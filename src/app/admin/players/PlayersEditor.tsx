@@ -189,7 +189,7 @@ export default function PlayersEditor({ initialData, username }: Props) {
                 const confirming = confirmDelete === player.id;
 
                 return (
-                  <div key={player.id} className="bg-[#161616] rounded-2xl border border-white/5 overflow-hidden">
+                  <div key={player.id} className="bg-[#161616] rounded-2xl border border-white/5">
 
                     {/* Ligne résumé */}
                     <div className="flex items-center gap-4 px-5 py-4">
@@ -250,7 +250,7 @@ export default function PlayersEditor({ initialData, username }: Props) {
 
                     {/* Formulaire déplié */}
                     {open && (
-                      <div className="px-5 pb-6 border-t border-white/5 pt-5 space-y-5">
+                      <div className="px-5 pb-6 border-t border-white/5 pt-5 space-y-5 overflow-visible">
 
                         {/* Infos de base */}
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
