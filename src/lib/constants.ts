@@ -9,10 +9,10 @@ export const CLUB = {
 };
 
 export const TICKETING = {
-  baseUrl: "https://billetterie.asnl.fr",
-  nextMatchUrl: "https://billetterie.asnl.fr/prochain-match",
-  seasonTicketUrl: "https://billetterie.asnl.fr/abonnements",
-  groupUrl: "https://billetterie.asnl.fr/groupes",
+  baseUrl: "https://asnlbillets.net",
+  nextMatchUrl: "https://asnlbillets.net/(S(3efueez1h0f5lm3ypektwljn))/Pages/PSpectacles.aspx",
+  seasonTicketUrl: "https://asnlbillets.net/(S(3efueez1h0f5lm3ypektwljn))/Pages/PSpectacles.aspx",
+  groupUrl: "https://asnlbillets.net/(S(3efueez1h0f5lm3ypektwljn))/Pages/PSpectacles.aspx",
 };
 
 export const SOCIAL = {
@@ -45,7 +45,7 @@ export const NEXT_MATCH = {
   competition: "Ligue 2 BKT",
   stadium: "Stade Marcel Picot",
   isHome: true,
-  ticketingUrl: "https://billetterie.asnl.fr/prochain-match",
+  ticketingUrl: "https://asnlbillets.net/(S(3efueez1h0f5lm3ypektwljn))/Pages/PSpectacles.aspx",
   isHighProfile: true,
   status: "upcoming" as const,
 };
