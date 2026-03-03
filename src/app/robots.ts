@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/", "/_next/", "/admin/"],
       },
     ],
-    sitemap: "https://www.asnl.fr/sitemap.xml",
+    sitemap: "https://maquetteasnl.vercel.app/sitemap.xml",
   };
 }

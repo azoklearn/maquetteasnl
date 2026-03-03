@@ -6,7 +6,7 @@ import { Analytics } from "@/components/providers/Analytics";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.asnl.fr"),
+  metadataBase: new URL("https://maquetteasnl.vercel.app"),
   title: {
     default: "AS Nancy Lorraine – Club officiel",
     template: "%s | AS Nancy Lorraine",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "AS Nancy Lorraine – Club officiel",
     description: "Actualités, résultats, effectif, billetterie et boutique du club historique de Lorraine.",
-    url: "https://www.asnl.fr",
+    url: "https://maquetteasnl.vercel.app",
     siteName: "AS Nancy Lorraine",
     images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "AS Nancy Lorraine" }],
     locale: "fr_FR",
@@ -45,8 +45,8 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
   alternates: {
-    canonical: "https://www.asnl.fr",
-    languages: { "fr-FR": "https://www.asnl.fr", "en-US": "https://www.asnl.fr/en" },
+    canonical: "https://maquetteasnl.vercel.app",
+    languages: { "fr-FR": "https://maquetteasnl.vercel.app" },
   },
 };
 
@@ -76,8 +76,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               "@type": "SportsOrganization",
               name: "AS Nancy Lorraine",
               alternateName: "ASNL",
-              url: "https://www.asnl.fr",
-              logo: "https://www.asnl.fr/logo.png",
+              url: "https://maquetteasnl.vercel.app",
+              logo: "https://maquetteasnl.vercel.app/logo.jpeg",
               foundingDate: "1913",
               sport: "Football",
               location: {
