@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   Save, Plus, Trash2, AlertCircle, Check, Loader2,
-  AlertTriangle, ChevronUp, ChevronDown,
+  AlertTriangle, ChevronUp, ChevronDown, Camera,
 } from "lucide-react";
 import type { StandingEntry } from "@/types";
 import { AdminShell } from "@/components/admin/AdminShell";
@@ -253,16 +253,26 @@ export function StandingsEditor({ initialData, username }: Props) {
                     row.position <= 2 ? "text-green-400" : row.position === 3 ? "text-blue-400" : row.position >= 16 ? "text-red-400" : "text-white/60",
                   ].join(" ")}>{row.position}</span>
 
-                  {/* Logo */}
-                  <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center overflow-hidden p-0.5 mx-auto">
+                  {/* Logo — clic pour déplier et uploader */}
+                  <button
+                    onClick={() => setExpanded(isOpen ? null : row.position)}
+                    title="Cliquer pour modifier le logo"
+                    className="relative group w-8 h-8 rounded-full bg-white flex items-center justify-center overflow-hidden p-0.5 mx-auto shrink-0"
+                  >
                     {row.logo?.trim() ? (
                       <div className="relative w-full h-full">
                         <Image src={row.logo} alt={row.team} fill className="object-contain" sizes="32px" unoptimized={row.logo.startsWith("data:")} />
                       </div>
                     ) : (
-                      <span className="text-[#0A0A0A] text-[8px] font-black">{row.shortName.slice(0, 3)}</span>
+                      <span className="text-[#0A0A0A] text-[8px] font-black group-hover:hidden">{row.shortName.slice(0, 3)}</span>
                     )}
-                  </div>
+                    <div className={[
+                      "absolute inset-0 rounded-full bg-black/60 items-center justify-center transition-opacity",
+                      row.logo?.trim() ? "hidden group-hover:flex" : "hidden group-hover:flex",
+                    ].join(" ")}>
+                      <Camera className="w-3 h-3 text-white" />
+                    </div>
+                  </button>
 
                   {/* Nom — cliquable pour déplier */}
                   <button
@@ -369,14 +379,25 @@ export function StandingsEditor({ initialData, username }: Props) {
                     </div>
 
                     {/* Logo */}
-                    <DragImageUpload
-                      label="Logo du club"
-                      hint="PNG transparent, 200×200px recommandé"
-                      value={row.logo}
-                      onChange={(v) => update(row.position, { logo: v ?? "" })}
-                      maxW={200}
-                      maxH={200}
-                    />
+                    <div>
+                      <DragImageUpload
+                        label="Logo du club"
+                        hint="PNG transparent recommandé · 200×200 px · Glissez ou cliquez pour uploader"
+                        value={row.logo}
+                        onChange={(v) => update(row.position, { logo: v ?? "" })}
+                        maxW={200}
+                        maxH={200}
+                      />
+                      {row.logo?.trim() && (
+                        <button
+                          type="button"
+                          onClick={() => update(row.position, { logo: "" })}
+                          className="mt-2 text-xs text-red-400 hover:text-red-300 transition-colors"
+                        >
+                          Supprimer le logo
+                        </button>
+                      )}
+                    </div>
 
                     {/* Forme récente */}
                     <div className="sm:col-span-2">
@@ -432,7 +453,7 @@ export function StandingsEditor({ initialData, username }: Props) {
         {rows.length === 0 && (
           <div className="text-center py-20 text-white/20">
             <p className="text-lg font-semibold">Aucune équipe</p>
-            <p className="text-sm mt-1">Cliquez sur « Ajouter » ou « Réinitialiser (API live) » pour commencer.</p>
+            <p className="text-sm mt-1">Cliquez sur « Ajouter » pour commencer.</p>
           </div>
         )}
 
