@@ -64,13 +64,15 @@ export function NewsSection({ articles, sectionStyle }: { articles?: NewsArticle
             >
               <Link href={`/actualites/${featured.slug}`} className="group block h-full">
                 <div className="relative h-64 lg:h-full min-h-[420px] rounded-2xl overflow-hidden bg-[#f0f0f0] shadow-xl shadow-black/10">
-                  <Image
-                    src={featured.image}
-                    alt={featured.title}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                  />
+                  {featured.image?.trim() && (
+                    <Image
+                      src={featured.image}
+                      alt={featured.title}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-black/30 to-transparent" />
                   <div className="absolute inset-0 p-6 flex flex-col justify-end">
                     <span className={`inline-flex self-start text-xs font-black px-3 py-1 rounded-full mb-3 ${CATEGORY_COLORS[featured.category] ?? "bg-[#0A0A0A] text-white"}`}>
@@ -108,13 +110,15 @@ export function NewsSection({ articles, sectionStyle }: { articles?: NewsArticle
                   className="group flex gap-4 bg-[#f7f7f7] hover:bg-[#fd0000]/5 border border-[#e5e5e5] hover:border-[#fd0000]/20 rounded-2xl p-4 transition-all"
                 >
                   <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden shrink-0 bg-[#e0e0e0]">
-                    <Image
-                      src={article.image}
-                      alt={article.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="112px"
-                    />
+                    {article.image?.trim() && (
+                      <Image
+                        src={article.image}
+                        alt={article.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="112px"
+                      />
+                    )}
                   </div>
                   <div className="flex flex-col justify-between min-w-0">
                     <div>

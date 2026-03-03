@@ -60,7 +60,7 @@ export function SponsorsSection({ sponsors = [], sectionStyle }: { sponsors?: Sp
                 transition={{ delay: i * 0.1 }}
                 className="group flex items-center justify-center bg-white rounded-2xl px-8 py-6 min-w-[160px] h-20 hover:scale-105 hover:shadow-lg hover:shadow-[#fd0000]/20 transition-all border-2 border-transparent hover:border-[#fd0000]"
               >
-                <img src={sponsor.logo} alt={sponsor.name} className="max-h-10 max-w-[140px] object-contain" />
+                {sponsor.logo?.trim() && <img src={sponsor.logo} alt={sponsor.name} className="max-h-10 max-w-[140px] object-contain" />}
               </motion.a>
             ))}
           </div>
@@ -84,7 +84,7 @@ export function SponsorsSection({ sponsors = [], sectionStyle }: { sponsors?: Sp
               transition={{ delay: i * 0.06 }}
               className="group flex items-center justify-center bg-white/90 hover:bg-white border border-white/20 rounded-xl px-6 py-4 min-w-[120px] h-16 hover:scale-105 transition-all hover:shadow-md hover:shadow-[#fd0000]/15"
             >
-              <img src={sponsor.logo} alt={sponsor.name} className="max-h-8 max-w-[110px] object-contain opacity-70 group-hover:opacity-100 transition-opacity" />
+              {sponsor.logo?.trim() && <img src={sponsor.logo} alt={sponsor.name} className="max-h-8 max-w-[110px] object-contain opacity-70 group-hover:opacity-100 transition-opacity" />}
             </motion.a>
           ))}
         </div>

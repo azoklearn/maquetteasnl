@@ -125,14 +125,16 @@ export function ActualitesClient({ articles }: Props) {
                     whileHover={{ scale: 1.005 }}
                     transition={{ duration: 0.4 }}
                   >
-                    <Image
-                      src={featured.image}
-                      alt={featured.title}
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-105 brightness-75"
-                      sizes="100vw"
-                      priority
-                    />
+                    {featured.image?.trim() && (
+                      <Image
+                        src={featured.image}
+                        alt={featured.title}
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-105 brightness-75"
+                        sizes="100vw"
+                        priority
+                      />
+                    )}
                     {/* Gradient */}
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-black/20 to-transparent" />
 
@@ -186,13 +188,15 @@ export function ActualitesClient({ articles }: Props) {
                       >
                         {/* Image */}
                         <div className="relative h-44 overflow-hidden bg-[#1e1e1e]">
-                          <Image
-                            src={article.image}
-                            alt={article.title}
-                            fill
-                            className="object-cover transition-transform duration-500 group-hover:scale-105"
-                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                          />
+                          {article.image?.trim() && (
+                            <Image
+                              src={article.image}
+                              alt={article.title}
+                              fill
+                              className="object-cover transition-transform duration-500 group-hover:scale-105"
+                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                            />
+                          )}
                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                           <div className="absolute bottom-3 left-3">
                             <CategoryBadge cat={article.category} />

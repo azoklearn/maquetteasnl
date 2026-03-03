@@ -50,14 +50,16 @@ export default async function ArticlePage({ params }: Props) {
 
       {/* ── Hero image ── */}
       <div className="relative h-64 sm:h-96 md:h-[500px] overflow-hidden">
-        <Image
-          src={article.image}
-          alt={article.title}
-          fill
-          className="object-cover brightness-60"
-          sizes="100vw"
-          priority
-        />
+        {article.image?.trim() && (
+          <Image
+            src={article.image}
+            alt={article.title}
+            fill
+            className="object-cover brightness-60"
+            sizes="100vw"
+            priority
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-black/30 to-transparent" />
 
         {/* Bouton retour */}
@@ -169,14 +171,16 @@ export default async function ArticlePage({ params }: Props) {
                   href={`/actualites/${a.slug}`}
                   className="group block bg-[#141414] hover:bg-[#1a1a1a] border border-white/5 hover:border-white/10 rounded-2xl overflow-hidden transition-all"
                 >
-                  <div className="relative h-36 overflow-hidden">
-                    <Image
-                      src={a.image}
-                      alt={a.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105 brightness-75"
-                      sizes="(max-width: 640px) 100vw, 33vw"
-                    />
+                  <div className="relative h-36 overflow-hidden bg-[#1a1a1a]">
+                    {a.image?.trim() && (
+                      <Image
+                        src={a.image}
+                        alt={a.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105 brightness-75"
+                        sizes="(max-width: 640px) 100vw, 33vw"
+                      />
+                    )}
                   </div>
                   <div className="p-4">
                     <span className={`inline-flex text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider mb-2 ${CATEGORY_COLORS[a.category] ?? "bg-white/10 text-white"}`}>

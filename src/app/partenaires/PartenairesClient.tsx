@@ -79,11 +79,13 @@ export function PartenairesClient({ sponsors }: Props) {
                     tier === "platinum" ? "py-10 px-8" : "py-7 px-6"
                   }`}
                 >
-                  <img
-                    src={sponsor.logo}
-                    alt={sponsor.name}
-                    className={`object-contain ${tier === "platinum" ? "max-h-14 max-w-[180px]" : "max-h-10 max-w-[130px]"}`}
-                  />
+                  {sponsor.logo?.trim() && (
+                    <img
+                      src={sponsor.logo}
+                      alt={sponsor.name}
+                      className={`object-contain ${tier === "platinum" ? "max-h-14 max-w-[180px]" : "max-h-10 max-w-[130px]"}`}
+                    />
+                  )}
                   <p className="mt-4 text-[#0A0A0A]/50 text-xs font-semibold group-hover:text-[#fd0000] transition-colors text-center">
                     {sponsor.name}
                   </p>
