@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import type { Sponsor } from "@/types";
 import AdminShell from "@/components/admin/AdminShell";
 import SaveButton from "@/components/admin/SaveButton";
-import { Plus, Trash2, GripVertical } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
+import DragImageUpload from "@/components/admin/DragImageUpload";
 
 interface Props { initialData: Sponsor[]; username: string }
 
@@ -89,9 +90,22 @@ export default function SponsorsEditor({ initialData, username }: Props) {
         <div className="flex flex-col gap-3">
           {sponsors.map((sponsor) => (
             <div key={sponsor.id} className="bg-[#161616] rounded-2xl border border-white/5 p-5">
-              <div className="flex items-start gap-3">
-                <GripVertical className="w-4 h-4 text-white/20 mt-3 shrink-0" />
-                <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="flex items-start gap-4">
+
+                {/* Logo drag-and-drop */}
+                <div className="w-48 shrink-0">
+                  <DragImageUpload
+                    label="Logo"
+                    hint="Format carré recommandé"
+                    value={sponsor.logo}
+                    onChange={(v) => update(sponsor.id, "logo", v ?? "")}
+                    maxW={400}
+                    maxH={400}
+                  />
+                </div>
+
+                {/* Infos texte */}
+                <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
                     <label className={LABEL}>Nom</label>
                     <input className={FIELD} value={sponsor.name} onChange={(e) => update(sponsor.id, "name", e.target.value)} />
@@ -103,20 +117,18 @@ export default function SponsorsEditor({ initialData, username }: Props) {
                     </select>
                   </div>
                   <div>
-                    <label className={LABEL}>Logo (URL)</label>
-                    <input className={FIELD} value={sponsor.logo} onChange={(e) => update(sponsor.id, "logo", e.target.value)} placeholder="https://..." />
-                  </div>
-                  <div>
                     <label className={LABEL}>Site web</label>
                     <input className={FIELD} value={sponsor.url} onChange={(e) => update(sponsor.id, "url", e.target.value)} placeholder="https://..." />
                   </div>
                 </div>
-                <div className="flex flex-col items-end gap-2 shrink-0 pt-1">
+
+                {/* Actions */}
+                <div className="flex flex-col items-end gap-2 shrink-0">
                   <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${TIER_COLORS[sponsor.tier]}`}>
                     {TIER_LABELS[sponsor.tier]}
                   </span>
                   <button
-                    onClick={() => { if(window.confirm("Supprimer ce partenaire ?")) remove(sponsor.id); }}
+                    onClick={() => { if (window.confirm("Supprimer ce partenaire ?")) remove(sponsor.id); }}
                     className="p-1.5 rounded-lg hover:bg-red-500/20 text-white/30 hover:text-red-400 transition-colors"
                     title="Supprimer"
                   >

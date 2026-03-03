@@ -6,6 +6,7 @@ import type { NewsArticle } from "@/types";
 import AdminShell from "@/components/admin/AdminShell";
 import SaveButton from "@/components/admin/SaveButton";
 import { Plus, Trash2, ChevronDown, ChevronUp, Star } from "lucide-react";
+import DragImageUpload from "@/components/admin/DragImageUpload";
 
 interface Props { initialData: NewsArticle[]; username: string }
 
@@ -160,8 +161,14 @@ export default function NewsEditor({ initialData, username }: Props) {
                     </div>
 
                     <div>
-                      <label className={LABEL}>Image (URL ou chemin)</label>
-                      <input className={FIELD} value={article.image} onChange={(e) => update(article.id, "image", e.target.value)} placeholder="/images/article.jpg" />
+                      <DragImageUpload
+                        label="Image de couverture"
+                        hint="Photo principale affichée sur la carte article"
+                        value={article.image}
+                        onChange={(v) => update(article.id, "image", v ?? "")}
+                        maxW={1200}
+                        maxH={800}
+                      />
                     </div>
 
                     <div>
