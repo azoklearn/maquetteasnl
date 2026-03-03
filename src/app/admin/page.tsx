@@ -5,13 +5,13 @@ export const dynamic = "force-dynamic";
 import { getAllCmsData } from "@/lib/db";
 import AdminShell from "@/components/admin/AdminShell";
 import Link from "next/link";
-import { Calendar, Newspaper, Users, HandHeart, Settings, ArrowRight } from "lucide-react";
+import { Calendar, ListOrdered, Newspaper, Users, HandHeart, Settings, ArrowRight } from "lucide-react";
 
 export default async function AdminDashboard() {
   const session = await requireAdmin();
   if (!session) redirect("/admin/login");
 
-  const { news, players, sponsors, nextMatch } = await getAllCmsData();
+  const { news, players, sponsors, nextMatch, matches } = await getAllCmsData();
 
   const cards = [
     {
@@ -21,6 +21,14 @@ export default async function AdminDashboard() {
       value: `${nextMatch.homeTeam} vs ${nextMatch.awayTeam}`,
       sub: nextMatch.date,
       color: "from-red-600 to-red-800",
+    },
+    {
+      href: "/admin/calendrier",
+      icon: ListOrdered,
+      label: "Calendrier",
+      value: `${matches.length} matchs`,
+      sub: "Ajouter, modifier, scores",
+      color: "from-slate-700 to-slate-900",
     },
     {
       href: "/admin/news",

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Target, Zap } from "lucide-react";
 import type { Player } from "@/types";
@@ -71,21 +72,47 @@ export function PlayersSection({ players = [] }: { players?: Player[] }) {
 
                   {/* Avatar */}
                   <div className="relative h-36 md:h-48 bg-[#f5f5f5] group-hover:bg-[#B00D27] flex items-center justify-center overflow-hidden transition-colors">
-                    <div className="w-18 h-18 md:w-24 md:h-24 rounded-full bg-[#C8102E]/15 group-hover:bg-white/20 border border-[#C8102E]/20 group-hover:border-white/30 flex items-center justify-center transition-all">
-                      <span
-                        className="text-[#C8102E] group-hover:text-white text-2xl md:text-3xl font-black transition-colors"
-                        style={{ fontFamily: "'Bebas Neue', sans-serif" }}
-                      >
-                        {player.firstName[0]}{player.name[0]}
-                      </span>
-                    </div>
                     {/* Numéro haut droite */}
                     <div
-                      className="absolute top-3 right-3 text-[#0A0A0A]/20 group-hover:text-white/40 text-3xl font-black leading-none transition-colors"
+                      className="absolute top-3 right-3 text-[#0A0A0A]/20 group-hover:text-white/40 text-3xl font-black leading-none transition-colors z-10"
                       style={{ fontFamily: "'Bebas Neue', sans-serif" }}
                     >
                       {player.number}
                     </div>
+
+                    {player.photo ? (
+                      <>
+                        {/* Photo principale */}
+                        <Image
+                          src={player.photo}
+                          alt={`${player.firstName} ${player.name}`}
+                          fill
+                          className={`object-cover object-top transition-opacity duration-300 ${player.photoHover ? "group-hover:opacity-0" : ""}`}
+                          sizes="(max-width: 768px) 50vw, 33vw"
+                          unoptimized={player.photo.startsWith("data:")}
+                        />
+                        {/* Photo hover */}
+                        {player.photoHover && (
+                          <Image
+                            src={player.photoHover}
+                            alt={`${player.firstName} ${player.name} — action`}
+                            fill
+                            className="object-cover object-top opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute inset-0"
+                            sizes="(max-width: 768px) 50vw, 33vw"
+                            unoptimized={player.photoHover.startsWith("data:")}
+                          />
+                        )}
+                      </>
+                    ) : (
+                      <div className="w-18 h-18 md:w-24 md:h-24 rounded-full bg-[#C8102E]/15 group-hover:bg-white/20 border border-[#C8102E]/20 group-hover:border-white/30 flex items-center justify-center transition-all">
+                        <span
+                          className="text-[#C8102E] group-hover:text-white text-2xl md:text-3xl font-black transition-colors"
+                          style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+                        >
+                          {player.firstName[0]}{player.name[0]}
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   <div className="p-4">

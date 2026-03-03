@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { Target, Zap, Shield } from "lucide-react";
 import { PLAYERS } from "@/lib/mock-data";
 import type { Player } from "@/types";
@@ -109,25 +110,49 @@ function PlayerCard({ player, index }: { player: Player; index: number }) {
       {/* Avatar */}
       <div className="relative h-44 bg-gradient-to-b from-[#C8102E]/10 to-[#141414] flex items-end justify-center pb-4 overflow-hidden">
         <div
-          className="absolute top-2 right-3 text-7xl font-black text-white/[0.04] leading-none select-none"
+          className="absolute top-2 right-3 text-7xl font-black text-white/[0.04] leading-none select-none z-10"
           style={{ fontFamily: "'Bebas Neue', sans-serif" }}
         >
           {player.number}
         </div>
-        <div className="w-24 h-24 rounded-full bg-[#C8102E]/20 border border-[#C8102E]/20 flex items-center justify-center">
-          <span
-            className="text-[#C8102E] text-3xl font-black"
-            style={{ fontFamily: "'Bebas Neue', sans-serif" }}
-          >
-            {player.firstName[0]}{player.name[0]}
-          </span>
-        </div>
         <div
-          className="absolute top-3 left-3 text-white/30 text-2xl font-black leading-none"
+          className="absolute top-3 left-3 text-white/30 text-2xl font-black leading-none z-10"
           style={{ fontFamily: "'Bebas Neue', sans-serif" }}
         >
           #{player.number}
         </div>
+
+        {player.photo ? (
+          <>
+            <Image
+              src={player.photo}
+              alt={`${player.firstName} ${player.name}`}
+              fill
+              className={`object-cover object-top transition-opacity duration-300 ${player.photoHover ? "group-hover:opacity-0" : ""}`}
+              sizes="(max-width: 640px) 50vw, 25vw"
+              unoptimized={player.photo.startsWith("data:")}
+            />
+            {player.photoHover && (
+              <Image
+                src={player.photoHover}
+                alt={`${player.firstName} ${player.name} — action`}
+                fill
+                className="object-cover object-top opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute inset-0"
+                sizes="(max-width: 640px) 50vw, 25vw"
+                unoptimized={player.photoHover.startsWith("data:")}
+              />
+            )}
+          </>
+        ) : (
+          <div className="w-24 h-24 rounded-full bg-[#C8102E]/20 border border-[#C8102E]/20 flex items-center justify-center">
+            <span
+              className="text-[#C8102E] text-3xl font-black"
+              style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+            >
+              {player.firstName[0]}{player.name[0]}
+            </span>
+          </div>
+        )}
       </div>
 
       <div className="p-4">

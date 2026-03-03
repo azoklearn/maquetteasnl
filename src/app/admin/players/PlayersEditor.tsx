@@ -6,6 +6,7 @@ import type { Player } from "@/types";
 import AdminShell from "@/components/admin/AdminShell";
 import SaveButton from "@/components/admin/SaveButton";
 import { Plus, Trash2, ChevronDown, ChevronUp, AlertTriangle } from "lucide-react";
+import DragImageUpload from "@/components/admin/DragImageUpload";
 
 interface Props { initialData: Player[]; username: string }
 
@@ -214,15 +215,25 @@ export default function PlayersEditor({ initialData, username }: Props) {
                           </div>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          <div>
-                            <label className={LABEL}>Nationalité</label>
-                            <input className={FIELD} value={player.nationality} onChange={(e) => update(player.id, "nationality", e.target.value)} />
-                          </div>
-                          <div>
-                            <label className={LABEL}>Photo (URL)</label>
-                            <input className={FIELD} value={player.photo ?? ""} onChange={(e) => update(player.id, "photo", e.target.value || undefined)} placeholder="https://..." />
-                          </div>
+                        <div>
+                          <label className={LABEL}>Nationalité</label>
+                          <input className={FIELD} value={player.nationality} onChange={(e) => update(player.id, "nationality", e.target.value)} />
+                        </div>
+
+                        {/* Photos */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-1">
+                          <DragImageUpload
+                            label="Photo principale"
+                            hint="Affichée par défaut sur la carte"
+                            value={player.photo}
+                            onChange={(v) => update(player.id, "photo", v)}
+                          />
+                          <DragImageUpload
+                            label="Photo au survol"
+                            hint="Affichée au hover (ex. action, célébration)"
+                            value={player.photoHover}
+                            onChange={(v) => update(player.id, "photoHover", v)}
+                          />
                         </div>
 
                         <div>

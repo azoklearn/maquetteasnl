@@ -7,6 +7,7 @@ import {
   getPlayers,   setPlayers,
   getSponsors,  setSponsors,
   getSiteConfig,setSiteConfig,
+  getMatches,   setMatches,
   getAllCmsData,
 } from "@/lib/db";
 
@@ -27,6 +28,7 @@ export async function GET(req: NextRequest) {
     case "players":   return NextResponse.json(await getPlayers());
     case "sponsors":  return NextResponse.json(await getSponsors());
     case "config":    return NextResponse.json(await getSiteConfig());
+    case "matches":   return NextResponse.json(await getMatches());
     default:          return NextResponse.json(await getAllCmsData());
   }
 }
@@ -43,7 +45,8 @@ export async function POST(req: NextRequest) {
     case "news":      await setNews(data);      break;
     case "players":   await setPlayers(data);   break;
     case "sponsors":  await setSponsors(data);  break;
-    case "config":    await setSiteConfig(data);break;
+    case "config":    await setSiteConfig(data);  break;
+    case "matches":   await setMatches(data);      break;
     default:
       return NextResponse.json({ error: "Section inconnue" }, { status: 400 });
   }

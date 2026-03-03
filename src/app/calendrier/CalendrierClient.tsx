@@ -2,21 +2,24 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Ticket, MapPin, Calendar, ChevronRight } from "lucide-react";
+import { Ticket, MapPin, Calendar } from "lucide-react";
 import { MATCHES } from "@/lib/mock-data";
 import { TICKETING } from "@/lib/constants";
 import { trackTicketingClick } from "@/lib/analytics";
 import { formatDate } from "@/lib/utils";
 import { cn } from "@/lib/utils";
+import type { Match } from "@/types";
 
 type Tab = "upcoming" | "finished";
 
-export function CalendrierClient() {
+export function CalendrierClient({ matches: matchesProp }: { matches?: Match[] }) {
   const [tab, setTab] = useState<Tab>("upcoming");
 
-  const upcoming = MATCHES.filter((m) => m.status === "upcoming");
-  const finished = MATCHES.filter((m) => m.status === "finished");
+  const allMatches = matchesProp ?? MATCHES;
+  const upcoming = allMatches.filter((m) => m.status === "upcoming");
+  const finished = allMatches.filter((m) => m.status === "finished");
   const displayed = tab === "upcoming" ? upcoming : finished;
+
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] pt-8">

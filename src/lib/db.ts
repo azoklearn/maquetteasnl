@@ -41,6 +41,7 @@ export interface CmsData {
   players: Player[];
   sponsors: Sponsor[];
   config: SiteConfig;
+  matches: Match[];
 }
 
 // ── Valeurs par défaut ─────────────────────────────────────────────────────────
@@ -73,6 +74,7 @@ const KV_KEYS = {
   players:   "cms:players",
   sponsors:  "cms:sponsors",
   config:    "cms:config",
+  matches:   "cms:matches",
 } as const;
 
 // Fallback en mémoire pour dev sans KV configuré
@@ -148,6 +150,13 @@ export async function setSponsors(sponsors: Sponsor[]) {
   await kvSet(KV_KEYS.sponsors, sponsors);
 }
 
+export async function getMatches(): Promise<Match[]> {
+  return (await kvGet<Match[]>(KV_KEYS.matches)) ?? MATCHES;
+}
+export async function setMatches(matches: Match[]) {
+  await kvSet(KV_KEYS.matches, matches);
+}
+
 export async function getSiteConfig(): Promise<SiteConfig> {
   return (await kvGet<SiteConfig>(KV_KEYS.config)) ?? DEFAULT_CONFIG;
 }
@@ -156,12 +165,13 @@ export async function setSiteConfig(cfg: SiteConfig) {
 }
 
 export async function getAllCmsData(): Promise<CmsData> {
-  const [nextMatch, news, players, sponsors, config] = await Promise.all([
+  const [nextMatch, news, players, sponsors, config, matches] = await Promise.all([
     getNextMatch(),
     getNews(),
     getPlayers(),
     getSponsors(),
     getSiteConfig(),
+    getMatches(),
   ]);
-  return { nextMatch, news, players, sponsors, config };
+  return { nextMatch, news, players, sponsors, config, matches };
 }

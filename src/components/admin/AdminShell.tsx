@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 const NAV = [
   { href: "/admin",               label: "Tableau de bord", icon: LayoutDashboard },
   { href: "/admin/match",         label: "Prochain match",  icon: Calendar },
+  { href: "/admin/calendrier",    label: "Calendrier",      icon: Trophy },
   { href: "/admin/news",          label: "Actualités",      icon: Newspaper },
   { href: "/admin/players",       label: "Effectif",        icon: Users },
   { href: "/admin/sponsors",      label: "Partenaires",     icon: HandHeart },

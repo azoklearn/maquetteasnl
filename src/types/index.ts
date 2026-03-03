@@ -22,6 +22,7 @@ export interface Player {
   position: "GK" | "DEF" | "MID" | "ATT";
   nationality: string;
   photo?: string;
+  photoHover?: string;
   stats: {
     appearances: number;
     goals: number;

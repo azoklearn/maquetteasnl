@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Ticket, ShoppingBag, Search } from "lucide-react";
+import { Menu, X, Ticket, ShoppingBag } from "lucide-react";
 import { NAVIGATION, TICKETING } from "@/lib/constants";
 import { trackTicketingClick } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
@@ -114,14 +114,6 @@ export function Header({ tickerMessages, ticketingUrl }: HeaderProps) {
 
             {/* ── Desktop CTAs ── */}
             <div className="hidden md:flex items-center gap-3">
-              <button
-                className={cn(
-                  "p-2 transition-colors",
-                  isScrolled ? "text-[#0A0A0A]/50 hover:text-[#C8102E]" : "text-white/60 hover:text-white",
-                )}
-              >
-                <Search className="w-5 h-5" />
-              </button>
               <Link
                 href="/boutique"
                 className={cn(

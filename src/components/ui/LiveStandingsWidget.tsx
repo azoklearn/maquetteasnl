@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { RefreshCw, ExternalLink, ArrowUp, ArrowDown, Wifi, WifiOff } from "lucide-react";
+import { RefreshCw, ArrowUp, ArrowDown, WifiOff } from "lucide-react";
 import { STANDINGS } from "@/lib/mock-data";
 import type { StandingEntry } from "@/types";
 import { cn } from "@/lib/utils";
@@ -31,10 +31,6 @@ const FORM_STYLE: Record<"W" | "D" | "L", string> = {
   L: "bg-red-500 text-white",
 };
 const FORM_FR: Record<"W" | "D" | "L", string> = { W: "V", D: "N", L: "D" };
-
-function time(d: Date) {
-  return d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-}
 
 // ── Response API ───────────────────────────────────────────────────────────────
 interface ApiResponse {
@@ -346,27 +342,6 @@ export function LiveStandingsWidget() {
         </button>
       </div>
 
-      {/* ── Footer status ── */}
-      <div className="bg-[#f9f9f9] border-t border-[#f0f0f0] px-5 py-2 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-1.5 text-[10px] font-medium text-[#0A0A0A]/30">
-          {isLive
-            ? <Wifi className="w-3 h-3 text-green-500" />
-            : <WifiOff className="w-3 h-3 text-amber-400" />
-          }
-          <span>
-            {isLive ? "Données officielles · " : "Données locales · "}
-            Mis à jour à {time(lastUpdated)}
-          </span>
-        </div>
-        <a
-          href="https://www.lfp.fr/ligue-2"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-1 text-[10px] font-medium text-[#0A0A0A]/30 hover:text-[#C8102E] transition-colors shrink-0"
-        >
-          LFP.fr <ExternalLink className="w-2.5 h-2.5" />
-        </a>
-      </div>
     </div>
   );
 }

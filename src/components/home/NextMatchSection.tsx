@@ -193,35 +193,8 @@ export function NextMatchSection({ match: matchProp }: { match?: Match }) {
             <Ticket className="w-6 h-6 transition-transform group-hover:rotate-12" />
             Prendre ma place
           </a>
-          <a
-            href={TICKETING.groupUrl}
-            target="_blank"
-            rel="noopener noreferrer nofollow"
-            onClick={() => handleTicketClick("next_match_section_group")}
-            className="flex items-center gap-3 bg-transparent text-white border-2 border-white/50 hover:bg-white hover:text-[#C8102E] font-bold text-sm px-8 py-5 rounded-full transition-all uppercase tracking-wider"
-          >
-            Réserver pour un groupe
-          </a>
         </motion.div>
 
-        {/* ── Lien abonnés ── */}
-        <motion.div
-          className="mt-10 text-center"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.55 }}
-        >
-          <a
-            href={TICKETING.seasonTicketUrl}
-            target="_blank"
-            rel="noopener noreferrer nofollow"
-            onClick={() => handleTicketClick("next_match_section_season")}
-            className="text-sm text-white/50 hover:text-white underline underline-offset-4 decoration-white/30 transition-colors font-medium"
-          >
-            💳 Vous avez un abonnement ? Accédez directement à votre espace
-          </a>
-        </motion.div>
       </div>
 
       {/* ── Barre blanche bas ── */}

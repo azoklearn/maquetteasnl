@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { MediasClient } from "./MediasClient";
 
 export const metadata: Metadata = {
-  title: "Médias & Actualités",
-  description: "Toute l'actualité de l'AS Nancy Lorraine : articles, photos, vidéos et revue de presse.",
+  title: "Médias — Photos & Vidéos",
+  description: "Galerie photos et résumés vidéo des matchs de l'AS Nancy Lorraine.",
 };
 
 export default function MediasPage() {
