@@ -74,12 +74,19 @@ const KV_KEYS = {
 // Fallback en mémoire pour dev sans KV
 const memStore = new Map<string, string>();
 
+function getRedis() {
+  if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) return null;
+  const { Redis } = require("@upstash/redis");
+  return new Redis({
+    url: process.env.KV_REST_API_URL,
+    token: process.env.KV_REST_API_TOKEN,
+  });
+}
+
 async function kvGet<T>(key: string): Promise<T | null> {
   try {
-    if (process.env.KV_REST_API_URL) {
-      const { kv } = await import("@vercel/kv");
-      return await kv.get<T>(key);
-    }
+    const redis = getRedis();
+    if (redis) return await redis.get(key) as T | null;
     const v = memStore.get(key);
     return v ? (JSON.parse(v) as T) : null;
   } catch {
@@ -89,9 +96,9 @@ async function kvGet<T>(key: string): Promise<T | null> {
 
 async function kvSet<T>(key: string, value: T): Promise<void> {
   try {
-    if (process.env.KV_REST_API_URL) {
-      const { kv } = await import("@vercel/kv");
-      await kv.set(key, JSON.stringify(value));
+    const redis = getRedis();
+    if (redis) {
+      await redis.set(key, JSON.stringify(value));
     } else {
       memStore.set(key, JSON.stringify(value));
     }
