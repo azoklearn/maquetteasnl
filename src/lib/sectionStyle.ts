@@ -10,17 +10,17 @@ export const TITLE_SIZE_CLASSES: Record<NonNullable<SectionStyle["titleSize"]>, 
 
 /** Retourne les styles CSS inline à appliquer à la section */
 export function sectionBg(s?: SectionStyle): React.CSSProperties {
-  if (!s?.bgColor) return {};
+  if (!s?.bgColor?.trim()) return {};
   return { backgroundColor: s.bgColor };
 }
 
 export function sectionText(s?: SectionStyle): React.CSSProperties {
-  if (!s?.textColor) return {};
+  if (!s?.textColor?.trim()) return {};
   return { color: s.textColor };
 }
 
 export function sectionAccent(s?: SectionStyle): string {
-  return s?.accentColor ?? "#fd0000";
+  return s?.accentColor?.trim() || "#fd0000";
 }
 
 export function titleSizeClass(s?: SectionStyle, fallback = "text-4xl md:text-6xl"): string {

@@ -32,12 +32,12 @@ export function NewsSection({ articles, sectionStyle }: { articles?: NewsArticle
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-xs font-bold uppercase tracking-[0.3em] block mb-2" style={{ color: sectionStyle?.accentColor ?? "#fd0000" }}>
+            <span className="text-xs font-bold uppercase tracking-[0.3em] block mb-2" style={{ color: sectionStyle?.accentColor?.trim() || "#fd0000" }}>
               {sectionStyle?.subtitle ?? "Actualités"}
             </span>
             <h2
               className={`font-black uppercase leading-none ${titleCls}`}
-              style={{ fontFamily: "'Bebas Neue', sans-serif", color: sectionStyle?.textColor ?? "#0A0A0A" }}
+              style={{ fontFamily: "'Bebas Neue', sans-serif", color: sectionStyle?.textColor?.trim() || "#0A0A0A" }}
             >
               {sectionStyle?.title ?? <>Les dernières<br />nouveautés</>}
             </h2>

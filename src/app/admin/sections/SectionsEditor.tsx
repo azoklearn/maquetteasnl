@@ -250,24 +250,39 @@ function SectionPanel({
           </div>
 
           {/* Aperçu */}
-          <div
-            style={{
-              borderRadius: 8, padding: "14px 18px",
-              background: style.bgColor || meta.defaultBg,
-              color: style.textColor || meta.defaultText,
-              border: "1px solid rgba(255,255,255,0.08)",
-              display: "flex", flexDirection: "column", gap: 4,
-            }}
-          >
-            {(style.subtitle) && (
-              <span style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.2em", color: style.accentColor || "#fd0000" }}>
-                {style.subtitle}
-              </span>
-            )}
-            <span style={{ fontSize: 22, fontWeight: 900, textTransform: "uppercase", fontFamily: "'Bebas Neue', sans-serif" }}>
-              {style.title || meta.label}
-            </span>
-          </div>
+          {(() => {
+            const PREVIEW_SIZES: Record<string, number> = { sm: 18, md: 26, lg: 34, xl: 44 };
+            const previewFontSize = PREVIEW_SIZES[style.titleSize ?? "md"] ?? 26;
+            return (
+              <div
+                style={{
+                  borderRadius: 8, padding: "14px 18px",
+                  background: style.bgColor?.trim() || meta.defaultBg,
+                  color: style.textColor?.trim() || meta.defaultText,
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  display: "flex", flexDirection: "column", gap: 4,
+                  transition: "all 0.2s",
+                }}
+              >
+                {style.subtitle?.trim() && (
+                  <span style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.2em", color: style.accentColor?.trim() || "#fd0000" }}>
+                    {style.subtitle}
+                  </span>
+                )}
+                <span style={{
+                  fontSize: previewFontSize,
+                  fontWeight: 900,
+                  textTransform: "uppercase",
+                  fontFamily: "'Bebas Neue', sans-serif",
+                  color: style.textColor?.trim() || meta.defaultText,
+                  lineHeight: 1.1,
+                  transition: "font-size 0.2s",
+                }}>
+                  {style.title?.trim() || meta.label}
+                </span>
+              </div>
+            );
+          })()}
         </div>
       )}
     </div>

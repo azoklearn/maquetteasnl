@@ -10,11 +10,11 @@ import type { SectionStyle } from "@/lib/db";
 import { titleSizeClass } from "@/lib/sectionStyle";
 
 export function StandingsSection({ sectionStyle }: { sectionStyle?: SectionStyle }) {
-  const accent   = sectionStyle?.accentColor ?? "#fd0000";
-  const textCol  = sectionStyle?.textColor   ?? "#0A0A0A";
+  const accent   = sectionStyle?.accentColor?.trim() || "#fd0000";
+  const textCol  = sectionStyle?.textColor?.trim()   || "#0A0A0A";
   const titleCls = titleSizeClass(sectionStyle, "text-5xl md:text-7xl");
   return (
-    <section className="section-padding" style={{ backgroundColor: sectionStyle?.bgColor ?? "#ffffff" }}>
+    <section className="section-padding" style={{ backgroundColor: sectionStyle?.bgColor?.trim() || "#ffffff" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-5 gap-12 items-start">
 

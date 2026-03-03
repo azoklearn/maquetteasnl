@@ -27,8 +27,8 @@ const HERO_SIZE: Record<string, string> = {
 
 export function HeroSection({ subtitle, season, ticketingUrl, sectionStyle }: HeroProps) {
   const accent    = sectionAccent(sectionStyle);
-  const titleCls  = HERO_SIZE[sectionStyle?.titleSize ?? "md"] ?? HERO_SIZE.md;
-  const textCol   = sectionStyle?.textColor ?? "#ffffff";
+  const titleCls  = HERO_SIZE[sectionStyle?.titleSize ?? "md"] || HERO_SIZE.md;
+  const textCol   = sectionStyle?.textColor?.trim() || "#ffffff";
   const ticketUrl = ticketingUrl ?? TICKETING.nextMatchUrl;
   return (
     <section className="relative h-[100svh] min-h-[600px] max-h-[1000px] overflow-hidden flex items-center"

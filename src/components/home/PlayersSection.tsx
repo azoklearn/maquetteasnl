@@ -18,8 +18,8 @@ const POSITION_LABELS: Record<string, string> = {
 export function PlayersSection({ players = [], sectionStyle }: { players?: Player[]; sectionStyle?: SectionStyle }) {
   const featuredPlayers = players.filter((p) => p.isFeatured);
   const featured = featuredPlayers.length > 0 ? featuredPlayers : players.slice(0, 6);
-  const accent     = sectionStyle?.accentColor ?? "#fd0000";
-  const textCol    = sectionStyle?.textColor   ?? "#ffffff";
+  const accent     = sectionStyle?.accentColor?.trim() || "#fd0000";
+  const textCol    = sectionStyle?.textColor?.trim()   || "#ffffff";
   const titleCls   = titleSizeClass(sectionStyle, "text-4xl md:text-6xl");
 
   return (

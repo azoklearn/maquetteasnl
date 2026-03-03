@@ -31,15 +31,15 @@ function SponsorCard({ sponsor }: { sponsor: Sponsor }) {
 // ── Section principale ─────────────────────────────────────────────────────────
 export function SponsorsSection({ sponsors = [], sectionStyle }: { sponsors?: Sponsor[]; sectionStyle?: SectionStyle }) {
   const trackRef = useRef<HTMLDivElement>(null);
-  const accent   = sectionStyle?.accentColor ?? "#fd0000";
-  const textCol  = sectionStyle?.textColor   ?? "#ffffff";
+  const accent   = sectionStyle?.accentColor?.trim() || "#fd0000";
+  const textCol  = sectionStyle?.textColor?.trim()   || "#ffffff";
   const titleCls = titleSizeClass(sectionStyle, "text-4xl md:text-6xl");
 
   // On double la liste pour le défilement infini
   const doubled = [...sponsors, ...sponsors];
 
   return (
-    <section className="section-padding border-t border-white/5" style={{ backgroundColor: sectionStyle?.bgColor ?? "#0A0A0A" }}>
+    <section className="section-padding border-t border-white/5" style={{ backgroundColor: sectionStyle?.bgColor?.trim() || "#0A0A0A" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
