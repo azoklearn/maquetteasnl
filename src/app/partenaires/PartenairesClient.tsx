@@ -1,30 +1,19 @@
 "use client";
 
+import { useRef } from "react";
 import { motion } from "framer-motion";
 import type { Sponsor } from "@/types";
 
 interface Props { sponsors: Sponsor[] }
 
-const TIER_LABELS: Record<Sponsor["tier"], string> = {
-  platinum: "Partenaire Titre",
-  gold: "Partenaire Or",
-  silver: "Partenaire Argent",
-  official: "Partenaire Officiel",
-};
-
-const TIER_ORDER: Sponsor["tier"][] = ["platinum", "gold", "silver", "official"];
-
 export function PartenairesClient({ sponsors }: Props) {
-  const grouped = TIER_ORDER.map((tier) => ({
-    tier,
-    label: TIER_LABELS[tier],
-    items: sponsors.filter((s) => s.tier === tier),
-  })).filter((g) => g.items.length > 0);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const doubled  = [...sponsors, ...sponsors];
 
   return (
     <div className="min-h-screen bg-[#0A0A0A]">
 
-      {/* Header */}
+      {/* ── Hero ── */}
       <div className="bg-[#fd0000] py-20 relative overflow-hidden">
         <div
           className="absolute inset-0 opacity-[0.06]"
@@ -48,54 +37,92 @@ export function PartenairesClient({ sponsors }: Props) {
         </div>
       </div>
 
-      {/* Partenaires groupés par niveau */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-20">
-        {grouped.map(({ tier, label, items }) => (
-          <section key={tier}>
-            {/* Titre du niveau */}
-            <div className="flex items-center gap-4 mb-10">
-              <div className="h-px flex-1 bg-white/8" />
-              <span className="text-white/30 text-xs font-black uppercase tracking-[0.4em]">{label}</span>
-              <div className="h-px flex-1 bg-white/8" />
+      {/* ── Bandeau défilant ── */}
+      {sponsors.length > 0 && (
+        <div className="bg-white py-6 border-b border-black/5">
+          <div
+            className="overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
+            onMouseEnter={() => trackRef.current && (trackRef.current.style.animationPlayState = "paused")}
+            onMouseLeave={() => trackRef.current && (trackRef.current.style.animationPlayState = "running")}
+          >
+            <div
+              ref={trackRef}
+              className="flex items-center"
+              style={{ animation: "sponsors-scroll 28s linear infinite", width: "max-content" }}
+            >
+              {doubled.map((s, i) => (
+                <a
+                  key={`${s.id}-${i}`}
+                  href={s.url || "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="shrink-0 flex items-center justify-center mx-6 grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all"
+                >
+                  {s.logo?.trim() ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={s.logo} alt={s.name} className="h-8 max-w-[120px] object-contain" />
+                  ) : (
+                    <span className="text-[#0A0A0A] text-sm font-bold uppercase tracking-wide">{s.name}</span>
+                  )}
+                </a>
+              ))}
             </div>
+          </div>
+          <style>{`
+            @keyframes sponsors-scroll {
+              from { transform: translateX(0); }
+              to   { transform: translateX(-50%); }
+            }
+          `}</style>
+        </div>
+      )}
 
-            {/* Grille */}
-            <div className={`grid gap-5 ${
-              tier === "platinum"
-                ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-                : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"
-            }`}>
-              {items.map((sponsor, i) => (
+      {/* ── Grille tous partenaires ── */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+
+        {sponsors.length > 0 ? (
+          <>
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-white/30 text-xs font-bold uppercase tracking-[0.4em] mb-10 text-center"
+            >
+              {sponsors.length} partenaire{sponsors.length > 1 ? "s" : ""}
+            </motion.p>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {sponsors.map((sponsor, i) => (
                 <motion.a
                   key={sponsor.id}
-                  href={sponsor.url}
+                  href={sponsor.url || "#"}
                   target="_blank"
                   rel="noopener noreferrer"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.07 }}
-                  className={`group flex flex-col items-center justify-center bg-white rounded-2xl transition-all hover:scale-[1.03] hover:shadow-xl hover:shadow-[#fd0000]/15 ${
-                    tier === "platinum" ? "py-10 px-8" : "py-7 px-6"
-                  }`}
+                  transition={{ delay: i * 0.04 }}
+                  className="group flex flex-col items-center justify-center bg-white rounded-2xl py-8 px-6 hover:scale-[1.04] hover:shadow-xl hover:shadow-[#fd0000]/15 transition-all"
                 >
-                  {sponsor.logo?.trim() && (
+                  {sponsor.logo?.trim() ? (
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={sponsor.logo}
                       alt={sponsor.name}
-                      className={`object-contain ${tier === "platinum" ? "max-h-14 max-w-[180px]" : "max-h-10 max-w-[130px]"}`}
+                      className="max-h-12 max-w-[130px] object-contain"
                     />
+                  ) : (
+                    <div className="w-12 h-12 rounded-full bg-[#fd0000]/10 flex items-center justify-center">
+                      <span className="text-[#fd0000] text-lg font-black">{sponsor.name.charAt(0)}</span>
+                    </div>
                   )}
-                  <p className="mt-4 text-[#0A0A0A]/50 text-xs font-semibold group-hover:text-[#fd0000] transition-colors text-center">
+                  <p className="mt-3 text-[#0A0A0A]/50 text-xs font-semibold group-hover:text-[#fd0000] transition-colors text-center leading-snug">
                     {sponsor.name}
                   </p>
                 </motion.a>
               ))}
             </div>
-          </section>
-        ))}
-
-        {sponsors.length === 0 && (
+          </>
+        ) : (
           <div className="text-center py-20 text-white/20">
             <p className="text-lg">Aucun partenaire configuré.</p>
             <p className="text-sm mt-2">Ajoute des partenaires depuis l'espace admin.</p>
