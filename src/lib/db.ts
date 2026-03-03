@@ -32,6 +32,7 @@ export interface SiteConfig {
   social: { twitter: string; instagram: string; facebook: string; youtube: string };
   heroTitle: string;
   heroSubtitle: string;
+  heroSeason: string;
 }
 
 export interface CmsData {
@@ -59,6 +60,7 @@ const DEFAULT_CONFIG: SiteConfig = {
   social: SOCIAL,
   heroTitle: "AS Nancy Lorraine",
   heroSubtitle: "Fondé en 1913. Fier. Lorrain. Irréductible.",
+  heroSeason: "Saison 2025 – 2026",
 };
 
 // ── KV wrapper ─────────────────────────────────────────────────────────────────

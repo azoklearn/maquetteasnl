@@ -10,10 +10,11 @@ import { trackTicketingClick } from "@/lib/analytics";
 interface HeroProps {
   title?: string;
   subtitle?: string;
+  season?: string;
   ticketingUrl?: string;
 }
 
-export function HeroSection({ title, subtitle, ticketingUrl }: HeroProps) {
+export function HeroSection({ subtitle, season, ticketingUrl }: HeroProps) {
   const ticketUrl = ticketingUrl ?? TICKETING.nextMatchUrl;
   return (
     <section className="relative h-[100svh] min-h-[600px] max-h-[1000px] overflow-hidden flex items-center">
@@ -85,7 +86,7 @@ export function HeroSection({ title, subtitle, ticketingUrl }: HeroProps) {
           >
             <span className="w-10 h-0.5 bg-white" />
             <span className="text-white text-xs font-bold uppercase tracking-[0.4em]">
-              Saison 2025 – 2026
+              {season ?? "Saison 2025 – 2026"}
             </span>
           </motion.div>
 

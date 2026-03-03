@@ -3,34 +3,46 @@ import Image from "next/image";
 import { Ticket, Instagram, Twitter, Facebook, Youtube } from "lucide-react";
 import { CLUB, SOCIAL, TICKETING } from "@/lib/constants";
 import { FooterNewsletter } from "./FooterNewsletter";
+import type { SiteConfig } from "@/lib/db";
 
-const footerLinks = {
-  Club: [
-    { label: "Histoire", href: "/histoire" },
-    { label: "Effectif", href: "/effectif" },
-    { label: "Staff technique", href: "/effectif#staff" },
-    { label: "Palmarès", href: "/histoire#palmares" },
-  ],
-  Compétitions: [
-    { label: "Calendrier", href: "/calendrier" },
-    { label: "Résultats", href: "/calendrier#resultats" },
-    { label: "Classement", href: "/calendrier#classement" },
-  ],
-  Services: [
-    { label: "Billetterie", href: TICKETING.nextMatchUrl, external: true },
-    { label: "Abonnements", href: TICKETING.seasonTicketUrl, external: true },
-    { label: "Groupes", href: TICKETING.groupUrl, external: true },
-    { label: "Boutique", href: "/boutique" },
-  ],
-  Infos: [
-    { label: "Médias / Presse", href: "/medias" },
-    { label: "Partenaires", href: "/partenaires" },
-    { label: "Stade Marcel Picot", href: "/stade" },
-    { label: "Contact", href: "/contact" },
-  ],
-};
+interface FooterProps {
+  social?: SiteConfig["social"];
+  ticketingUrl?: string;
+  seasonTicketUrl?: string;
+  groupUrl?: string;
+}
 
-export function Footer() {
+export function Footer({ social, ticketingUrl, seasonTicketUrl, groupUrl }: FooterProps) {
+  const s = social ?? SOCIAL;
+  const tUrl = ticketingUrl ?? TICKETING.nextMatchUrl;
+  const sUrl = seasonTicketUrl ?? TICKETING.seasonTicketUrl;
+  const gUrl = groupUrl ?? TICKETING.groupUrl;
+
+  const footerLinks = {
+    Club: [
+      { label: "Histoire", href: "/histoire" },
+      { label: "Effectif", href: "/effectif" },
+      { label: "Staff technique", href: "/effectif#staff" },
+      { label: "Palmarès", href: "/histoire#palmares" },
+    ],
+    Compétitions: [
+      { label: "Calendrier", href: "/calendrier" },
+      { label: "Résultats", href: "/calendrier#resultats" },
+      { label: "Classement", href: "/calendrier#classement" },
+    ],
+    Services: [
+      { label: "Billetterie", href: tUrl, external: true },
+      { label: "Abonnements", href: sUrl, external: true },
+      { label: "Groupes", href: gUrl, external: true },
+      { label: "Boutique", href: "/boutique" },
+    ],
+    Infos: [
+      { label: "Médias / Presse", href: "/medias" },
+      { label: "Partenaires", href: "/partenaires" },
+      { label: "Stade Marcel Picot", href: "/stade" },
+      { label: "Contact", href: "/contact" },
+    ],
+  };
   return (
     <footer className="bg-[#0A0A0A]">
 
@@ -83,10 +95,10 @@ export function Footer() {
             {/* Réseaux — icônes rouges au hover */}
             <div className="flex gap-2">
               {[
-                { href: SOCIAL.instagram, icon: Instagram, label: "Instagram" },
-                { href: SOCIAL.twitter, icon: Twitter, label: "Twitter" },
-                { href: SOCIAL.facebook, icon: Facebook, label: "Facebook" },
-                { href: SOCIAL.youtube, icon: Youtube, label: "YouTube" },
+                { href: s.instagram, icon: Instagram, label: "Instagram" },
+                { href: s.twitter, icon: Twitter, label: "Twitter" },
+                { href: s.facebook, icon: Facebook, label: "Facebook" },
+                { href: s.youtube, icon: Youtube, label: "YouTube" },
               ].map(({ href, icon: Icon, label }) => (
                 <a
                   key={label}

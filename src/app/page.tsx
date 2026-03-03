@@ -22,7 +22,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <HeroSection title={config.heroTitle} subtitle={config.heroSubtitle} ticketingUrl={config.ticketingUrl} />
+      <HeroSection subtitle={config.heroSubtitle} season={config.heroSeason} ticketingUrl={config.ticketingUrl} />
       <NextMatchSection match={nextMatch} />
       <NewsSection articles={news} />
       <PlayersSection players={players} />

@@ -9,9 +9,22 @@ import { NAVIGATION, TICKETING } from "@/lib/constants";
 import { trackTicketingClick } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
-export function Header() {
+interface HeaderProps {
+  tickerMessages?: string[];
+  ticketingUrl?: string;
+}
+
+export function Header({ tickerMessages, ticketingUrl }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const ticketUrl = ticketingUrl ?? TICKETING.nextMatchUrl;
+  const messages = tickerMessages?.length ? tickerMessages : [
+    "⚽ Nancy 3-0 Valenciennes",
+    "🎟️ DERBY vs METZ — 14 MARS — PLACES LIMITÉES",
+    "🏆 LIGUE 2 J27 — ASNL 3ème au classement",
+    "📣 Diego Santos prolonge jusqu'en 2028",
+    "🔥 Choc de la saison le 14 mars à Marcel Picot",
+  ];
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 60);
@@ -30,16 +43,12 @@ export function Header() {
         <div className="flex animate-ticker whitespace-nowrap">
           {[...Array(2)].map((_, i) => (
             <span key={i} className="flex items-center gap-8 px-4">
-              <span className="opacity-80">⚽ Nancy 3-0 Valenciennes</span>
-              <span className="opacity-40">·</span>
-              <span>🎟️ DERBY vs METZ — 14 MARS — PLACES LIMITÉES</span>
-              <span className="opacity-40">·</span>
-              <span className="opacity-80">🏆 NATIONAL J25 — ASNL 2ème au classement</span>
-              <span className="opacity-40">·</span>
-              <span className="opacity-80">📣 Diego Santos prolonge jusqu'en 2028</span>
-              <span className="opacity-40">·</span>
-              <span>🔥 Choc de la saison le 14 mars à Marcel Picot</span>
-              <span className="opacity-40">·</span>
+              {messages.map((msg, j) => (
+                <span key={j} className="flex items-center gap-8">
+                  <span>{msg}</span>
+                  <span className="opacity-40">·</span>
+                </span>
+              ))}
             </span>
           ))}
         </div>
@@ -126,7 +135,7 @@ export function Header() {
 
               {/* CTA billetterie — toujours rouge plein */}
               <a
-                href={TICKETING.nextMatchUrl}
+                href={ticketUrl}
                 target="_blank"
                 rel="noopener noreferrer nofollow"
                 onClick={handleTicketClick}
@@ -191,7 +200,7 @@ export function Header() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.35 }}
-                href={TICKETING.nextMatchUrl}
+                href={ticketUrl}
                 target="_blank"
                 rel="noopener noreferrer nofollow"
                 onClick={() => { handleTicketClick(); setIsMobileOpen(false); }}

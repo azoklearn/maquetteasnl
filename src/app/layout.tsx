@@ -4,6 +4,9 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Analytics } from "@/components/providers/Analytics";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { getSiteConfig } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://maquetteasnl.vercel.app"),
@@ -57,7 +60,9 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const config = await getSiteConfig();
+
   return (
     <html lang="fr" suppressHydrationWarning>
       <head>
@@ -104,9 +109,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-[#0A0A0A] text-white antialiased">
         <ThemeProvider>
           <Analytics />
-          <Header />
+          <Header
+            tickerMessages={config.tickerMessages}
+            ticketingUrl={config.ticketingUrl}
+          />
           <main>{children}</main>
-          <Footer />
+          <Footer
+            social={config.social}
+            ticketingUrl={config.ticketingUrl}
+            seasonTicketUrl={config.seasonTicketUrl}
+            groupUrl={config.groupUrl}
+          />
         </ThemeProvider>
       </body>
     </html>

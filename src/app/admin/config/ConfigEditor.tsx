@@ -83,8 +83,8 @@ export default function ConfigEditor({ initialData, username }: Props) {
           <Section title="Page d'accueil — Hero">
             <div className="space-y-4">
               <div>
-                <label className={LABEL}>Titre principal</label>
-                <input className={FIELD} value={config.heroTitle} onChange={(e) => set("heroTitle", e.target.value)} />
+                <label className={LABEL}>Saison (ex: Saison 2025 – 2026)</label>
+                <input className={FIELD} value={config.heroSeason ?? ""} onChange={(e) => set("heroSeason", e.target.value)} placeholder="Saison 2025 – 2026" />
               </div>
               <div>
                 <label className={LABEL}>Sous-titre / Slogan</label>
