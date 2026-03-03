@@ -168,34 +168,42 @@ export function HeroSection({ subtitle, season, ticketingUrl, sectionStyle }: He
           </motion.div>
         </div>
 
-        {/* Stats côté droit — sur fond semi-transparent blanc */}
-        <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, delay: 1.0 }}
-          className="absolute bottom-20 right-4 sm:right-8 flex flex-col gap-1"
-        >
-          {[
-            { value: "2ème", label: "au classement" },
-            { value: "48", label: "points" },
-            { value: "+18", label: "diff. buts" },
-          ].map((stat) => (
-            <div
-              key={stat.label}
-              className="text-right px-4 py-2"
+        {/* Stats côté droit */}
+        {(() => {
+          const stats = sectionStyle?.stats?.length
+            ? sectionStyle.stats
+            : [
+                { value: "2ème", label: "au classement" },
+                { value: "48",   label: "points" },
+                { value: "+18",  label: "diff. buts" },
+              ];
+          return (
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 1.0 }}
+              className="absolute bottom-20 right-4 sm:right-8 flex flex-col gap-1"
             >
-              <div
-                className="text-white text-3xl font-black leading-none drop-shadow-lg"
-                style={{ fontFamily: "'Bebas Neue', sans-serif" }}
-              >
-                {stat.value}
-              </div>
-              <div className="text-white/60 text-[10px] uppercase tracking-widest font-semibold">{stat.label}</div>
-            </div>
-          ))}
-          {/* Barre rouge à droite des stats */}
-          <div className="absolute right-0 top-2 bottom-2 w-0.5 bg-white/40" />
-        </motion.div>
+              {stats.map((stat, i) => (
+                <div key={i} className="text-right px-4 py-2">
+                  <div
+                    className="text-3xl font-black leading-none drop-shadow-lg"
+                    style={{ fontFamily: "'Bebas Neue', sans-serif", color: textCol }}
+                  >
+                    {stat.value}
+                  </div>
+                  <div
+                    className="text-[10px] uppercase tracking-widest font-semibold"
+                    style={{ color: textCol, opacity: 0.6 }}
+                  >
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
+              <div className="absolute right-0 top-2 bottom-2 w-0.5 bg-white/40" />
+            </motion.div>
+          );
+        })()}
       </div>
 
       {/* ── Scroll indicator ── */}

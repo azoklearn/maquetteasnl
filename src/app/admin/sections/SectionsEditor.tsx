@@ -249,6 +249,71 @@ function SectionPanel({
             />
           </div>
 
+          {/* Stats Hero (uniquement pour la section Hero) */}
+          {meta.key === "hero" && (() => {
+            const stats: { value: string; label: string }[] = style.stats?.length
+              ? style.stats
+              : [
+                  { value: "2ème", label: "au classement" },
+                  { value: "48",   label: "points" },
+                  { value: "+18",  label: "diff. buts" },
+                ];
+            return (
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <label style={{ fontSize: 11, fontWeight: 600, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                  Statistiques affichées (côté droit du hero)
+                </label>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  {stats.map((s, i) => (
+                    <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 2fr auto", gap: 6, alignItems: "center" }}>
+                      <input
+                        type="text"
+                        value={s.value}
+                        placeholder="ex: 2ème"
+                        onChange={(e) => {
+                          const updated = [...stats];
+                          updated[i] = { ...updated[i], value: e.target.value };
+                          onChange({ stats: updated });
+                        }}
+                        style={{ padding: "6px 10px", background: "#1f2937", border: "1px solid #374151", borderRadius: 6, color: "#f9fafb", fontSize: 14, fontWeight: 700 }}
+                      />
+                      <input
+                        type="text"
+                        value={s.label}
+                        placeholder="ex: au classement"
+                        onChange={(e) => {
+                          const updated = [...stats];
+                          updated[i] = { ...updated[i], label: e.target.value };
+                          onChange({ stats: updated });
+                        }}
+                        style={{ padding: "6px 10px", background: "#1f2937", border: "1px solid #374151", borderRadius: 6, color: "#9ca3af", fontSize: 13 }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const updated = stats.filter((_, idx) => idx !== i);
+                          onChange({ stats: updated });
+                        }}
+                        style={{ background: "#7f1d1d", border: "none", borderRadius: 6, color: "#fca5a5", cursor: "pointer", padding: "6px 10px", fontSize: 12 }}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                  {stats.length < 5 && (
+                    <button
+                      type="button"
+                      onClick={() => onChange({ stats: [...stats, { value: "", label: "" }] })}
+                      style={{ padding: "6px 12px", background: "#1f2937", border: "1px dashed #374151", borderRadius: 6, color: "#6b7280", cursor: "pointer", fontSize: 12, textAlign: "left" }}
+                    >
+                      + Ajouter une stat
+                    </button>
+                  )}
+                </div>
+              </div>
+            );
+          })()}
+
           {/* Aperçu */}
           {(() => {
             const PREVIEW_SIZES: Record<string, number> = { sm: 18, md: 26, lg: 34, xl: 44 };
