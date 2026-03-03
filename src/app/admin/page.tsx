@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/session";
+
+export const dynamic = "force-dynamic";
 import { getAllCmsData } from "@/lib/db";
 import AdminShell from "@/components/admin/AdminShell";
 import Link from "next/link";

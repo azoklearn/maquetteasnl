@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import type { Sponsor } from "@/types";
 import AdminShell from "@/components/admin/AdminShell";
 import SaveButton from "@/components/admin/SaveButton";
@@ -30,6 +31,7 @@ function newSponsor(): Sponsor {
 }
 
 export default function SponsorsEditor({ initialData, username }: Props) {
+  const router = useRouter();
   const [sponsors, setSponsors] = useState<Sponsor[]>(initialData);
 
   function update(id: string, field: keyof Sponsor, value: string) {
@@ -52,6 +54,7 @@ export default function SponsorsEditor({ initialData, username }: Props) {
       body: JSON.stringify({ section: "sponsors", data: sponsors }),
     });
     if (!res.ok) throw new Error();
+    router.refresh();
   }
 
   return (

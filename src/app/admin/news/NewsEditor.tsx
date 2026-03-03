@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import type { NewsArticle } from "@/types";
 import AdminShell from "@/components/admin/AdminShell";
 import SaveButton from "@/components/admin/SaveButton";
@@ -33,6 +34,7 @@ function newArticle(): NewsArticle {
 }
 
 export default function NewsEditor({ initialData, username }: Props) {
+  const router = useRouter();
   const [articles, setArticles] = useState<NewsArticle[]>(initialData);
   const [expanded, setExpanded] = useState<string | null>(null);
 
@@ -65,6 +67,8 @@ export default function NewsEditor({ initialData, username }: Props) {
       body: JSON.stringify({ section: "news", data: articles }),
     });
     if (!res.ok) throw new Error();
+    // Recharge les données fraîches depuis Redis
+    router.refresh();
   }
 
   return (

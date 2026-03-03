@@ -3,6 +3,8 @@ import { requireAdmin } from "@/lib/session";
 import { getSponsors } from "@/lib/db";
 import SponsorsEditor from "./SponsorsEditor";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminSponsorsPage() {
   const session = await requireAdmin();
   if (!session) redirect("/admin/login");

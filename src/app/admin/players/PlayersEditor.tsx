@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import type { Player } from "@/types";
 import AdminShell from "@/components/admin/AdminShell";
 import SaveButton from "@/components/admin/SaveButton";
@@ -29,6 +30,7 @@ function newPlayer(): Player {
 }
 
 export default function PlayersEditor({ initialData, username }: Props) {
+  const router = useRouter();
   const [players, setPlayers] = useState<Player[]>(initialData);
   const [expanded, setExpanded] = useState<string | null>(null);
 
@@ -60,6 +62,7 @@ export default function PlayersEditor({ initialData, username }: Props) {
       body: JSON.stringify({ section: "players", data: players }),
     });
     if (!res.ok) throw new Error();
+    router.refresh();
   }
 
   const grouped = POSITIONS.map((pos) => ({

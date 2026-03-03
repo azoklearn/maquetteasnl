@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import type { SiteConfig } from "@/lib/db";
 import AdminShell from "@/components/admin/AdminShell";
 import SaveButton from "@/components/admin/SaveButton";
@@ -24,6 +25,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 }
 
 export default function ConfigEditor({ initialData, username }: Props) {
+  const router = useRouter();
   const [config, setConfig] = useState<SiteConfig>(initialData);
 
   function set<K extends keyof SiteConfig>(key: K, value: SiteConfig[K]) {
@@ -60,6 +62,7 @@ export default function ConfigEditor({ initialData, username }: Props) {
       body: JSON.stringify({ section: "config", data: config }),
     });
     if (!res.ok) throw new Error();
+    router.refresh();
   }
 
   return (

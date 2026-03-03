@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import type { Match } from "@/types";
 import AdminShell from "@/components/admin/AdminShell";
 import SaveButton from "@/components/admin/SaveButton";
@@ -12,6 +13,7 @@ const FIELD = "bg-[#1a1a1a] border border-white/10 focus:border-[#C8102E] focus:
 const LABEL = "block text-white/50 text-xs font-bold uppercase tracking-wider mb-2";
 
 export default function MatchEditor({ initialData, username }: Props) {
+  const router = useRouter();
   const [data, setData] = useState<Match>(initialData);
 
   function set(field: keyof Match, value: string | boolean | number) {
@@ -25,6 +27,7 @@ export default function MatchEditor({ initialData, username }: Props) {
       body: JSON.stringify({ section: "nextMatch", data }),
     });
     if (!res.ok) throw new Error("Erreur sauvegarde");
+    router.refresh();
   }
 
   return (
