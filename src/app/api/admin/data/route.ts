@@ -1,4 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+
+// Augmente la limite pour les images base64
+export const maxDuration = 30;
+export const dynamic = "force-dynamic";
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/session";
 import {
