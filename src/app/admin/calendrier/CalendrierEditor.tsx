@@ -9,6 +9,7 @@ import {
   AlertTriangle, CheckCircle, Loader2,
 } from "lucide-react";
 import type { Match } from "@/types";
+import DragImageUpload from "@/components/admin/DragImageUpload";
 
 const EMPTY_MATCH: Omit<Match, "id"> = {
   homeTeam: "",
@@ -195,12 +196,35 @@ export default function CalendrierEditor({ initialData, username }: Props) {
                       >
                         <div className="px-5 pb-6 pt-2 border-t border-white/5 grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-                          <Field label="Équipe domicile">
-                            <input value={match.homeTeam} onChange={(e) => update(match.id, "homeTeam", e.target.value)} className={input} placeholder="AS Nancy Lorraine" />
-                          </Field>
-                          <Field label="Équipe extérieur">
-                            <input value={match.awayTeam} onChange={(e) => update(match.id, "awayTeam", e.target.value)} className={input} placeholder="FC Metz" />
-                          </Field>
+                          {/* Logos des clubs */}
+                          <div className="sm:col-span-2 grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <Field label="Équipe domicile">
+                                <input value={match.homeTeam} onChange={(e) => update(match.id, "homeTeam", e.target.value)} className={input} placeholder="AS Nancy Lorraine" />
+                              </Field>
+                              <DragImageUpload
+                                label="Logo domicile"
+                                hint="PNG transparent recommandé"
+                                value={match.homeLogo}
+                                onChange={(v) => update(match.id, "homeLogo", v ?? "")}
+                                maxW={200}
+                                maxH={200}
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Field label="Équipe extérieur">
+                                <input value={match.awayTeam} onChange={(e) => update(match.id, "awayTeam", e.target.value)} className={input} placeholder="FC Metz" />
+                              </Field>
+                              <DragImageUpload
+                                label="Logo extérieur"
+                                hint="PNG transparent recommandé"
+                                value={match.awayLogo}
+                                onChange={(v) => update(match.id, "awayLogo", v ?? "")}
+                                maxW={200}
+                                maxH={200}
+                              />
+                            </div>
+                          </div>
 
                           <Field label="Date (YYYY-MM-DD)">
                             <input type="date" value={match.date} onChange={(e) => update(match.id, "date", e.target.value)} className={input} />

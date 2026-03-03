@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { Ticket, MapPin, Calendar } from "lucide-react";
 import { MATCHES } from "@/lib/mock-data";
 import { TICKETING } from "@/lib/constants";
@@ -94,17 +95,27 @@ export function CalendrierClient({ matches: matchesProp }: { matches?: Match[] }
                 </div>
 
                 {/* Teams */}
-                <div className="flex items-center gap-4 flex-1">
+                <div className="flex items-center gap-3 flex-1">
+                  {/* Domicile */}
                   <div className={cn(
-                    "text-right flex-1",
+                    "text-right flex-1 flex items-center justify-end gap-2",
                     match.isHome ? "text-white font-bold" : "text-white/70",
                   )}>
                     <span className="text-base md:text-xl" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
                       {match.homeTeam}
                     </span>
-                    {match.isHome && <span className="ml-2 text-[10px] text-[#fd0000] font-bold uppercase tracking-widest">(Dom)</span>}
+                    {match.homeLogo?.trim() ? (
+                      <div className="w-8 h-8 shrink-0 relative">
+                        <Image src={match.homeLogo} alt={match.homeTeam} fill className="object-contain" sizes="32px" unoptimized={match.homeLogo.startsWith("data:")} />
+                      </div>
+                    ) : (
+                      <div className="w-8 h-8 shrink-0 rounded-full bg-white/10 flex items-center justify-center text-[8px] font-black text-white/40">
+                        {match.homeTeam.slice(0, 2).toUpperCase()}
+                      </div>
+                    )}
                   </div>
 
+                  {/* Score / VS */}
                   <div className="shrink-0 bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-center min-w-[60px]">
                     {match.status === "finished" ? (
                       <span
@@ -118,14 +129,23 @@ export function CalendrierClient({ matches: matchesProp }: { matches?: Match[] }
                     )}
                   </div>
 
+                  {/* Extérieur */}
                   <div className={cn(
-                    "flex-1",
+                    "flex-1 flex items-center gap-2",
                     !match.isHome ? "text-white font-bold" : "text-white/70",
                   )}>
+                    {match.awayLogo?.trim() ? (
+                      <div className="w-8 h-8 shrink-0 relative">
+                        <Image src={match.awayLogo} alt={match.awayTeam} fill className="object-contain" sizes="32px" unoptimized={match.awayLogo.startsWith("data:")} />
+                      </div>
+                    ) : (
+                      <div className="w-8 h-8 shrink-0 rounded-full bg-white/10 flex items-center justify-center text-[8px] font-black text-white/40">
+                        {match.awayTeam.slice(0, 2).toUpperCase()}
+                      </div>
+                    )}
                     <span className="text-base md:text-xl" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
                       {match.awayTeam}
                     </span>
-                    {!match.isHome && <span className="ml-2 text-[10px] text-[#fd0000] font-bold uppercase tracking-widest">(Ext)</span>}
                   </div>
                 </div>
 

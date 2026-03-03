@@ -6,6 +6,7 @@ import type { Match } from "@/types";
 import AdminShell from "@/components/admin/AdminShell";
 import SaveButton from "@/components/admin/SaveButton";
 import { Calendar } from "lucide-react";
+import DragImageUpload from "@/components/admin/DragImageUpload";
 
 interface Props { initialData: Match; username: string }
 
@@ -68,14 +69,34 @@ export default function MatchEditor({ initialData, username }: Props) {
               <span className="w-1 h-4 bg-[#fd0000] rounded-full inline-block" />
               Équipes
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className={LABEL}>Équipe domicile</label>
-                <input className={FIELD} value={data.homeTeam} onChange={(e) => set("homeTeam", e.target.value)} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <div>
+                  <label className={LABEL}>Équipe domicile</label>
+                  <input className={FIELD} value={data.homeTeam} onChange={(e) => set("homeTeam", e.target.value)} />
+                </div>
+                <DragImageUpload
+                  label="Logo domicile"
+                  hint="PNG transparent recommandé"
+                  value={data.homeLogo}
+                  onChange={(v) => set("homeLogo", v ?? "")}
+                  maxW={200}
+                  maxH={200}
+                />
               </div>
-              <div>
-                <label className={LABEL}>Équipe extérieure</label>
-                <input className={FIELD} value={data.awayTeam} onChange={(e) => set("awayTeam", e.target.value)} />
+              <div className="space-y-3">
+                <div>
+                  <label className={LABEL}>Équipe extérieure</label>
+                  <input className={FIELD} value={data.awayTeam} onChange={(e) => set("awayTeam", e.target.value)} />
+                </div>
+                <DragImageUpload
+                  label="Logo extérieur"
+                  hint="PNG transparent recommandé"
+                  value={data.awayLogo}
+                  onChange={(v) => set("awayLogo", v ?? "")}
+                  maxW={200}
+                  maxH={200}
+                />
               </div>
             </div>
             <div className="mt-4 flex items-center gap-3">
