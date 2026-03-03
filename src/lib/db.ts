@@ -63,6 +63,8 @@ const DEFAULT_CONFIG: SiteConfig = {
 
 // ── KV wrapper ─────────────────────────────────────────────────────────────────
 
+import { Redis } from "@upstash/redis";
+
 const KV_KEYS = {
   nextMatch: "cms:nextMatch",
   news:      "cms:news",
@@ -71,25 +73,32 @@ const KV_KEYS = {
   config:    "cms:config",
 } as const;
 
-// Fallback en mémoire pour dev sans KV
+// Fallback en mémoire pour dev sans KV configuré
 const memStore = new Map<string, string>();
 
-function getRedis() {
+let _redis: Redis | null = null;
+function getRedis(): Redis | null {
   if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) return null;
-  const { Redis } = require("@upstash/redis");
-  return new Redis({
-    url: process.env.KV_REST_API_URL,
-    token: process.env.KV_REST_API_TOKEN,
-  });
+  if (!_redis) {
+    _redis = new Redis({
+      url: process.env.KV_REST_API_URL,
+      token: process.env.KV_REST_API_TOKEN,
+    });
+  }
+  return _redis;
 }
 
 async function kvGet<T>(key: string): Promise<T | null> {
   try {
     const redis = getRedis();
-    if (redis) return await redis.get(key) as T | null;
+    if (redis) {
+      const val = await redis.get<T>(key);
+      return val ?? null;
+    }
     const v = memStore.get(key);
     return v ? (JSON.parse(v) as T) : null;
-  } catch {
+  } catch (e) {
+    console.error("[db] kvGet error", e);
     return null;
   }
 }
@@ -98,7 +107,7 @@ async function kvSet<T>(key: string, value: T): Promise<void> {
   try {
     const redis = getRedis();
     if (redis) {
-      await redis.set(key, JSON.stringify(value));
+      await redis.set(key, value);
     } else {
       memStore.set(key, JSON.stringify(value));
     }
