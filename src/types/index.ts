@@ -25,6 +25,7 @@ export interface Player {
   nationality: string;
   photo?: string;
   photoHover?: string;
+  isFeatured?: boolean;
   stats: {
     appearances: number;
     goals: number;

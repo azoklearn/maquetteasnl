@@ -7,7 +7,7 @@ import AdminShell from "@/components/admin/AdminShell";
 import DragImageUpload from "@/components/admin/DragImageUpload";
 import {
   Plus, Trash2, ChevronDown, ChevronUp,
-  AlertTriangle, Save, Check, Loader2, AlertCircle,
+  AlertTriangle, Save, Check, Loader2, AlertCircle, Star,
 } from "lucide-react";
 
 interface Props { initialData: Player[]; username: string }
@@ -153,7 +153,14 @@ export default function PlayersEditor({ initialData, username }: Props) {
             <h1 className="text-white font-black text-3xl uppercase tracking-wider" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
               Effectif
             </h1>
-            <p className="text-white/40 text-sm mt-1">{players.length} joueur{players.length > 1 ? "s" : ""}</p>
+            <p className="text-white/40 text-sm mt-1">
+              {players.length} joueur{players.length > 1 ? "s" : ""}
+              {players.filter(p => p.isFeatured).length > 0 && (
+                <span className="ml-2 text-amber-400 font-semibold">
+                  · {players.filter(p => p.isFeatured).length} <Star className="inline w-3 h-3 fill-amber-400" /> joueur{players.filter(p => p.isFeatured).length > 1 ? "s" : ""} clé{players.filter(p => p.isFeatured).length > 1 ? "s" : ""}
+                </span>
+              )}
+            </p>
           </div>
           <div className="flex items-center gap-3 flex-wrap">
             {dirty && (
@@ -209,8 +216,13 @@ export default function PlayersEditor({ initialData, username }: Props) {
                         className="flex-1 min-w-0 text-left hover:opacity-80 transition-opacity"
                         onClick={() => { setExpanded(open ? null : player.id); setConfirmDelete(null); }}
                       >
-                        <p className="text-white font-semibold text-sm">
+                        <p className="text-white font-semibold text-sm flex items-center gap-2">
                           {player.firstName} <span className="font-black uppercase">{player.name}</span>
+                          {player.isFeatured && (
+                            <span title="Joueur clé — affiché en homepage">
+                              <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                            </span>
+                          )}
                         </p>
                         <p className="text-white/30 text-xs">{player.nationality} · {POS_LABELS[player.position]}</p>
                       </button>
@@ -305,6 +317,20 @@ export default function PlayersEditor({ initialData, username }: Props) {
                             onChange={(v) => update(player.id, "photoHover", v)}
                           />
                         </div>
+
+                        {/* Joueur clé */}
+                        <label className="flex items-center gap-3 cursor-pointer select-none group">
+                          <input
+                            type="checkbox"
+                            checked={!!player.isFeatured}
+                            onChange={(e) => update(player.id, "isFeatured", e.target.checked)}
+                            className="w-4 h-4 accent-amber-400 cursor-pointer"
+                          />
+                          <span className="flex items-center gap-2 text-sm text-white/70 group-hover:text-white transition-colors">
+                            <Star className={`w-4 h-4 transition-colors ${player.isFeatured ? "text-amber-400 fill-amber-400" : "text-white/20"}`} />
+                            <span>Joueur clé <span className="text-white/30 font-normal">(affiché dans la section &quot;Les joueurs clés&quot; de la homepage)</span></span>
+                          </span>
+                        </label>
 
                         {/* Stats */}
                         <div>
