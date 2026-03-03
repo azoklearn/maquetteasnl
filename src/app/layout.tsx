@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Analytics } from "@/components/providers/Analytics";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { getSiteConfig } from "@/lib/db";
+import { LoadingScreen } from "@/components/ui/LoadingScreen";
 
 export const dynamic = "force-dynamic";
 
@@ -108,6 +109,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body className="bg-[#0A0A0A] text-white antialiased">
         <ThemeProvider>
+          <LoadingScreen />
           <Analytics />
           <Header
             tickerMessages={config.tickerMessages}
