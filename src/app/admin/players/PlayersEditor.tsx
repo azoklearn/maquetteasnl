@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import type { Player } from "@/types";
 import AdminShell from "@/components/admin/AdminShell";
 import SaveButton from "@/components/admin/SaveButton";
-import { Plus, Trash2, ChevronDown, ChevronUp } from "lucide-react";
+import { Plus, Trash2, ChevronDown, ChevronUp, AlertTriangle } from "lucide-react";
 
 interface Props { initialData: Player[]; username: string }
 
@@ -33,26 +33,49 @@ export default function PlayersEditor({ initialData, username }: Props) {
   const router = useRouter();
   const [players, setPlayers] = useState<Player[]>(initialData);
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
+  const [dirty, setDirty] = useState(false);
+
+  // Resynchronise quand les données serveur changent (après router.refresh)
+  useEffect(() => {
+    setPlayers(initialData);
+    setDirty(false);
+  }, [initialData]);
 
   function update(id: string, field: keyof Player, value: unknown) {
     setPlayers((prev) => prev.map((p) => p.id === id ? { ...p, [field]: value } : p));
+    setDirty(true);
   }
 
   function updateStat(id: string, stat: keyof Player["stats"], value: number) {
     setPlayers((prev) =>
       prev.map((p) => p.id === id ? { ...p, stats: { ...p.stats, [stat]: value } } : p)
     );
+    setDirty(true);
   }
 
-  function remove(id: string) {
-    if (!confirm("Supprimer ce joueur ?")) return;
-    setPlayers((prev) => prev.filter((p) => p.id !== id));
+  async function remove(id: string) {
+    const updated = players.filter((p) => p.id !== id);
+    setPlayers(updated);
+    setConfirmDelete(null);
+    setExpanded(null);
+    // Auto-save immédiatement après suppression
+    const res = await fetch("/api/admin/data", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ section: "players", data: updated }),
+    });
+    if (res.ok) {
+      setDirty(false);
+      router.refresh();
+    }
   }
 
   function add() {
     const p = newPlayer();
     setPlayers((prev) => [...prev, p]);
     setExpanded(p.id);
+    setDirty(true);
   }
 
   async function save() {
@@ -62,6 +85,7 @@ export default function PlayersEditor({ initialData, username }: Props) {
       body: JSON.stringify({ section: "players", data: players }),
     });
     if (!res.ok) throw new Error();
+    setDirty(false);
     router.refresh();
   }
 
@@ -81,7 +105,13 @@ export default function PlayersEditor({ initialData, username }: Props) {
             </h1>
             <p className="text-white/40 text-sm mt-1">{players.length} joueur{players.length > 1 ? "s" : ""}</p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex items-center gap-3">
+            {dirty && (
+              <span className="text-yellow-400 text-xs font-semibold flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-yellow-400 inline-block" />
+                Modifications non sauvegardées
+              </span>
+            )}
             <button
               onClick={add}
               className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-bold text-sm px-4 py-2.5 rounded-xl transition-colors"
@@ -98,34 +128,68 @@ export default function PlayersEditor({ initialData, username }: Props) {
             <div className="flex flex-col gap-2">
               {group.map((player) => {
                 const open = expanded === player.id;
+                const confirming = confirmDelete === player.id;
+
                 return (
                   <div key={player.id} className="bg-[#161616] rounded-2xl border border-white/5 overflow-hidden">
-                    <button
-                      className="w-full flex items-center gap-4 px-5 py-4 text-left hover:bg-white/5 transition-colors"
-                      onClick={() => setExpanded(open ? null : player.id)}
-                    >
+                    <div className="flex items-center gap-4 px-5 py-4">
                       <span className="text-white/20 font-black text-lg w-8 shrink-0 text-center">
                         {player.number}
                       </span>
-                      <div className="flex-1 min-w-0">
+
+                      {/* Infos — cliquable pour ouvrir */}
+                      <button
+                        className="flex-1 min-w-0 text-left hover:opacity-80 transition-opacity"
+                        onClick={() => { setExpanded(open ? null : player.id); setConfirmDelete(null); }}
+                      >
                         <p className="text-white font-semibold text-sm">{player.firstName} <span className="font-black uppercase">{player.name}</span></p>
-                        <p className="text-white/30 text-xs">{player.nationality}</p>
-                      </div>
+                        <p className="text-white/30 text-xs">{player.nationality} · {POS_LABELS[player.position]}</p>
+                      </button>
+
                       <div className="flex items-center gap-2 shrink-0">
                         <div className="hidden sm:flex gap-3 text-white/30 text-xs">
                           <span>{player.stats.appearances} app.</span>
                           <span>{player.stats.goals} buts</span>
                           <span>{player.stats.assists} pass.</span>
                         </div>
+
+                        {/* Suppression avec confirmation inline */}
+                        {confirming ? (
+                          <div className="flex items-center gap-2">
+                            <span className="text-red-400 text-xs font-semibold flex items-center gap-1">
+                              <AlertTriangle className="w-3 h-3" /> Supprimer ?
+                            </span>
+                            <button
+                              onClick={() => remove(player.id)}
+                              className="px-2.5 py-1 bg-red-500 hover:bg-red-600 text-white text-xs font-bold rounded-lg transition-colors"
+                            >
+                              Oui
+                            </button>
+                            <button
+                              onClick={() => setConfirmDelete(null)}
+                              className="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-lg transition-colors"
+                            >
+                              Non
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={(e) => { e.stopPropagation(); setConfirmDelete(player.id); }}
+                            className="p-2 rounded-lg hover:bg-red-500/20 text-white/30 hover:text-red-400 transition-colors"
+                            title="Supprimer"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        )}
+
                         <button
-                          onClick={(e) => { e.stopPropagation(); remove(player.id); }}
-                          className="p-2 rounded-lg hover:bg-red-500/20 text-white/30 hover:text-red-400 transition-colors"
+                          onClick={() => { setExpanded(open ? null : player.id); setConfirmDelete(null); }}
+                          className="p-1 text-white/40"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          {open ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                         </button>
-                        {open ? <ChevronUp className="w-4 h-4 text-white/40" /> : <ChevronDown className="w-4 h-4 text-white/40" />}
                       </div>
-                    </button>
+                    </div>
 
                     {open && (
                       <div className="px-5 pb-5 border-t border-white/5 pt-4 space-y-4">
@@ -157,7 +221,7 @@ export default function PlayersEditor({ initialData, username }: Props) {
                           </div>
                           <div>
                             <label className={LABEL}>Photo (URL)</label>
-                            <input className={FIELD} value={player.photo ?? ""} onChange={(e) => update(player.id, "photo", e.target.value)} placeholder="https://..." />
+                            <input className={FIELD} value={player.photo ?? ""} onChange={(e) => update(player.id, "photo", e.target.value || undefined)} placeholder="https://..." />
                           </div>
                         </div>
 
@@ -166,7 +230,7 @@ export default function PlayersEditor({ initialData, username }: Props) {
                           <div className="grid grid-cols-3 gap-4">
                             {(["appearances", "goals", "assists"] as const).map((stat) => (
                               <div key={stat}>
-                                <label className="text-white/30 text-xs block mb-1 capitalize">{stat === "appearances" ? "Matchs" : stat === "goals" ? "Buts" : "Passes D."}</label>
+                                <label className="text-white/30 text-xs block mb-1">{stat === "appearances" ? "Matchs" : stat === "goals" ? "Buts" : "Passes D."}</label>
                                 <input
                                   type="number"
                                   className={FIELD}
@@ -177,6 +241,11 @@ export default function PlayersEditor({ initialData, username }: Props) {
                               </div>
                             ))}
                           </div>
+                        </div>
+
+                        {/* Save inline */}
+                        <div className="pt-2 flex justify-end">
+                          <SaveButton onSave={save} label="Enregistrer les modifications" />
                         </div>
                       </div>
                     )}

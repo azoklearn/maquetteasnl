@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import type { Sponsor } from "@/types";
 import AdminShell from "@/components/admin/AdminShell";
@@ -34,13 +34,21 @@ export default function SponsorsEditor({ initialData, username }: Props) {
   const router = useRouter();
   const [sponsors, setSponsors] = useState<Sponsor[]>(initialData);
 
+  useEffect(() => { setSponsors(initialData); }, [initialData]);
+
   function update(id: string, field: keyof Sponsor, value: string) {
     setSponsors((prev) => prev.map((s) => s.id === id ? { ...s, [field]: value } : s));
   }
 
-  function remove(id: string) {
-    if (!confirm("Supprimer ce partenaire ?")) return;
-    setSponsors((prev) => prev.filter((s) => s.id !== id));
+  async function remove(id: string) {
+    const updated = sponsors.filter((s) => s.id !== id);
+    setSponsors(updated);
+    const res = await fetch("/api/admin/data", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ section: "sponsors", data: updated }),
+    });
+    if (res.ok) router.refresh();
   }
 
   function add() {
@@ -108,8 +116,9 @@ export default function SponsorsEditor({ initialData, username }: Props) {
                     {TIER_LABELS[sponsor.tier]}
                   </span>
                   <button
-                    onClick={() => remove(sponsor.id)}
+                    onClick={() => { if(window.confirm("Supprimer ce partenaire ?")) remove(sponsor.id); }}
                     className="p-1.5 rounded-lg hover:bg-red-500/20 text-white/30 hover:text-red-400 transition-colors"
+                    title="Supprimer"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>

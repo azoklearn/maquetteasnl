@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import type { NewsArticle } from "@/types";
 import AdminShell from "@/components/admin/AdminShell";
@@ -38,6 +38,8 @@ export default function NewsEditor({ initialData, username }: Props) {
   const [articles, setArticles] = useState<NewsArticle[]>(initialData);
   const [expanded, setExpanded] = useState<string | null>(null);
 
+  useEffect(() => { setArticles(initialData); }, [initialData]);
+
   function update(id: string, field: keyof NewsArticle, value: string | boolean) {
     setArticles((prev) =>
       prev.map((a) => {
@@ -49,9 +51,15 @@ export default function NewsEditor({ initialData, username }: Props) {
     );
   }
 
-  function remove(id: string) {
-    if (!confirm("Supprimer cet article définitivement ?")) return;
-    setArticles((prev) => prev.filter((a) => a.id !== id));
+  async function remove(id: string) {
+    const updated = articles.filter((a) => a.id !== id);
+    setArticles(updated);
+    const res = await fetch("/api/admin/data", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ section: "news", data: updated }),
+    });
+    if (res.ok) router.refresh();
   }
 
   function add() {
@@ -111,12 +119,13 @@ export default function NewsEditor({ initialData, username }: Props) {
                     <p className="text-white/30 text-xs mt-0.5">{article.publishedAt}</p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
-                    <button
-                      onClick={(e) => { e.stopPropagation(); remove(article.id); }}
-                      className="p-2 rounded-lg hover:bg-red-500/20 text-white/30 hover:text-red-400 transition-colors"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); if (window.confirm("Supprimer cet article ?")) remove(article.id); }}
+                          className="p-2 rounded-lg hover:bg-red-500/20 text-white/30 hover:text-red-400 transition-colors"
+                          title="Supprimer"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                     {open ? <ChevronUp className="w-4 h-4 text-white/40" /> : <ChevronDown className="w-4 h-4 text-white/40" />}
                   </div>
                 </button>
