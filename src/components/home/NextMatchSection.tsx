@@ -38,7 +38,7 @@ export function NextMatchSection({ match: matchProp }: { match?: Match }) {
             fontSize: "clamp(120px, 20vw, 280px)",
           }}
         >
-          DERBY
+          {match.awayTeam}
         </span>
       </div>
 
@@ -55,10 +55,12 @@ export function NextMatchSection({ match: matchProp }: { match?: Match }) {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <span className="flex items-center gap-2 bg-white text-[#C8102E] text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider shadow-lg">
-            <Flame className="w-3 h-3" />
-            Choc de la saison
-          </span>
+          {match.isHighProfile && (
+            <span className="flex items-center gap-2 bg-white text-[#C8102E] text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider shadow-lg">
+              <Flame className="w-3 h-3" />
+              Choc de la saison
+            </span>
+          )}
           <span className="flex items-center gap-2 bg-white/15 border border-white/30 text-white text-xs font-bold px-4 py-2 rounded-full uppercase tracking-wider">
             <AlertCircle className="w-3 h-3" />
             Places limitées
@@ -86,13 +88,13 @@ export function NextMatchSection({ match: matchProp }: { match?: Match }) {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          {/* ASNL */}
+          {/* Équipe domicile */}
           <div className="text-center flex-1 max-w-[240px]">
             <div className="w-20 h-20 md:w-28 md:h-28 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl shadow-black/30 overflow-hidden p-1">
               <div className="relative w-full h-full">
                 <Image
                   src="/logo.jpeg"
-                  alt="AS Nancy Lorraine"
+                  alt={match.homeTeam}
                   fill
                   className="object-contain"
                   sizes="112px"
@@ -103,10 +105,10 @@ export function NextMatchSection({ match: matchProp }: { match?: Match }) {
               className="text-white text-2xl md:text-4xl font-black uppercase leading-tight"
               style={{ fontFamily: "'Bebas Neue', sans-serif" }}
             >
-              AS Nancy Lorraine
+              {match.homeTeam}
             </h2>
             <span className="text-white/50 text-xs uppercase tracking-widest mt-1 block font-semibold">
-              Domicile
+              {match.isHome ? "Domicile" : "Extérieur"}
             </span>
           </div>
 
@@ -120,24 +122,24 @@ export function NextMatchSection({ match: matchProp }: { match?: Match }) {
             </div>
           </div>
 
-          {/* Adversaire — contour blanc */}
+          {/* Équipe visiteur */}
           <div className="text-center flex-1 max-w-[240px]">
             <div className="w-20 h-20 md:w-28 md:h-28 bg-transparent border-2 border-white/40 rounded-full flex items-center justify-center mx-auto mb-4">
               <span
                 className="text-white text-xl md:text-2xl font-black"
                 style={{ fontFamily: "'Bebas Neue', sans-serif" }}
               >
-                FCM
+                {match.awayTeam.slice(0, 3).toUpperCase()}
               </span>
             </div>
             <h2
               className="text-white text-2xl md:text-4xl font-black uppercase leading-tight"
               style={{ fontFamily: "'Bebas Neue', sans-serif" }}
             >
-              FC Metz
+              {match.awayTeam}
             </h2>
             <span className="text-white/50 text-xs uppercase tracking-widest mt-1 block font-semibold">
-              Visiteur
+              {match.isHome ? "Visiteur" : "Domicile"}
             </span>
           </div>
         </motion.div>
