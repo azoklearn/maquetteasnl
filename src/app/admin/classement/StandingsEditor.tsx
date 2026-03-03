@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   Save, Plus, Trash2, AlertCircle, Check, Loader2,
-  AlertTriangle, ChevronUp, ChevronDown, RotateCcw,
+  AlertTriangle, ChevronUp, ChevronDown,
 } from "lucide-react";
 import type { StandingEntry } from "@/types";
 import { AdminShell } from "@/components/admin/AdminShell";
@@ -152,28 +152,6 @@ export function StandingsEditor({ initialData, username }: Props) {
     }
   }
 
-  async function resetToLive() {
-    setSaveStatus("saving");
-    setSaveError(null);
-    try {
-      const res = await fetch("/api/admin/data", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ section: "standings", data: [] }), // [] = clear → API live
-      });
-      if (!res.ok) throw new Error(`Erreur ${res.status}`);
-      setSaveStatus("saved");
-      setDirty(false);
-      router.refresh();
-      setTimeout(() => setSaveStatus("idle"), 2500);
-    } catch (e) {
-      const msg = e instanceof Error ? e.message : "Erreur inconnue";
-      setSaveError(msg);
-      setSaveStatus("error");
-      setTimeout(() => setSaveStatus("idle"), 6000);
-    }
-  }
-
   const isSaving = saveStatus === "saving";
 
   return (
@@ -186,7 +164,7 @@ export function StandingsEditor({ initialData, username }: Props) {
             <h1 className="text-white font-black text-3xl uppercase tracking-wider" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
               Classement
             </h1>
-            <p className="text-white/40 text-sm mt-1">{rows.length} équipes · modifié manuellement (prioritaire sur l'API live)</p>
+            <p className="text-white/40 text-sm mt-1">{rows.length} équipe{rows.length > 1 ? "s" : ""}</p>
           </div>
           <div className="flex items-center gap-3 flex-wrap">
             {dirty && (
@@ -200,14 +178,6 @@ export function StandingsEditor({ initialData, username }: Props) {
               className="flex items-center gap-2 bg-white/10 hover:bg-white/15 text-white font-bold text-sm px-4 py-2.5 rounded-xl transition-all border border-white/10"
             >
               <Plus className="w-4 h-4" /> Ajouter
-            </button>
-            <button
-              onClick={resetToLive}
-              disabled={isSaving}
-              title="Supprimer le classement manuel → revenir à l'API live"
-              className="flex items-center gap-2 bg-white/5 hover:bg-white/10 text-white/50 hover:text-white font-bold text-sm px-4 py-2.5 rounded-xl transition-all border border-white/10"
-            >
-              <RotateCcw className="w-4 h-4" /> Réinitialiser (API live)
             </button>
             <button
               onClick={save}
@@ -236,11 +206,6 @@ export function StandingsEditor({ initialData, username }: Props) {
           </div>
         )}
 
-        {/* Note */}
-        <div className="mb-6 p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-300 text-sm">
-          <strong>Info :</strong> Le classement saisi ici remplace l&apos;API live. Cliquez sur{" "}
-          <em>&quot;Réinitialiser (API live)&quot;</em> pour revenir aux données automatiques.
-        </div>
 
         {/* En-tête tableau */}
         <div className="hidden sm:grid grid-cols-[32px_40px_48px_1fr_48px_48px_48px_48px_48px_48px_56px_80px_32px] gap-2 px-4 py-2 text-white/30 text-[10px] font-bold uppercase tracking-wider border-b border-white/5 mb-1">

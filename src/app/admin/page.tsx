@@ -34,7 +34,7 @@ export default async function AdminDashboard() {
       href: "/admin/classement",
       icon: BarChart2,
       label: "Classement",
-      value: standings ? `${standings.length} équipes (manuel)` : "API live",
+      value: standings ? `${standings.length} équipes` : "Données mock",
       sub: "Modifier le tableau Ligue 2",
       color: "from-emerald-700 to-emerald-900",
     },
