@@ -17,9 +17,18 @@ interface HeroProps {
   sectionStyle?: SectionStyle;
 }
 
+// Tailles spécifiques au Hero (beaucoup plus grand que les autres sections)
+const HERO_SIZE: Record<string, string> = {
+  sm: "text-5xl sm:text-7xl md:text-8xl",
+  md: "text-7xl sm:text-9xl md:text-[9.5rem]",
+  lg: "text-8xl sm:text-[10rem] md:text-[11rem]",
+  xl: "text-9xl sm:text-[11rem] md:text-[13rem]",
+};
+
 export function HeroSection({ subtitle, season, ticketingUrl, sectionStyle }: HeroProps) {
   const accent    = sectionAccent(sectionStyle);
-  const titleCls  = titleSizeClass(sectionStyle, "text-6xl sm:text-8xl md:text-[10rem]");
+  const titleCls  = HERO_SIZE[sectionStyle?.titleSize ?? "md"] ?? HERO_SIZE.md;
+  const textCol   = sectionStyle?.textColor ?? "#ffffff";
   const ticketUrl = ticketingUrl ?? TICKETING.nextMatchUrl;
   return (
     <section className="relative h-[100svh] min-h-[600px] max-h-[1000px] overflow-hidden flex items-center"
@@ -91,27 +100,27 @@ export function HeroSection({ subtitle, season, ticketingUrl, sectionStyle }: He
             transition={{ duration: 0.5, delay: 0.2 }}
             className="flex items-center gap-3 mb-5"
           >
-            <span className="w-10 h-0.5 bg-white" />
-            <span className="text-white text-xs font-bold uppercase tracking-[0.4em]">
+            <span className="w-10 h-0.5" style={{ backgroundColor: textCol }} />
+            <span className="text-xs font-bold uppercase tracking-[0.4em]" style={{ color: textCol }}>
               {sectionStyle?.title ?? season ?? "Saison 2025 – 2026"}
             </span>
           </motion.div>
 
-          {/* Titre — blanc puis rouge */}
+          {/* Titre — club name */}
           <motion.h1
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="font-black uppercase leading-none tracking-tighter"
+            className={`font-black uppercase leading-none tracking-tighter ${titleCls}`}
             style={{ fontFamily: "'Bebas Neue', sans-serif" }}
           >
-            <span className="block text-white text-7xl sm:text-9xl md:text-[9.5rem] drop-shadow-2xl">
+            <span className="block drop-shadow-2xl" style={{ color: textCol }}>
               AS Nancy
             </span>
             <span
-              className="block text-7xl sm:text-9xl md:text-[9.5rem]"
+              className="block"
               style={{
-                WebkitTextStroke: "3px white",
+                WebkitTextStroke: `3px ${textCol}`,
                 color: "transparent",
               }}
             >
@@ -119,12 +128,13 @@ export function HeroSection({ subtitle, season, ticketingUrl, sectionStyle }: He
             </span>
           </motion.h1>
 
-          {/* Sous-titre blanc */}
+          {/* Sous-titre */}
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="text-white/85 text-base md:text-lg mt-6 mb-10 max-w-lg leading-relaxed font-medium"
+            className="text-base md:text-lg mt-6 mb-10 max-w-lg leading-relaxed font-medium"
+            style={{ color: textCol, opacity: 0.85 }}
           >
             {sectionStyle?.subtitle ?? subtitle ?? "Fondé en 1913. Fier. Lorrain. Irréductible."}
           </motion.p>

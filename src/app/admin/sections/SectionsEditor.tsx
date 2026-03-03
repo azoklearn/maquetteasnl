@@ -171,13 +171,13 @@ function SectionPanel({
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
               <label style={{ fontSize: 11, fontWeight: 600, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                Titre
+                {meta.key === "hero" ? "Saison (texte eyebrow)" : "Titre"}
               </label>
               <input
                 type="text"
                 value={style.title ?? ""}
                 onChange={(e) => onChange({ title: e.target.value })}
-                placeholder="Titre par défaut"
+                placeholder={meta.key === "hero" ? "ex: Saison 2025 – 2026" : "Titre par défaut"}
                 style={{
                   padding: "8px 12px", background: "#1f2937", border: "1px solid #374151",
                   borderRadius: 6, color: "#f9fafb", fontSize: 14,
@@ -186,13 +186,13 @@ function SectionPanel({
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
               <label style={{ fontSize: 11, fontWeight: 600, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                Sous-titre / Eyebrow
+                {meta.key === "hero" ? "Slogan / Sous-titre" : "Sous-titre"}
               </label>
               <input
                 type="text"
                 value={style.subtitle ?? ""}
                 onChange={(e) => onChange({ subtitle: e.target.value })}
-                placeholder="Texte au-dessus du titre"
+                placeholder={meta.key === "hero" ? "ex: Fondé en 1913. Fier. Lorrain." : "Texte au-dessus du titre"}
                 style={{
                   padding: "8px 12px", background: "#1f2937", border: "1px solid #374151",
                   borderRadius: 6, color: "#f9fafb", fontSize: 14,
