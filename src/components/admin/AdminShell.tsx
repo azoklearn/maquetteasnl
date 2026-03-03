@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import {
   LayoutDashboard, Calendar, Newspaper, Users, Trophy,
-  HandHeart, Settings, LogOut, Menu, X, ChevronRight, Layers,
+  HandHeart, Settings, LogOut, Menu, X, ChevronRight, Layers, BarChart2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -14,6 +14,7 @@ const NAV = [
   { href: "/admin",            label: "Tableau de bord",   icon: LayoutDashboard },
   { href: "/admin/match",      label: "Prochain match",    icon: Calendar },
   { href: "/admin/calendrier", label: "Calendrier",        icon: Trophy },
+  { href: "/admin/classement", label: "Classement",        icon: BarChart2 },
   { href: "/admin/news",       label: "Actualités",        icon: Newspaper },
   { href: "/admin/players",    label: "Effectif",          icon: Users },
   { href: "/admin/sponsors",   label: "Partenaires",       icon: HandHeart },

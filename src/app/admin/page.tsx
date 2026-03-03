@@ -5,13 +5,13 @@ export const dynamic = "force-dynamic";
 import { getAllCmsData } from "@/lib/db";
 import AdminShell from "@/components/admin/AdminShell";
 import Link from "next/link";
-import { Calendar, ListOrdered, Newspaper, Users, HandHeart, Settings, ArrowRight, Layers } from "lucide-react";
+import { Calendar, ListOrdered, Newspaper, Users, HandHeart, Settings, ArrowRight, Layers, BarChart2 } from "lucide-react";
 
 export default async function AdminDashboard() {
   const session = await requireAdmin();
   if (!session) redirect("/admin/login");
 
-  const { news, players, sponsors, nextMatch, matches } = await getAllCmsData();
+  const { news, players, sponsors, nextMatch, matches, standings } = await getAllCmsData();
 
   const cards = [
     {
@@ -29,6 +29,14 @@ export default async function AdminDashboard() {
       value: `${matches.length} matchs`,
       sub: "Ajouter, modifier, scores",
       color: "from-slate-700 to-slate-900",
+    },
+    {
+      href: "/admin/classement",
+      icon: BarChart2,
+      label: "Classement",
+      value: standings ? `${standings.length} équipes (manuel)` : "API live",
+      sub: "Modifier le tableau Ligue 2",
+      color: "from-emerald-700 to-emerald-900",
     },
     {
       href: "/admin/news",

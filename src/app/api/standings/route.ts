@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { STANDINGS } from "@/lib/mock-data";
+import { getStandings } from "@/lib/db";
 import type { StandingEntry } from "@/types";
 
 // ── Config ────────────────────────────────────────────────────────────────────
@@ -54,6 +55,17 @@ function transformStanding(s: ApiTeamStanding): StandingEntry {
 
 // ── Handler GET ────────────────────────────────────────────────────────────────
 export async function GET() {
+  // ── Priorité 1 : classement sauvegardé manuellement dans KV ──
+  try {
+    const manual = await getStandings();
+    if (manual && manual.length > 0) {
+      return NextResponse.json(
+        { standings: manual, source: "manual", updatedAt: new Date().toISOString() },
+        { headers: { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=120" } },
+      );
+    }
+  } catch { /* ignore, continue to API */ }
+
   // ── Pas de clé API → renvoie les données mock ──
   if (!API_KEY || API_KEY === "your_api_key_here") {
     return NextResponse.json(

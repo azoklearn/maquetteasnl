@@ -12,6 +12,7 @@ import {
   getSponsors,  setSponsors,
   getSiteConfig,setSiteConfig,
   getMatches,   setMatches,
+  getStandings, setStandings, clearStandings,
   getAllCmsData,
 } from "@/lib/db";
 
@@ -33,6 +34,7 @@ export async function GET(req: NextRequest) {
     case "sponsors":  return NextResponse.json(await getSponsors());
     case "config":    return NextResponse.json(await getSiteConfig());
     case "matches":   return NextResponse.json(await getMatches());
+    case "standings": return NextResponse.json(await getStandings() ?? []);
     case "sections":  return NextResponse.json((await getSiteConfig()).sections ?? {});
     default:          return NextResponse.json(await getAllCmsData());
   }
@@ -60,6 +62,10 @@ export async function POST(req: NextRequest) {
       case "sponsors":  await setSponsors(data as Parameters<typeof setSponsors>[0]);  break;
       case "config":    await setSiteConfig(data as Parameters<typeof setSiteConfig>[0]); break;
       case "matches":   await setMatches(data as Parameters<typeof setMatches>[0]);    break;
+      case "standings":
+        if (Array.isArray(data) && data.length === 0) await clearStandings(); // reset → retour API live
+        else await setStandings(data as Parameters<typeof setStandings>[0]);
+        break;
       case "sections": {
         const current = await getSiteConfig();
         await setSiteConfig({ ...current, sections: data as Parameters<typeof setSiteConfig>[0]["sections"] });
@@ -81,6 +87,7 @@ export async function POST(req: NextRequest) {
   revalidatePath("/medias");
   revalidatePath("/partenaires");
   revalidatePath("/actualites");
+  revalidatePath("/api/standings");
 
   return NextResponse.json({ ok: true, savedAt: new Date().toISOString() });
 }

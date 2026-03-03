@@ -5,7 +5,7 @@
  * Toutes les données du site transitent par ce module.
  */
 
-import type { Match, NewsArticle, Player, Sponsor } from "@/types";
+import type { Match, NewsArticle, Player, Sponsor, StandingEntry } from "@/types";
 import {
   NEXT_MATCH,
   TICKETING,
@@ -20,6 +20,7 @@ import {
   MATCHES,
   SPONSORS,
 } from "@/lib/mock-data";
+
 
 // ── Types CMS ──────────────────────────────────────────────────────────────────
 
@@ -60,6 +61,7 @@ export interface CmsData {
   sponsors: Sponsor[];
   config: SiteConfig;
   matches: Match[];
+  standings: StandingEntry[] | null;
 }
 
 // ── Valeurs par défaut ─────────────────────────────────────────────────────────
@@ -93,6 +95,7 @@ const KV_KEYS = {
   sponsors:  "cms:sponsors",
   config:    "cms:config",
   matches:   "cms:matches",
+  standings: "cms:standings",
 } as const;
 
 // Fallback en mémoire pour dev sans KV configuré
@@ -171,6 +174,19 @@ export async function setMatches(matches: Match[]) {
   await kvSet(KV_KEYS.matches, matches);
 }
 
+/** Retourne null si aucun classement manuel n'a été sauvegardé (laisse l'API live prendre le relais) */
+export async function getStandings(): Promise<StandingEntry[] | null> {
+  return await kvGet<StandingEntry[]>(KV_KEYS.standings);
+}
+export async function setStandings(standings: StandingEntry[]) {
+  await kvSet(KV_KEYS.standings, standings);
+}
+export async function clearStandings() {
+  const redis = getRedis();
+  if (redis) await redis.del(KV_KEYS.standings);
+  else memStore.delete(KV_KEYS.standings);
+}
+
 export async function getSiteConfig(): Promise<SiteConfig> {
   return (await kvGet<SiteConfig>(KV_KEYS.config)) ?? DEFAULT_CONFIG;
 }
@@ -179,13 +195,14 @@ export async function setSiteConfig(cfg: SiteConfig) {
 }
 
 export async function getAllCmsData(): Promise<CmsData> {
-  const [nextMatch, news, players, sponsors, config, matches] = await Promise.all([
+  const [nextMatch, news, players, sponsors, config, matches, standings] = await Promise.all([
     getNextMatch(),
     getNews(),
     getPlayers(),
     getSponsors(),
     getSiteConfig(),
     getMatches(),
+    getStandings(),
   ]);
-  return { nextMatch, news, players, sponsors, config, matches };
+  return { nextMatch, news, players, sponsors, config, matches, standings };
 }
