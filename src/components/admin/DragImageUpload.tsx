@@ -2,27 +2,18 @@
 
 import { useRef, useState, useCallback } from "react";
 import Image from "next/image";
-import { Upload, X, ImageIcon, Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { UploadCloud, X, Loader2, CheckCircle } from "lucide-react";
 
 interface Props {
   value?: string;
   onChange: (val: string | undefined) => void;
   label: string;
   hint?: string;
-  /** Max width for compression (default 480) */
   maxW?: number;
-  /** Max height for compression (default 600) */
   maxH?: number;
 }
 
-/** Compresse une image côté client via Canvas et retourne un data URL JPEG. */
-function compressImage(
-  file: File,
-  maxW = 480,
-  maxH = 600,
-  quality = 0.82
-): Promise<string> {
+function compressImage(file: File, maxW = 480, maxH = 600, quality = 0.82): Promise<string> {
   return new Promise((resolve, reject) => {
     const img = new window.Image();
     img.onload = () => {
@@ -42,156 +33,143 @@ function compressImage(
 }
 
 export default function DragImageUpload({
-  value,
-  onChange,
-  label,
-  hint,
-  maxW = 480,
-  maxH = 600,
+  value, onChange, label, hint, maxW = 480, maxH = 600,
 }: Props) {
-  const inputRef  = useRef<HTMLInputElement>(null);
+  const inputRef              = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
   const [loading,  setLoading]  = useState(false);
   const [error,    setError]    = useState<string | null>(null);
 
-  const trimmed   = value?.trim() || undefined;
-  const isDataUrl = trimmed?.startsWith("data:") ?? false;
-  const isUrl     = trimmed && !isDataUrl;
+  const src = value?.trim() || undefined;
 
-  const handleFiles = useCallback(
-    async (files: FileList | null) => {
-      if (!files || files.length === 0) return;
-      const file = files[0];
-      if (!file.type.startsWith("image/")) {
-        setError("Fichier non valide — veuillez choisir une image.");
-        return;
-      }
-      setError(null);
-      setLoading(true);
-      try {
-        const dataUrl = await compressImage(file, maxW, maxH);
-        onChange(dataUrl);
-      } catch {
-        setError("Erreur lors du traitement de l'image.");
-      } finally {
-        setLoading(false);
-      }
-    },
-    [onChange, maxW, maxH]
-  );
+  const processFiles = useCallback(async (files: FileList | null) => {
+    if (!files?.length) return;
+    const file = files[0];
+    if (!file.type.startsWith("image/")) {
+      setError("Fichier invalide — choisissez une image (JPG, PNG, WEBP).");
+      return;
+    }
+    setError(null);
+    setLoading(true);
+    try {
+      onChange(await compressImage(file, maxW, maxH));
+    } catch {
+      setError("Erreur lors du traitement de l'image.");
+    } finally {
+      setLoading(false);
+    }
+  }, [onChange, maxW, maxH]);
 
-  const onDrop = useCallback(
-    (e: React.DragEvent) => {
-      e.preventDefault();
-      setDragging(false);
-      handleFiles(e.dataTransfer.files);
-    },
-    [handleFiles]
-  );
-
-  const onDragOver  = (e: React.DragEvent) => { e.preventDefault(); setDragging(true);  };
-  const onDragLeave = ()                    => setDragging(false);
+  const onDrop      = useCallback((e: React.DragEvent) => { e.preventDefault(); setDragging(false); processFiles(e.dataTransfer.files); }, [processFiles]);
+  const onDragOver  = (e: React.DragEvent) => { e.preventDefault(); setDragging(true); };
+  const onDragLeave = () => setDragging(false);
+  const onDragEnd   = () => setDragging(false);
 
   return (
-    <div>
-      <label className="block text-white/40 text-xs font-semibold uppercase tracking-wider mb-2">
-        {label}
-      </label>
+    <div className="flex flex-col gap-2">
 
-      {/* Aperçu + suppression */}
-      {trimmed && (
-        <div className="relative mb-3 group w-fit">
-          <div className="relative w-24 h-28 rounded-xl overflow-hidden border border-white/10 bg-[#1e1e1e]">
-            <Image
-              src={trimmed!}
-              alt={label}
-              fill
-              className="object-cover"
-              sizes="96px"
-              unoptimized={!!isDataUrl}
-            />
-            {/* Overlay hover pour remplacer */}
-            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <span className="text-white text-[10px] font-semibold text-center px-1 leading-tight">
-                Cliquer pour<br />remplacer
-              </span>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={() => onChange(undefined)}
-            className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center transition-colors shadow-md"
-            title="Supprimer l'image"
-          >
-            <X className="w-3 h-3" />
-          </button>
-        </div>
-      )}
+      {/* Label */}
+      <p className="text-white/50 text-xs font-bold uppercase tracking-wider">{label}</p>
+      {hint && <p className="text-white/30 text-[10px] -mt-1">{hint}</p>}
 
-      {/* Zone de drop */}
+      {/* Zone principale */}
       <div
         onClick={() => !loading && inputRef.current?.click()}
         onDrop={onDrop}
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
-        className={cn(
-          "relative flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed px-4 py-5 cursor-pointer transition-all text-center select-none",
+        onDragEnd={onDragEnd}
+        style={{ cursor: loading ? "default" : "pointer" }}
+        className={[
+          "relative min-h-[120px] rounded-2xl border-2 border-dashed flex flex-col items-center justify-center gap-3 p-4 transition-all duration-200 overflow-hidden",
           dragging
-            ? "border-[#fd0000] bg-[#fd0000]/10"
-            : "border-white/10 bg-[#1a1a1a] hover:border-white/25 hover:bg-[#222]",
-          loading && "pointer-events-none opacity-60"
-        )}
+            ? "border-[#fd0000] bg-[#fd0000]/15 scale-[1.01]"
+            : src
+            ? "border-white/20 bg-white/5 hover:border-white/40 hover:bg-white/8"
+            : "border-white/25 bg-white/[0.04] hover:border-white/40 hover:bg-white/[0.07]",
+        ].join(" ")}
       >
+        {/* Aperçu si image chargée */}
+        {src && !loading && (
+          <div className="relative w-full h-28 rounded-xl overflow-hidden">
+            <Image
+              src={src}
+              alt={label}
+              fill
+              className="object-cover"
+              sizes="240px"
+              unoptimized={src.startsWith("data:")}
+            />
+            <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
+              <span className="text-white text-xs font-semibold bg-black/50 px-3 py-1 rounded-full">
+                Cliquer pour remplacer
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* Icône / spinner */}
         {loading ? (
-          <Loader2 className="w-5 h-5 text-white/40 animate-spin" />
+          <Loader2 className="w-8 h-8 text-white/40 animate-spin" />
+        ) : src ? (
+          <div className="flex items-center gap-2 text-green-400 text-xs font-semibold">
+            <CheckCircle className="w-4 h-4" />
+            Image chargée
+          </div>
         ) : (
           <>
-            {value ? (
-              <Upload className="w-5 h-5 text-white/30" />
-            ) : (
-              <ImageIcon className="w-5 h-5 text-white/20" />
-            )}
-            <p className="text-white/40 text-xs font-medium leading-snug">
-              {value ? "Glisser pour remplacer" : "Glisser une image ici"}
-              <span className="block text-white/20 mt-0.5">ou cliquer pour parcourir</span>
-            </p>
-            {hint && <p className="text-white/20 text-[10px]">{hint}</p>}
+            <div className={[
+              "w-12 h-12 rounded-2xl flex items-center justify-center transition-colors",
+              dragging ? "bg-[#fd0000]/30" : "bg-white/10",
+            ].join(" ")}>
+              <UploadCloud className={["w-6 h-6 transition-colors", dragging ? "text-[#fd0000]" : "text-white/40"].join(" ")} />
+            </div>
+            <div className="text-center">
+              <p className="text-white/60 text-sm font-semibold">
+                {dragging ? "Relâchez pour uploader" : "Glissez une image ici"}
+              </p>
+              <p className="text-white/30 text-xs mt-0.5">ou cliquez pour parcourir</p>
+              <p className="text-white/20 text-[10px] mt-1 font-mono">JPG · PNG · WEBP</p>
+            </div>
           </>
         )}
-
-        {/* Badge format accepté */}
-        <span className="absolute bottom-1.5 right-2 text-[9px] text-white/15 font-mono uppercase">
-          JPG · PNG · WEBP
-        </span>
       </div>
 
-      {error && (
-        <p className="mt-1.5 text-red-400 text-xs font-medium">{error}</p>
+      {/* Bouton supprimer */}
+      {src && (
+        <button
+          type="button"
+          onClick={(e) => { e.stopPropagation(); onChange(undefined); }}
+          className="flex items-center gap-1.5 self-start text-red-400/70 hover:text-red-400 text-xs font-semibold transition-colors"
+        >
+          <X className="w-3.5 h-3.5" />
+          Supprimer l&apos;image
+        </button>
       )}
 
-      {/* Séparateur URL manuelle */}
-      <div className="flex items-center gap-2 mt-3 mb-2">
-        <div className="flex-1 h-px bg-white/5" />
-        <span className="text-white/20 text-[10px] uppercase tracking-wider">ou URL</span>
-        <div className="flex-1 h-px bg-white/5" />
+      {/* Message d'erreur */}
+      {error && <p className="text-red-400 text-xs font-medium">{error}</p>}
+
+      {/* Champ URL alternative */}
+      <div className="flex items-center gap-2">
+        <div className="flex-1 h-px bg-white/8" />
+        <span className="text-white/20 text-[10px] font-mono uppercase tracking-wider shrink-0">ou URL directe</span>
+        <div className="flex-1 h-px bg-white/8" />
       </div>
       <input
-        placeholder="https://..."
-        value={isUrl ? (trimmed ?? "") : ""}
-        onChange={(e) => {
-          setError(null);
-          onChange(e.target.value || undefined);
-        }}
-        className="w-full bg-[#1a1a1a] border border-white/10 rounded-xl px-3 py-2 text-white text-xs placeholder:text-white/20 focus:outline-none focus:border-[#fd0000]/50 transition-colors"
+        placeholder="https://example.com/photo.jpg"
+        value={src && !src.startsWith("data:") ? src : ""}
+        onChange={(e) => { setError(null); onChange(e.target.value.trim() || undefined); }}
+        className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-white text-xs placeholder:text-white/20 focus:outline-none focus:border-[#fd0000]/60 transition-colors"
       />
 
       {/* Input fichier caché */}
       <input
         ref={inputRef}
         type="file"
-        accept="image/*"
+        accept="image/jpeg,image/png,image/webp,image/gif"
         className="hidden"
-        onChange={(e) => handleFiles(e.target.files)}
+        onChange={(e) => processFiles(e.target.files)}
       />
     </div>
   );
