@@ -7,6 +7,8 @@ import { Target, Zap, Shield } from "lucide-react";
 import { PLAYERS } from "@/lib/mock-data";
 import type { Player } from "@/types";
 
+interface EffectifClientProps { players?: Player[] }
+
 type Filter = "ALL" | "GK" | "DEF" | "MID" | "ATT";
 
 const FILTERS: { key: Filter; label: string }[] = [
@@ -31,10 +33,11 @@ const POSITION_LABELS: Record<string, string> = {
   ATT: "Attaquant",
 };
 
-export function EffectifClient() {
+export function EffectifClient({ players: playersProp }: EffectifClientProps) {
+  const players = playersProp?.length ? playersProp : PLAYERS;
   const [filter, setFilter] = useState<Filter>("ALL");
 
-  const filtered = filter === "ALL" ? PLAYERS : PLAYERS.filter((p) => p.position === filter);
+  const filtered = filter === "ALL" ? players : players.filter((p) => p.position === filter);
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] pt-8">
@@ -65,7 +68,7 @@ export function EffectifClient() {
             className="text-white/50 mt-4 text-base max-w-xl"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
           >
-            {PLAYERS.length} joueurs professionnels sous les couleurs rouge et blanc.
+            {players.length} joueur{players.length > 1 ? "s" : ""} professionnel{players.length > 1 ? "s" : ""} sous les couleurs rouge et blanc.
           </motion.p>
         </div>
       </div>

@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
+import { getPlayers } from "@/lib/db";
 import { EffectifClient } from "./EffectifClient";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Effectif",
@@ -10,6 +13,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function EffectifPage() {
-  return <EffectifClient />;
+export default async function EffectifPage() {
+  const players = await getPlayers();
+  return <EffectifClient players={players} />;
 }
