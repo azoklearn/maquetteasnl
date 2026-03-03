@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/session";
 import {
   getNextMatch, setNextMatch,
@@ -46,6 +47,13 @@ export async function POST(req: NextRequest) {
     default:
       return NextResponse.json({ error: "Section inconnue" }, { status: 400 });
   }
+
+  // Invalide le cache immédiatement sur toutes les pages publiques
+  revalidatePath("/");
+  revalidatePath("/effectif");
+  revalidatePath("/calendrier");
+  revalidatePath("/medias");
+  revalidatePath("/partenaires");
 
   return NextResponse.json({ ok: true, savedAt: new Date().toISOString() });
 }

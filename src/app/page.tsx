@@ -8,8 +8,8 @@ import { StandingsSection } from "@/components/home/StandingsSection";
 import { SponsorsSection } from "@/components/home/SponsorsSection";
 import { NewsletterSection } from "@/components/home/NewsletterSection";
 
-// Revalide toutes les 60 secondes pour répercuter les changements admin
-export const revalidate = 60;
+// Dynamique — les changements admin apparaissent immédiatement
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "AS Nancy Lorraine – Site Officiel",
