@@ -33,6 +33,7 @@ export async function GET(req: NextRequest) {
     case "sponsors":  return NextResponse.json(await getSponsors());
     case "config":    return NextResponse.json(await getSiteConfig());
     case "matches":   return NextResponse.json(await getMatches());
+    case "sections":  return NextResponse.json((await getSiteConfig()).sections ?? {});
     default:          return NextResponse.json(await getAllCmsData());
   }
 }
@@ -51,6 +52,11 @@ export async function POST(req: NextRequest) {
     case "sponsors":  await setSponsors(data);  break;
     case "config":    await setSiteConfig(data);  break;
     case "matches":   await setMatches(data);      break;
+    case "sections": {
+      const current = await getSiteConfig();
+      await setSiteConfig({ ...current, sections: data });
+      break;
+    }
     default:
       return NextResponse.json({ error: "Section inconnue" }, { status: 400 });
   }

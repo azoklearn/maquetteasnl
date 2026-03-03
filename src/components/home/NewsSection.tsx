@@ -6,6 +6,8 @@ import Link from "next/link";
 import { ArrowRight, Clock } from "lucide-react";
 import type { NewsArticle } from "@/types";
 import { formatShortDate } from "@/lib/utils";
+import type { SectionStyle } from "@/lib/db";
+import { titleSizeClass } from "@/lib/sectionStyle";
 
 const CATEGORY_COLORS: Record<string, string> = {
   Match: "bg-[#fd0000] text-white",
@@ -14,12 +16,13 @@ const CATEGORY_COLORS: Record<string, string> = {
   Club: "bg-[#0A0A0A] text-white",
 };
 
-export function NewsSection({ articles }: { articles?: NewsArticle[] }) {
+export function NewsSection({ articles, sectionStyle }: { articles?: NewsArticle[]; sectionStyle?: SectionStyle }) {
+  const titleCls = titleSizeClass(sectionStyle, "text-4xl md:text-6xl");
   const [featured, ...rest] = articles ?? [];
 
   return (
     /* ── Fond blanc — contraste maximal ── */
-    <section className="section-padding bg-white">
+    <section className="section-padding bg-white" style={sectionStyle?.bgColor ? { backgroundColor: sectionStyle.bgColor } : undefined}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* ── Header section ── */}
@@ -29,14 +32,14 @@ export function NewsSection({ articles }: { articles?: NewsArticle[] }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-[#fd0000] text-xs font-bold uppercase tracking-[0.3em] block mb-2">
-              Actualités
+            <span className="text-xs font-bold uppercase tracking-[0.3em] block mb-2" style={{ color: sectionStyle?.accentColor ?? "#fd0000" }}>
+              {sectionStyle?.subtitle ?? "Actualités"}
             </span>
             <h2
-              className="text-[#0A0A0A] text-4xl md:text-6xl font-black uppercase leading-none"
-              style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+              className={`font-black uppercase leading-none ${titleCls}`}
+              style={{ fontFamily: "'Bebas Neue', sans-serif", color: sectionStyle?.textColor ?? "#0A0A0A" }}
             >
-              Les dernières<br />nouveautés
+              {sectionStyle?.title ?? <>Les dernières<br />nouveautés</>}
             </h2>
           </motion.div>
 

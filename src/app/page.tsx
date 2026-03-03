@@ -19,15 +19,28 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   const { nextMatch, news, players, sponsors, config } = await getAllCmsData();
+  const s = config.sections ?? {};
 
   return (
     <>
-      <HeroSection subtitle={config.heroSubtitle} season={config.heroSeason} ticketingUrl={config.ticketingUrl} />
-      <NextMatchSection match={nextMatch} />
-      <NewsSection articles={news} />
-      <PlayersSection players={players} />
-      <StandingsSection />
-      <SponsorsSection sponsors={sponsors} />
+      {s.hero?.visible !== false && (
+        <HeroSection subtitle={config.heroSubtitle} season={config.heroSeason} ticketingUrl={config.ticketingUrl} sectionStyle={s.hero} />
+      )}
+      {s.nextMatch?.visible !== false && (
+        <NextMatchSection match={nextMatch} sectionStyle={s.nextMatch} />
+      )}
+      {s.news?.visible !== false && (
+        <NewsSection articles={news} sectionStyle={s.news} />
+      )}
+      {s.players?.visible !== false && (
+        <PlayersSection players={players} sectionStyle={s.players} />
+      )}
+      {s.standings?.visible !== false && (
+        <StandingsSection sectionStyle={s.standings} />
+      )}
+      {s.sponsors?.visible !== false && (
+        <SponsorsSection sponsors={sponsors} sectionStyle={s.sponsors} />
+      )}
       <NewsletterSection />
     </>
   );

@@ -6,18 +6,25 @@ import Link from "next/link";
 import { Play, ChevronDown, Ticket } from "lucide-react";
 import { TICKETING } from "@/lib/constants";
 import { trackTicketingClick } from "@/lib/analytics";
+import type { SectionStyle } from "@/lib/db";
+import { sectionAccent, titleSizeClass } from "@/lib/sectionStyle";
 
 interface HeroProps {
   title?: string;
   subtitle?: string;
   season?: string;
   ticketingUrl?: string;
+  sectionStyle?: SectionStyle;
 }
 
-export function HeroSection({ subtitle, season, ticketingUrl }: HeroProps) {
+export function HeroSection({ subtitle, season, ticketingUrl, sectionStyle }: HeroProps) {
+  const accent    = sectionAccent(sectionStyle);
+  const titleCls  = titleSizeClass(sectionStyle, "text-6xl sm:text-8xl md:text-[10rem]");
   const ticketUrl = ticketingUrl ?? TICKETING.nextMatchUrl;
   return (
-    <section className="relative h-[100svh] min-h-[600px] max-h-[1000px] overflow-hidden flex items-center">
+    <section className="relative h-[100svh] min-h-[600px] max-h-[1000px] overflow-hidden flex items-center"
+      style={sectionStyle?.bgColor ? { backgroundColor: sectionStyle.bgColor } : undefined}
+    >
 
       {/* ── Fond photo ── */}
       <div className="absolute inset-0 z-0">
@@ -86,7 +93,7 @@ export function HeroSection({ subtitle, season, ticketingUrl }: HeroProps) {
           >
             <span className="w-10 h-0.5 bg-white" />
             <span className="text-white text-xs font-bold uppercase tracking-[0.4em]">
-              {season ?? "Saison 2025 – 2026"}
+              {sectionStyle?.title ?? season ?? "Saison 2025 – 2026"}
             </span>
           </motion.div>
 
@@ -119,7 +126,7 @@ export function HeroSection({ subtitle, season, ticketingUrl }: HeroProps) {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="text-white/85 text-base md:text-lg mt-6 mb-10 max-w-lg leading-relaxed font-medium"
           >
-            {subtitle ?? "Fondé en 1913. Fier. Lorrain. Irréductible."}
+            {sectionStyle?.subtitle ?? subtitle ?? "Fondé en 1913. Fier. Lorrain. Irréductible."}
           </motion.p>
 
           {/* CTAs */}

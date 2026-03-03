@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Target, Zap } from "lucide-react";
 import type { Player } from "@/types";
+import type { SectionStyle } from "@/lib/db";
+import { titleSizeClass } from "@/lib/sectionStyle";
 
 const POSITION_LABELS: Record<string, string> = {
   GK: "Gardien",
@@ -13,12 +15,14 @@ const POSITION_LABELS: Record<string, string> = {
   ATT: "Attaquant",
 };
 
-export function PlayersSection({ players = [] }: { players?: Player[] }) {
-  const featured = players.slice(0, 6);
+export function PlayersSection({ players = [], sectionStyle }: { players?: Player[]; sectionStyle?: SectionStyle }) {
+  const featured   = players.slice(0, 6);
+  const accent     = sectionStyle?.accentColor ?? "#fd0000";
+  const textCol    = sectionStyle?.textColor   ?? "#ffffff";
+  const titleCls   = titleSizeClass(sectionStyle, "text-4xl md:text-6xl");
 
   return (
-    /* ── Fond noir profond — rouge et blanc tranchants ── */
-    <section className="section-padding bg-[#0A0A0A]">
+    <section className="section-padding" style={{ backgroundColor: sectionStyle?.bgColor ?? "#0A0A0A" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* ── Header ── */}
@@ -28,15 +32,14 @@ export function PlayersSection({ players = [] }: { players?: Player[] }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-[#fd0000] text-xs font-bold uppercase tracking-[0.3em] block mb-2">
-              L'Effectif
+            <span className="text-xs font-bold uppercase tracking-[0.3em] block mb-2" style={{ color: accent }}>
+              {sectionStyle?.subtitle ?? "L'Effectif"}
             </span>
             <h2
-              className="text-white text-4xl md:text-6xl font-black uppercase leading-none"
-              style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+              className={`font-black uppercase leading-none ${titleCls}`}
+              style={{ fontFamily: "'Bebas Neue', sans-serif", color: textCol }}
             >
-              Les joueurs<br />
-              <span className="text-[#fd0000]">clés</span>
+              {sectionStyle?.title ? sectionStyle.title : (<>Les joueurs<br /><span style={{ color: accent }}>clés</span></>)}
             </h2>
           </motion.div>
 

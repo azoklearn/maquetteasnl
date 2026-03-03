@@ -6,23 +6,24 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import {
   LayoutDashboard, Calendar, Newspaper, Users, Trophy,
-  HandHeart, Settings, LogOut, Menu, X, ChevronRight,
+  HandHeart, Settings, LogOut, Menu, X, ChevronRight, Layers,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { href: "/admin",               label: "Tableau de bord", icon: LayoutDashboard },
-  { href: "/admin/match",         label: "Prochain match",  icon: Calendar },
-  { href: "/admin/calendrier",    label: "Calendrier",      icon: Trophy },
-  { href: "/admin/news",          label: "Actualités",      icon: Newspaper },
-  { href: "/admin/players",       label: "Effectif",        icon: Users },
-  { href: "/admin/sponsors",      label: "Partenaires",     icon: HandHeart },
-  { href: "/admin/config",        label: "Configuration",   icon: Settings },
+  { href: "/admin",            label: "Tableau de bord",   icon: LayoutDashboard },
+  { href: "/admin/match",      label: "Prochain match",    icon: Calendar },
+  { href: "/admin/calendrier", label: "Calendrier",        icon: Trophy },
+  { href: "/admin/news",       label: "Actualités",        icon: Newspaper },
+  { href: "/admin/players",    label: "Effectif",          icon: Users },
+  { href: "/admin/sponsors",   label: "Partenaires",       icon: HandHeart },
+  { href: "/admin/sections",   label: "Sections & Design", icon: Layers },
+  { href: "/admin/config",     label: "Configuration",     icon: Settings },
 ];
 
 interface Props { username?: string; children: React.ReactNode }
 
-export default function AdminShell({ username = "admin", children }: Props) {
+export function AdminShell({ username = "admin", children }: Props) {
   const pathname = usePathname();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -126,3 +127,5 @@ export default function AdminShell({ username = "admin", children }: Props) {
     </div>
   );
 }
+
+export default AdminShell;

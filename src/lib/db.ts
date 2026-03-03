@@ -23,6 +23,16 @@ import {
 
 // ── Types CMS ──────────────────────────────────────────────────────────────────
 
+export interface SectionStyle {
+  title?: string;
+  subtitle?: string;
+  bgColor?: string;
+  textColor?: string;
+  accentColor?: string;
+  titleSize?: "sm" | "md" | "lg" | "xl";
+  visible?: boolean;
+}
+
 export interface SiteConfig {
   clubName: string;
   tickerMessages: string[];
@@ -33,6 +43,14 @@ export interface SiteConfig {
   heroTitle: string;
   heroSubtitle: string;
   heroSeason: string;
+  sections?: {
+    hero?:       SectionStyle;
+    nextMatch?:  SectionStyle;
+    news?:       SectionStyle;
+    players?:    SectionStyle;
+    standings?:  SectionStyle;
+    sponsors?:   SectionStyle;
+  };
 }
 
 export interface CmsData {

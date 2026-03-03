@@ -4,14 +4,18 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import type { Sponsor } from "@/types";
+import type { SectionStyle } from "@/lib/db";
+import { titleSizeClass } from "@/lib/sectionStyle";
 
-export function SponsorsSection({ sponsors = [] }: { sponsors?: Sponsor[] }) {
+export function SponsorsSection({ sponsors = [], sectionStyle }: { sponsors?: Sponsor[]; sectionStyle?: SectionStyle }) {
   const platinum = sponsors.filter((s) => s.tier === "platinum");
-  const others = sponsors.filter((s) => s.tier !== "platinum");
+  const others   = sponsors.filter((s) => s.tier !== "platinum");
+  const accent   = sectionStyle?.accentColor ?? "#fd0000";
+  const textCol  = sectionStyle?.textColor   ?? "#ffffff";
+  const titleCls = titleSizeClass(sectionStyle, "text-4xl md:text-6xl");
 
   return (
-    /* ── Fond noir — logos blancs tranchants ── */
-    <section className="section-padding bg-[#0A0A0A] border-t border-white/5">
+    <section className="section-padding border-t border-white/5" style={{ backgroundColor: sectionStyle?.bgColor ?? "#0A0A0A" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div className="flex items-end justify-between mb-14">
@@ -20,14 +24,14 @@ export function SponsorsSection({ sponsors = [] }: { sponsors?: Sponsor[] }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-[#fd0000] text-xs font-bold uppercase tracking-[0.3em] block mb-2">
-              Ils nous soutiennent
+            <span className="text-xs font-bold uppercase tracking-[0.3em] block mb-2" style={{ color: accent }}>
+              {sectionStyle?.subtitle ?? "Ils nous soutiennent"}
             </span>
             <h2
-              className="text-white text-4xl md:text-6xl font-black uppercase leading-none"
-              style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+              className={`font-black uppercase leading-none ${titleCls}`}
+              style={{ fontFamily: "'Bebas Neue', sans-serif", color: textCol }}
             >
-              Partenaires
+              {sectionStyle?.title ?? "Partenaires"}
             </h2>
           </motion.div>
           <Link

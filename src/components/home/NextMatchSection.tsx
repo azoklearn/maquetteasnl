@@ -8,16 +8,18 @@ import { NEXT_MATCH, TICKETING } from "@/lib/constants";
 import { trackTicketingClick } from "@/lib/analytics";
 import { formatDate } from "@/lib/utils";
 import type { Match } from "@/types";
+import type { SectionStyle } from "@/lib/db";
 
-export function NextMatchSection({ match: matchProp }: { match?: Match }) {
-  const match = matchProp ?? NEXT_MATCH;
+export function NextMatchSection({ match: matchProp, sectionStyle }: { match?: Match; sectionStyle?: SectionStyle }) {
+  const match  = matchProp ?? NEXT_MATCH;
+  const accent = sectionStyle?.bgColor ?? "#fd0000";
 
   function handleTicketClick(source: string) {
     trackTicketingClick(source, `${match.homeTeam} vs ${match.awayTeam}`);
   }
 
   return (
-    <section className="relative bg-[#fd0000] overflow-hidden">
+    <section className="relative overflow-hidden" style={{ backgroundColor: accent }}>
       {/* ── Texture pattern blanc sur rouge ── */}
       <div
         className="absolute inset-0 opacity-[0.06]"

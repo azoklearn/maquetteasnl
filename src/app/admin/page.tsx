@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 import { getAllCmsData } from "@/lib/db";
 import AdminShell from "@/components/admin/AdminShell";
 import Link from "next/link";
-import { Calendar, ListOrdered, Newspaper, Users, HandHeart, Settings, ArrowRight } from "lucide-react";
+import { Calendar, ListOrdered, Newspaper, Users, HandHeart, Settings, ArrowRight, Layers } from "lucide-react";
 
 export default async function AdminDashboard() {
   const session = await requireAdmin();
@@ -53,6 +53,14 @@ export default async function AdminDashboard() {
       value: `${sponsors.length} partenaires`,
       sub: "Logos & liens",
       color: "from-slate-700 to-slate-900",
+    },
+    {
+      href: "/admin/sections",
+      icon: Layers,
+      label: "Sections & Design",
+      value: "Apparence",
+      sub: "Couleurs, titres, visibilité",
+      color: "from-indigo-700 to-indigo-900",
     },
     {
       href: "/admin/config",

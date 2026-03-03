@@ -6,10 +6,15 @@ import { Ticket, ArrowRight } from "lucide-react";
 import { LiveStandingsWidget } from "@/components/ui/LiveStandingsWidget";
 import { TICKETING } from "@/lib/constants";
 import { trackTicketingClick } from "@/lib/analytics";
+import type { SectionStyle } from "@/lib/db";
+import { titleSizeClass } from "@/lib/sectionStyle";
 
-export function StandingsSection() {
+export function StandingsSection({ sectionStyle }: { sectionStyle?: SectionStyle }) {
+  const accent   = sectionStyle?.accentColor ?? "#fd0000";
+  const textCol  = sectionStyle?.textColor   ?? "#0A0A0A";
+  const titleCls = titleSizeClass(sectionStyle, "text-5xl md:text-7xl");
   return (
-    <section className="section-padding bg-white">
+    <section className="section-padding" style={{ backgroundColor: sectionStyle?.bgColor ?? "#ffffff" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-5 gap-12 items-start">
 
@@ -20,15 +25,14 @@ export function StandingsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <span className="text-[#fd0000] text-xs font-bold uppercase tracking-[0.3em] block mb-2">
-                Ligue 2 BKT · Saison 2025–26
+              <span className="text-xs font-bold uppercase tracking-[0.3em] block mb-2" style={{ color: accent }}>
+                {sectionStyle?.subtitle ?? "Ligue 2 BKT · Saison 2025–26"}
               </span>
               <h2
-                className="text-[#0A0A0A] text-5xl md:text-7xl font-black uppercase leading-none"
-                style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+                className={`font-black uppercase leading-none ${titleCls}`}
+                style={{ fontFamily: "'Bebas Neue', sans-serif", color: textCol }}
               >
-                Classement<br />
-                <span className="text-[#fd0000]">en direct</span>
+                {sectionStyle?.title ? sectionStyle.title : (<>Classement<br /><span style={{ color: accent }}>en direct</span></>)}
               </h2>
             </motion.div>
 
