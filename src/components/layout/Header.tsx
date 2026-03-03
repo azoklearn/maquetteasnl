@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Ticket, ShoppingBag } from "lucide-react";
+import { Ticket, ShoppingBag } from "lucide-react";
 import { NAVIGATION, TICKETING } from "@/lib/constants";
 import { trackTicketingClick } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
@@ -14,11 +14,54 @@ interface HeaderProps {
   ticketingUrl?: string;
 }
 
+// ── Bouton hamburger animé ─────────────────────────────────────────────────────
+function HamburgerButton({
+  open,
+  onClick,
+  scrolled,
+}: {
+  open: boolean;
+  onClick: () => void;
+  scrolled: boolean;
+}) {
+  const color = scrolled ? "#0A0A0A" : "#ffffff";
+  return (
+    <button
+      onClick={onClick}
+      aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+      className="lg:hidden relative w-10 h-10 flex flex-col items-center justify-center gap-[5px] rounded-xl transition-all hover:bg-white/10 focus:outline-none"
+    >
+      <span
+        style={{ background: color }}
+        className={cn(
+          "block h-[2px] w-6 rounded-full transition-all duration-300 origin-center",
+          open ? "rotate-45 translate-y-[7px]" : "",
+        )}
+      />
+      <span
+        style={{ background: color }}
+        className={cn(
+          "block h-[2px] w-6 rounded-full transition-all duration-300",
+          open ? "opacity-0 scale-x-0" : "",
+        )}
+      />
+      <span
+        style={{ background: color }}
+        className={cn(
+          "block h-[2px] w-6 rounded-full transition-all duration-300 origin-center",
+          open ? "-rotate-45 -translate-y-[7px]" : "",
+        )}
+      />
+    </button>
+  );
+}
+
+// ── Header principal ───────────────────────────────────────────────────────────
 export function Header({ tickerMessages, ticketingUrl }: HeaderProps) {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isScrolled, setIsScrolled]     = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const ticketUrl = ticketingUrl ?? TICKETING.nextMatchUrl;
-  const messages = tickerMessages?.length ? tickerMessages : [
+  const messages  = tickerMessages?.length ? tickerMessages : [
     "⚽ Nancy 3-0 Valenciennes",
     "🎟️ DERBY vs METZ — 14 MARS — PLACES LIMITÉES",
     "🏆 LIGUE 2 J27 — ASNL 3ème au classement",
@@ -32,13 +75,19 @@ export function Header({ tickerMessages, ticketingUrl }: HeaderProps) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Bloque le scroll du body quand le menu est ouvert
+  useEffect(() => {
+    document.body.style.overflow = isMobileOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [isMobileOpen]);
+
   function handleTicketClick() {
     trackTicketingClick("header_nav", "CTA Header");
   }
 
   return (
     <>
-      {/* ── Live Ticker — fond rouge, texte blanc ── */}
+      {/* ── Live Ticker ── */}
       <div className="bg-[#fd0000] text-white text-xs font-semibold overflow-hidden h-8 flex items-center">
         <div className="flex animate-ticker whitespace-nowrap">
           {[...Array(2)].map((_, i) => (
@@ -66,35 +115,23 @@ export function Header({ tickerMessages, ticketingUrl }: HeaderProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 md:h-20">
 
-            {/* ── Logo ── */}
+            {/* Logo */}
             <Link href="/" className="flex items-center gap-3 group shrink-0">
               <div className="w-10 h-10 md:w-12 md:h-12 relative transition-transform group-hover:scale-105 shrink-0">
-                <Image
-                  src="/logo.jpeg"
-                  alt="AS Nancy Lorraine"
-                  fill
-                  className="object-contain drop-shadow-md"
-                  sizes="48px"
-                  priority
-                />
+                <Image src="/logo.jpeg" alt="AS Nancy Lorraine" fill className="object-contain drop-shadow-md" sizes="48px" priority />
               </div>
               <div className="hidden sm:block">
                 <div
-                  className={cn(
-                    "font-black text-base leading-none tracking-tight transition-colors",
-                    isScrolled ? "text-[#0A0A0A]" : "text-white",
-                  )}
+                  className={cn("font-black text-base leading-none tracking-tight transition-colors", isScrolled ? "text-[#0A0A0A]" : "text-white")}
                   style={{ fontFamily: "'Bebas Neue', sans-serif" }}
                 >
                   AS Nancy
                 </div>
-                <div className="text-[#fd0000] text-[10px] font-bold uppercase tracking-[0.25em] leading-none">
-                  Lorraine
-                </div>
+                <div className="text-[#fd0000] text-[10px] font-bold uppercase tracking-[0.25em] leading-none">Lorraine</div>
               </div>
             </Link>
 
-            {/* ── Desktop Nav ── */}
+            {/* Nav desktop */}
             <nav className="hidden lg:flex items-center gap-0.5">
               {NAVIGATION.map((item) => (
                 <Link
@@ -112,20 +149,15 @@ export function Header({ tickerMessages, ticketingUrl }: HeaderProps) {
               ))}
             </nav>
 
-            {/* ── Desktop CTAs ── */}
+            {/* CTAs desktop */}
             <div className="hidden md:flex items-center gap-3">
               <Link
                 href="/boutique"
-                className={cn(
-                  "p-2 transition-colors",
-                  isScrolled ? "text-[#0A0A0A]/50 hover:text-[#fd0000]" : "text-white/60 hover:text-white",
-                )}
+                className={cn("p-2 transition-colors", isScrolled ? "text-[#0A0A0A]/50 hover:text-[#fd0000]" : "text-white/60 hover:text-white")}
                 aria-label="Boutique"
               >
                 <ShoppingBag className="w-5 h-5" />
               </Link>
-
-              {/* CTA billetterie — toujours rouge plein */}
               <a
                 href={ticketUrl}
                 target="_blank"
@@ -143,77 +175,110 @@ export function Header({ tickerMessages, ticketingUrl }: HeaderProps) {
               </a>
             </div>
 
-            {/* ── Mobile toggle ── */}
-            <button
-              className={cn(
-                "lg:hidden p-2 transition-colors",
-                isScrolled ? "text-[#0A0A0A]" : "text-white",
-              )}
+            {/* Hamburger mobile */}
+            <HamburgerButton
+              open={isMobileOpen}
               onClick={() => setIsMobileOpen(!isMobileOpen)}
-              aria-label="Menu"
-            >
-              {isMobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+              scrolled={isScrolled}
+            />
           </div>
         </div>
       </header>
 
-      {/* ── Mobile Menu — rouge et blanc ── */}
+      {/* ── Overlay sombre ── */}
       <AnimatePresence>
         {isMobileOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -16 }}
+            key="overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 top-[calc(2rem+4rem)] z-40 bg-white overflow-y-auto"
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+            onClick={() => setIsMobileOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* ── Drawer latéral ── */}
+      <AnimatePresence>
+        {isMobileOpen && (
+          <motion.div
+            key="drawer"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", stiffness: 320, damping: 35 }}
+            className="fixed top-0 right-0 bottom-0 z-50 w-[80vw] max-w-[340px] bg-[#0A0A0A] flex flex-col lg:hidden shadow-2xl"
           >
-            <nav className="max-w-7xl mx-auto px-6 pt-8 pb-16 flex flex-col gap-0">
+            {/* Header du drawer */}
+            <div className="flex items-center justify-between px-6 py-5 border-b border-white/8">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 relative shrink-0">
+                  <Image src="/logo.jpeg" alt="ASNL" fill className="object-contain" sizes="32px" />
+                </div>
+                <div>
+                  <p className="text-white font-black text-sm leading-none" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>AS Nancy Lorraine</p>
+                  <p className="text-[#fd0000] text-[9px] font-bold uppercase tracking-[0.25em]">Depuis 1913</p>
+                </div>
+              </div>
+              {/* Bouton fermer */}
+              <button
+                onClick={() => setIsMobileOpen(false)}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/15 transition-colors"
+              >
+                <span className="text-white/70 text-lg leading-none">✕</span>
+              </button>
+            </div>
+
+            {/* Liens de navigation */}
+            <nav className="flex-1 overflow-y-auto px-4 py-6">
               {NAVIGATION.map((item, i) => (
                 <motion.div
                   key={item.href}
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: 24 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05 }}
+                  transition={{ delay: 0.05 + i * 0.04 }}
                 >
                   <Link
                     href={item.href}
                     onClick={() => setIsMobileOpen(false)}
-                    className="flex items-center justify-between py-5 text-3xl font-black text-[#0A0A0A] uppercase tracking-wider border-b border-[#0A0A0A]/8 hover:text-[#fd0000] transition-colors"
-                    style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+                    className="flex items-center justify-between py-4 px-2 text-white/80 hover:text-white font-semibold text-base uppercase tracking-wider border-b border-white/5 hover:border-[#fd0000]/30 transition-all group"
                   >
-                    {item.label}
-                    <span className="text-[#fd0000] text-lg">→</span>
+                    <span className="group-hover:translate-x-1 transition-transform">{item.label}</span>
+                    <span className="text-white/20 group-hover:text-[#fd0000] transition-colors text-sm">→</span>
                   </Link>
                 </motion.div>
               ))}
+            </nav>
 
-              <motion.a
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35 }}
+            {/* CTA billetterie en bas */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25 }}
+              className="px-4 pb-8 pt-4 border-t border-white/8 space-y-3"
+            >
+              <a
                 href={ticketUrl}
                 target="_blank"
                 rel="noopener noreferrer nofollow"
                 onClick={() => { handleTicketClick(); setIsMobileOpen(false); }}
-                className="mt-8 flex items-center justify-center gap-3 bg-[#fd0000] text-white font-black text-xl py-5 rounded-2xl uppercase tracking-widest shadow-xl shadow-[#fd0000]/30"
+                className="flex items-center justify-center gap-3 bg-[#fd0000] hover:bg-[#cc0000] text-white font-black text-base py-4 rounded-2xl uppercase tracking-widest shadow-xl shadow-[#fd0000]/30 transition-all active:scale-95 w-full"
                 style={{ fontFamily: "'Bebas Neue', sans-serif" }}
               >
-                <Ticket className="w-6 h-6" />
+                <Ticket className="w-5 h-5" />
                 Prendre ma place
-              </motion.a>
-
-              {/* Branding bas de menu */}
-              <div className="mt-10 flex items-center gap-3">
-                <div className="w-10 h-10 relative shrink-0">
-                  <Image src="/logo.jpeg" alt="ASNL" fill className="object-contain" sizes="40px" />
-                </div>
-                <div>
-                  <div className="text-[#0A0A0A] font-black text-sm" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>AS Nancy Lorraine</div>
-                  <div className="text-[#fd0000] text-[10px] font-bold uppercase tracking-[0.25em]">Depuis 1913</div>
-                </div>
-              </div>
-            </nav>
+              </a>
+              <Link
+                href="/boutique"
+                onClick={() => setIsMobileOpen(false)}
+                className="flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 text-white/70 font-semibold text-sm py-3 rounded-xl transition-all w-full"
+              >
+                <ShoppingBag className="w-4 h-4" />
+                Boutique
+              </Link>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
