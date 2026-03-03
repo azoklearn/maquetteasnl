@@ -70,14 +70,20 @@ export default function PlayersEditor({ initialData, username }: Props) {
     setSaveStatus("saving");
     setSaveError(null);
     try {
+      const body = JSON.stringify({ section: "players", data });
+      const sizeKB = Math.round(body.length / 1024);
+      if (sizeKB > 3000) {
+        throw new Error(`Payload trop grand (${sizeKB} KB). Réduisez la taille des photos.`);
+      }
       const res = await fetch("/api/admin/data", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ section: "players", data }),
+        body,
       });
       if (!res.ok) {
-        const text = await res.text();
-        throw new Error(`Erreur ${res.status}: ${text}`);
+        let errMsg = `Erreur ${res.status}`;
+        try { const j = await res.json(); errMsg = j.error ?? errMsg; } catch { /* */ }
+        throw new Error(errMsg);
       }
       setSaveStatus("saved");
       setDirty(false);
@@ -87,7 +93,7 @@ export default function PlayersEditor({ initialData, username }: Props) {
       const msg = e instanceof Error ? e.message : "Erreur inconnue";
       setSaveError(msg);
       setSaveStatus("error");
-      setTimeout(() => setSaveStatus("idle"), 4000);
+      setTimeout(() => setSaveStatus("idle"), 6000);
     }
   }, [router]);
 

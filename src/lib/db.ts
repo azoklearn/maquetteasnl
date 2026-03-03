@@ -126,15 +126,11 @@ async function kvGet<T>(key: string): Promise<T | null> {
 }
 
 async function kvSet<T>(key: string, value: T): Promise<void> {
-  try {
-    const redis = getRedis();
-    if (redis) {
-      await redis.set(key, value);
-    } else {
-      memStore.set(key, JSON.stringify(value));
-    }
-  } catch (e) {
-    console.error("[db] kvSet error", e);
+  const redis = getRedis();
+  if (redis) {
+    await redis.set(key, value); // laisse l'erreur remonter si Redis échoue
+  } else {
+    memStore.set(key, JSON.stringify(value));
   }
 }
 

@@ -13,7 +13,7 @@ interface Props {
   maxH?: number;
 }
 
-function compressImage(file: File, maxW = 480, maxH = 600, quality = 0.82): Promise<string> {
+function compressImage(file: File, maxW = 320, maxH = 400, quality = 0.72): Promise<string> {
   return new Promise((resolve, reject) => {
     const img = new window.Image();
     img.onload = () => {
@@ -24,15 +24,19 @@ function compressImage(file: File, maxW = 480, maxH = 600, quality = 0.82): Prom
       const ctx = canvas.getContext("2d");
       if (!ctx) return reject(new Error("Canvas non disponible"));
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      resolve(canvas.toDataURL("image/jpeg", quality));
+      const result = canvas.toDataURL("image/jpeg", quality);
       URL.revokeObjectURL(img.src);
+      // Avertit si l'image compressée dépasse 150 KB
+      const kb = Math.round((result.length * 3) / 4 / 1024);
+      if (kb > 150) console.warn(`[DragImageUpload] Image compressée: ${kb} KB`);
+      resolve(result);
     };
     img.onerror = () => reject(new Error("Impossible de lire l'image"));
     img.src = URL.createObjectURL(file);
   });
 }
 
-export default function DragImageUpload({ value, onChange, label, hint, maxW = 480, maxH = 600 }: Props) {
+export default function DragImageUpload({ value, onChange, label, hint, maxW = 320, maxH = 400 }: Props) {
   const inputRef               = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
   const [loading,  setLoading]  = useState(false);

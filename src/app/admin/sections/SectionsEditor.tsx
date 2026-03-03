@@ -299,10 +299,10 @@ export function SectionsEditor({ initialData, username }: { initialData?: Partia
     setSaving(true);
     setError(null);
     try {
-      const res = await fetch("/api/admin/data?type=sections", {
+      const res = await fetch("/api/admin/data", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(sectionsRef.current),
+        body: JSON.stringify({ section: "sections", data: sectionsRef.current }),
       });
       if (!res.ok) throw new Error(await res.text());
       setSaved(true);

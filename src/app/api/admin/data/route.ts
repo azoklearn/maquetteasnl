@@ -43,22 +43,35 @@ export async function POST(req: NextRequest) {
   const admin = await requireAdmin();
   if (!admin) return unauthorized();
 
-  const { section, data } = await req.json();
+  let body: { section?: string; data?: unknown };
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Corps de requête invalide" }, { status: 400 });
+  }
 
-  switch (section) {
-    case "nextMatch": await setNextMatch(data); break;
-    case "news":      await setNews(data);      break;
-    case "players":   await setPlayers(data);   break;
-    case "sponsors":  await setSponsors(data);  break;
-    case "config":    await setSiteConfig(data);  break;
-    case "matches":   await setMatches(data);      break;
-    case "sections": {
-      const current = await getSiteConfig();
-      await setSiteConfig({ ...current, sections: data });
-      break;
+  const { section, data } = body;
+
+  try {
+    switch (section) {
+      case "nextMatch": await setNextMatch(data as Parameters<typeof setNextMatch>[0]); break;
+      case "news":      await setNews(data as Parameters<typeof setNews>[0]);           break;
+      case "players":   await setPlayers(data as Parameters<typeof setPlayers>[0]);    break;
+      case "sponsors":  await setSponsors(data as Parameters<typeof setSponsors>[0]);  break;
+      case "config":    await setSiteConfig(data as Parameters<typeof setSiteConfig>[0]); break;
+      case "matches":   await setMatches(data as Parameters<typeof setMatches>[0]);    break;
+      case "sections": {
+        const current = await getSiteConfig();
+        await setSiteConfig({ ...current, sections: data as Parameters<typeof setSiteConfig>[0]["sections"] });
+        break;
+      }
+      default:
+        return NextResponse.json({ error: `Section inconnue: "${section}"` }, { status: 400 });
     }
-    default:
-      return NextResponse.json({ error: "Section inconnue" }, { status: 400 });
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error(`[API] Erreur sauvegarde section="${section}":`, msg);
+    return NextResponse.json({ error: `Échec sauvegarde: ${msg}` }, { status: 500 });
   }
 
   // Invalide le cache immédiatement sur toutes les pages publiques
@@ -67,6 +80,7 @@ export async function POST(req: NextRequest) {
   revalidatePath("/calendrier");
   revalidatePath("/medias");
   revalidatePath("/partenaires");
+  revalidatePath("/actualites");
 
   return NextResponse.json({ ok: true, savedAt: new Date().toISOString() });
 }
