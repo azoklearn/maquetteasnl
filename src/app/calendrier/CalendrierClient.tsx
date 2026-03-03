@@ -33,7 +33,7 @@ export function CalendrierClient({ matches: matchesProp }: { matches?: Match[] }
           }}
         />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-[#C8102E] text-xs font-semibold uppercase tracking-[0.35em] mb-3">Saison 2025–2026</p>
+          <p className="text-[#fd0000] text-xs font-semibold uppercase tracking-[0.35em] mb-3">Saison 2025–2026</p>
           <h1
             className="text-white text-6xl md:text-8xl font-black uppercase leading-none"
             style={{ fontFamily: "'Bebas Neue', sans-serif" }}
@@ -56,7 +56,7 @@ export function CalendrierClient({ matches: matchesProp }: { matches?: Match[] }
               className={cn(
                 "px-6 py-3 rounded-lg text-sm font-semibold transition-all uppercase tracking-wide",
                 tab === key
-                  ? "bg-[#C8102E] text-white shadow-lg shadow-[#C8102E]/30"
+                  ? "bg-[#fd0000] text-white shadow-lg shadow-[#fd0000]/30"
                   : "text-white/50 hover:text-white",
               )}
             >
@@ -76,14 +76,14 @@ export function CalendrierClient({ matches: matchesProp }: { matches?: Match[] }
               className={cn(
                 "group bg-[#141414] hover:bg-[#1A1A1A] border rounded-2xl p-5 md:p-6 transition-all",
                 match.isHighProfile
-                  ? "border-[#C8102E]/30"
+                  ? "border-[#fd0000]/30"
                   : "border-white/5 hover:border-white/10",
               )}
             >
               <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
                 {/* Competition & date */}
                 <div className="shrink-0 md:w-48">
-                  <span className="text-[#C8102E] text-xs font-semibold uppercase tracking-wider block mb-1">
+                  <span className="text-[#fd0000] text-xs font-semibold uppercase tracking-wider block mb-1">
                     {match.competition}
                   </span>
                   <div className="flex items-center gap-2 text-white/50 text-sm">
@@ -102,7 +102,7 @@ export function CalendrierClient({ matches: matchesProp }: { matches?: Match[] }
                     <span className="text-base md:text-xl" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
                       {match.homeTeam}
                     </span>
-                    {match.isHome && <span className="ml-2 text-[10px] text-[#C8102E] font-bold uppercase tracking-widest">(Dom)</span>}
+                    {match.isHome && <span className="ml-2 text-[10px] text-[#fd0000] font-bold uppercase tracking-widest">(Dom)</span>}
                   </div>
 
                   <div className="shrink-0 bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-center min-w-[60px]">
@@ -125,7 +125,7 @@ export function CalendrierClient({ matches: matchesProp }: { matches?: Match[] }
                     <span className="text-base md:text-xl" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
                       {match.awayTeam}
                     </span>
-                    {!match.isHome && <span className="ml-2 text-[10px] text-[#C8102E] font-bold uppercase tracking-widest">(Ext)</span>}
+                    {!match.isHome && <span className="ml-2 text-[10px] text-[#fd0000] font-bold uppercase tracking-widest">(Ext)</span>}
                   </div>
                 </div>
 
@@ -142,7 +142,7 @@ export function CalendrierClient({ matches: matchesProp }: { matches?: Match[] }
                       target="_blank"
                       rel="noopener noreferrer nofollow"
                       onClick={() => trackTicketingClick("calendrier_match_card", `${match.homeTeam} vs ${match.awayTeam}`)}
-                      className="flex items-center gap-2 bg-[#C8102E] hover:bg-[#A00C24] text-white font-bold text-sm px-5 py-3 rounded-xl transition-all hover:scale-105 uppercase tracking-wide whitespace-nowrap"
+                      className="flex items-center gap-2 bg-[#fd0000] hover:bg-[#cc0000] text-white font-bold text-sm px-5 py-3 rounded-xl transition-all hover:scale-105 uppercase tracking-wide whitespace-nowrap"
                     >
                       <Ticket className="w-4 h-4" />
                       <span className="hidden sm:inline">Billets</span>

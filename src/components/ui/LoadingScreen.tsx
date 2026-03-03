@@ -28,7 +28,7 @@ export function LoadingScreen() {
             clipPath: "inset(0 0 100% 0)",
             transition: { duration: 0.7, ease: [0.76, 0, 0.24, 1], delay: 0.1 },
           }}
-          className="fixed inset-0 z-[9999] bg-[#C8102E] flex flex-col items-center justify-center overflow-hidden"
+          className="fixed inset-0 z-[9999] bg-[#fd0000] flex flex-col items-center justify-center overflow-hidden"
         >
           {/* Grille décorative */}
           <div

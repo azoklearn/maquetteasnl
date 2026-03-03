@@ -59,7 +59,7 @@ export default function AdminShell({ username = "admin", children }: Props) {
                   className={cn(
                     "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group",
                     active
-                      ? "bg-[#C8102E] text-white"
+                      ? "bg-[#fd0000] text-white"
                       : "text-white/50 hover:text-white hover:bg-white/5"
                   )}
                 >

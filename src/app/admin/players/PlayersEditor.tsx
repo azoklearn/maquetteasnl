@@ -10,7 +10,7 @@ import DragImageUpload from "@/components/admin/DragImageUpload";
 
 interface Props { initialData: Player[]; username: string }
 
-const FIELD = "bg-[#1a1a1a] border border-white/10 focus:border-[#C8102E] focus:outline-none rounded-xl px-4 py-3 text-white text-sm w-full transition-colors placeholder-white/20";
+const FIELD = "bg-[#1a1a1a] border border-white/10 focus:border-[#fd0000] focus:outline-none rounded-xl px-4 py-3 text-white text-sm w-full transition-colors placeholder-white/20";
 const LABEL = "block text-white/50 text-xs font-bold uppercase tracking-wider mb-2";
 const POSITIONS: Player["position"][] = ["GK", "DEF", "MID", "ATT"];
 const POS_LABELS: Record<Player["position"], string> = { GK: "Gardien", DEF: "Défenseur", MID: "Milieu", ATT: "Attaquant" };

@@ -141,12 +141,12 @@ export const MATCHES: Match[] = [
 ];
 
 export const SPONSORS: Sponsor[] = [
-  { id: "s1", name: "Crédit Mutuel", logo: "https://via.placeholder.com/160x60/ffffff/C8102E?text=Crédit+Mutuel", url: "#", tier: "platinum" },
-  { id: "s2", name: "Grand Est", logo: "https://via.placeholder.com/160x60/ffffff/C8102E?text=Grand+Est", url: "#", tier: "platinum" },
-  { id: "s3", name: "Ville de Nancy", logo: "https://via.placeholder.com/160x60/ffffff/C8102E?text=Nancy", url: "#", tier: "gold" },
-  { id: "s4", name: "Hummel", logo: "https://via.placeholder.com/120x50/ffffff/C8102E?text=Hummel", url: "#", tier: "gold" },
-  { id: "s5", name: "Orange", logo: "https://via.placeholder.com/120x50/ffffff/C8102E?text=Orange", url: "#", tier: "silver" },
-  { id: "s6", name: "BNP Paribas", logo: "https://via.placeholder.com/120x50/ffffff/C8102E?text=BNP", url: "#", tier: "silver" },
-  { id: "s7", name: "Leroy Merlin", logo: "https://via.placeholder.com/120x50/ffffff/C8102E?text=Leroy+Merlin", url: "#", tier: "official" },
-  { id: "s8", name: "Michelin", logo: "https://via.placeholder.com/120x50/ffffff/C8102E?text=Michelin", url: "#", tier: "official" },
+  { id: "s1", name: "Crédit Mutuel", logo: "https://via.placeholder.com/160x60/ffffff/fd0000?text=Crédit+Mutuel", url: "#", tier: "platinum" },
+  { id: "s2", name: "Grand Est", logo: "https://via.placeholder.com/160x60/ffffff/fd0000?text=Grand+Est", url: "#", tier: "platinum" },
+  { id: "s3", name: "Ville de Nancy", logo: "https://via.placeholder.com/160x60/ffffff/fd0000?text=Nancy", url: "#", tier: "gold" },
+  { id: "s4", name: "Hummel", logo: "https://via.placeholder.com/120x50/ffffff/fd0000?text=Hummel", url: "#", tier: "gold" },
+  { id: "s5", name: "Orange", logo: "https://via.placeholder.com/120x50/ffffff/fd0000?text=Orange", url: "#", tier: "silver" },
+  { id: "s6", name: "BNP Paribas", logo: "https://via.placeholder.com/120x50/ffffff/fd0000?text=BNP", url: "#", tier: "silver" },
+  { id: "s7", name: "Leroy Merlin", logo: "https://via.placeholder.com/120x50/ffffff/fd0000?text=Leroy+Merlin", url: "#", tier: "official" },
+  { id: "s8", name: "Michelin", logo: "https://via.placeholder.com/120x50/ffffff/fd0000?text=Michelin", url: "#", tier: "official" },
 ];

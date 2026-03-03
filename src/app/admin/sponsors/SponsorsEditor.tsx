@@ -9,7 +9,7 @@ import { Plus, Trash2, GripVertical } from "lucide-react";
 
 interface Props { initialData: Sponsor[]; username: string }
 
-const FIELD = "bg-[#1a1a1a] border border-white/10 focus:border-[#C8102E] focus:outline-none rounded-xl px-4 py-3 text-white text-sm w-full transition-colors placeholder-white/20";
+const FIELD = "bg-[#1a1a1a] border border-white/10 focus:border-[#fd0000] focus:outline-none rounded-xl px-4 py-3 text-white text-sm w-full transition-colors placeholder-white/20";
 const LABEL = "block text-white/50 text-xs font-bold uppercase tracking-wider mb-2";
 const TIERS: Sponsor["tier"][] = ["platinum", "gold", "silver", "official"];
 const TIER_LABELS: Record<Sponsor["tier"], string> = { platinum: "Platine", gold: "Or", silver: "Argent", official: "Officiel" };
@@ -17,7 +17,7 @@ const TIER_COLORS: Record<Sponsor["tier"], string> = {
   platinum: "text-white bg-white/10",
   gold: "text-yellow-400 bg-yellow-400/10",
   silver: "text-gray-300 bg-gray-400/10",
-  official: "text-[#C8102E] bg-[#C8102E]/10",
+  official: "text-[#fd0000] bg-[#fd0000]/10",
 };
 
 function newSponsor(): Sponsor {

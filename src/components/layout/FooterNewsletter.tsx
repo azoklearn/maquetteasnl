@@ -34,7 +34,7 @@ export function FooterNewsletter() {
       />
       <button
         type="submit"
-        className="px-6 py-3 bg-white text-[#C8102E] font-bold rounded-xl text-sm uppercase tracking-wide hover:bg-white/90 transition-colors shrink-0"
+        className="px-6 py-3 bg-white text-[#fd0000] font-bold rounded-xl text-sm uppercase tracking-wide hover:bg-white/90 transition-colors shrink-0"
       >
         S'abonner
       </button>

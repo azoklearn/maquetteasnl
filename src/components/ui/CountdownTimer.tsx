@@ -58,7 +58,7 @@ export function CountdownTimer({ date, time, className = "" }: CountdownTimerPro
           </div>
           {i < units.length - 1 && (
             <span
-              className="text-2xl sm:text-4xl text-[#C8102E] font-bold leading-none mb-4"
+              className="text-2xl sm:text-4xl text-[#fd0000] font-bold leading-none mb-4"
               style={{ fontFamily: "'Bebas Neue', sans-serif" }}
             >
               :

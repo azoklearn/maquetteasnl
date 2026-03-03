@@ -20,7 +20,7 @@ export function SponsorsSection({ sponsors = [] }: { sponsors?: Sponsor[] }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-[#C8102E] text-xs font-bold uppercase tracking-[0.3em] block mb-2">
+            <span className="text-[#fd0000] text-xs font-bold uppercase tracking-[0.3em] block mb-2">
               Ils nous soutiennent
             </span>
             <h2
@@ -54,7 +54,7 @@ export function SponsorsSection({ sponsors = [] }: { sponsors?: Sponsor[] }) {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="group flex items-center justify-center bg-white rounded-2xl px-8 py-6 min-w-[160px] h-20 hover:scale-105 hover:shadow-lg hover:shadow-[#C8102E]/20 transition-all border-2 border-transparent hover:border-[#C8102E]"
+                className="group flex items-center justify-center bg-white rounded-2xl px-8 py-6 min-w-[160px] h-20 hover:scale-105 hover:shadow-lg hover:shadow-[#fd0000]/20 transition-all border-2 border-transparent hover:border-[#fd0000]"
               >
                 <img src={sponsor.logo} alt={sponsor.name} className="max-h-10 max-w-[140px] object-contain" />
               </motion.a>
@@ -63,7 +63,7 @@ export function SponsorsSection({ sponsors = [] }: { sponsors?: Sponsor[] }) {
         </div>
 
         {/* Séparateur rouge */}
-        <div className="h-px bg-gradient-to-r from-transparent via-[#C8102E]/40 to-transparent mb-10" />
+        <div className="h-px bg-gradient-to-r from-transparent via-[#fd0000]/40 to-transparent mb-10" />
 
         {/* Autres — semi-transparent */}
         <div className="flex flex-wrap gap-3">
@@ -78,7 +78,7 @@ export function SponsorsSection({ sponsors = [] }: { sponsors?: Sponsor[] }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.06 }}
-              className="group flex items-center justify-center bg-white/90 hover:bg-white border border-white/20 rounded-xl px-6 py-4 min-w-[120px] h-16 hover:scale-105 transition-all hover:shadow-md hover:shadow-[#C8102E]/15"
+              className="group flex items-center justify-center bg-white/90 hover:bg-white border border-white/20 rounded-xl px-6 py-4 min-w-[120px] h-16 hover:scale-105 transition-all hover:shadow-md hover:shadow-[#fd0000]/15"
             >
               <img src={sponsor.logo} alt={sponsor.name} className="max-h-8 max-w-[110px] object-contain opacity-70 group-hover:opacity-100 transition-opacity" />
             </motion.a>

@@ -135,7 +135,7 @@ export function HeroSection({ subtitle, season, ticketingUrl }: HeroProps) {
               target="_blank"
               rel="noopener noreferrer nofollow"
               onClick={() => trackTicketingClick("hero_cta", "Derby vs Metz")}
-              className="cta-pulse inline-flex items-center gap-3 bg-white hover:bg-white/90 text-[#C8102E] font-black text-base px-8 py-4 rounded-full transition-all hover:scale-105 uppercase tracking-wider shadow-2xl shadow-black/40"
+              className="cta-pulse inline-flex items-center gap-3 bg-white hover:bg-white/90 text-[#fd0000] font-black text-base px-8 py-4 rounded-full transition-all hover:scale-105 uppercase tracking-wider shadow-2xl shadow-black/40"
             >
               <Ticket className="w-5 h-5" />
               Prendre ma place
@@ -143,7 +143,7 @@ export function HeroSection({ subtitle, season, ticketingUrl }: HeroProps) {
             {/* CTA secondaire — contour blanc */}
             <Link
               href="/medias"
-              className="inline-flex items-center gap-3 bg-transparent text-white border-2 border-white/70 hover:bg-white hover:text-[#C8102E] font-bold text-base px-8 py-4 rounded-full transition-all hover:scale-105 uppercase tracking-wider"
+              className="inline-flex items-center gap-3 bg-transparent text-white border-2 border-white/70 hover:bg-white hover:text-[#fd0000] font-bold text-base px-8 py-4 rounded-full transition-all hover:scale-105 uppercase tracking-wider"
             >
               <Play className="w-5 h-5 fill-current" />
               Derniers médias

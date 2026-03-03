@@ -33,7 +33,7 @@ export function HistoireClient() {
         <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/60 to-transparent" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.p
-            className="text-[#C8102E] text-xs font-semibold uppercase tracking-[0.35em] mb-3"
+            className="text-[#fd0000] text-xs font-semibold uppercase tracking-[0.35em] mb-3"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           >
             Depuis 1913
@@ -51,7 +51,7 @@ export function HistoireClient() {
       {/* Palmares */}
       <section className="bg-[#111] py-16 border-y border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-[#C8102E] text-xs font-semibold uppercase tracking-[0.35em] mb-10 text-center">Palmarès</p>
+          <p className="text-[#fd0000] text-xs font-semibold uppercase tracking-[0.35em] mb-10 text-center">Palmarès</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {PALMARES.map((item, i) => (
               <motion.div
@@ -62,7 +62,7 @@ export function HistoireClient() {
                 transition={{ delay: i * 0.1 }}
                 className="text-center bg-[#1A1A1A] border border-white/5 rounded-2xl p-8"
               >
-                <item.icon className="w-10 h-10 text-[#C8102E] mx-auto mb-4" />
+                <item.icon className="w-10 h-10 text-[#fd0000] mx-auto mb-4" />
                 <div
                   className="text-6xl font-black text-white mb-2 leading-none"
                   style={{ fontFamily: "'Bebas Neue', sans-serif" }}
@@ -87,7 +87,7 @@ export function HistoireClient() {
         </h2>
         <div className="relative">
           {/* Vertical line */}
-          <div className="absolute left-16 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#C8102E] via-[#C8102E]/30 to-transparent" />
+          <div className="absolute left-16 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#fd0000] via-[#fd0000]/30 to-transparent" />
 
           {TIMELINE.map((event, i) => (
             <motion.div
@@ -100,7 +100,7 @@ export function HistoireClient() {
             >
               <div className="shrink-0 w-32 text-right">
                 <span
-                  className="text-[#C8102E] text-3xl font-black"
+                  className="text-[#fd0000] text-3xl font-black"
                   style={{ fontFamily: "'Bebas Neue', sans-serif" }}
                 >
                   {event.year}
@@ -108,7 +108,7 @@ export function HistoireClient() {
               </div>
               {/* Dot */}
               <div className="relative shrink-0 flex items-start pt-2">
-                <div className="w-3 h-3 rounded-full bg-[#C8102E] border-2 border-[#0A0A0A] ring-2 ring-[#C8102E]/30" />
+                <div className="w-3 h-3 rounded-full bg-[#fd0000] border-2 border-[#0A0A0A] ring-2 ring-[#fd0000]/30" />
               </div>
               <div className="flex-1 pb-4">
                 <h3 className="text-white font-bold text-xl mb-2">{event.title}</h3>

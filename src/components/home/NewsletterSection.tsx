@@ -22,7 +22,7 @@ export function NewsletterSection() {
 
   return (
     /* ── Fond rouge — texte blanc — inversion totale ── */
-    <section className="relative bg-[#C8102E] overflow-hidden py-20 md:py-28">
+    <section className="relative bg-[#fd0000] overflow-hidden py-20 md:py-28">
 
       {/* Texture diagonale blanche subtile */}
       <div
@@ -118,12 +118,12 @@ export function NewsletterSection() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="votre@email.fr"
                     required
-                    className="w-full px-5 py-4 rounded-xl bg-[#f5f5f5] text-[#0A0A0A] placeholder-[#0A0A0A]/30 border border-[#e5e5e5] focus:outline-none focus:border-[#C8102E] transition-colors text-sm font-medium"
+                    className="w-full px-5 py-4 rounded-xl bg-[#f5f5f5] text-[#0A0A0A] placeholder-[#0A0A0A]/30 border border-[#e5e5e5] focus:outline-none focus:border-[#fd0000] transition-colors text-sm font-medium"
                   />
                   <button
                     type="submit"
                     disabled={status === "loading"}
-                    className="flex items-center justify-center gap-2 bg-[#C8102E] hover:bg-[#A00C24] disabled:opacity-60 text-white font-black text-base py-4 rounded-xl transition-colors uppercase tracking-wider"
+                    className="flex items-center justify-center gap-2 bg-[#fd0000] hover:bg-[#cc0000] disabled:opacity-60 text-white font-black text-base py-4 rounded-xl transition-colors uppercase tracking-wider"
                   >
                     {status === "loading" ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
@@ -140,7 +140,7 @@ export function NewsletterSection() {
                 <div className="mt-6 flex flex-col gap-2">
                   {["Résultats en direct", "Offres billetterie prioritaires", "Exclusivités club"].map((item) => (
                     <div key={item} className="flex items-center gap-2 text-xs text-[#0A0A0A]/50 font-medium">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#C8102E]" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#fd0000]" />
                       {item}
                     </div>
                   ))}

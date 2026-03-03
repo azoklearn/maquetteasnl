@@ -39,7 +39,7 @@ export function BoutiqueComingSoon() {
       >
         {/* Logo */}
         <motion.div
-          className="w-24 h-24 rounded-full bg-[#C8102E] flex items-center justify-center mb-8 shadow-2xl shadow-[#C8102E]/30 overflow-hidden p-1.5"
+          className="w-24 h-24 rounded-full bg-[#fd0000] flex items-center justify-center mb-8 shadow-2xl shadow-[#fd0000]/30 overflow-hidden p-1.5"
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.5 }}
@@ -69,7 +69,7 @@ export function BoutiqueComingSoon() {
           transition={{ delay: 0.45 }}
         >
           Boutique<br />
-          <span className="text-[#C8102E]">Officielle</span>
+          <span className="text-[#fd0000]">Officielle</span>
         </motion.h1>
 
         {/* Texte */}
@@ -85,7 +85,7 @@ export function BoutiqueComingSoon() {
         {/* CTA retour */}
         <motion.a
           href="/"
-          className="flex items-center gap-2.5 bg-[#C8102E] hover:bg-[#A00C24] text-white font-black uppercase tracking-wider px-8 py-4 rounded-full transition-all hover:scale-105 shadow-lg shadow-[#C8102E]/25"
+          className="flex items-center gap-2.5 bg-[#fd0000] hover:bg-[#cc0000] text-white font-black uppercase tracking-wider px-8 py-4 rounded-full transition-all hover:scale-105 shadow-lg shadow-[#fd0000]/25"
           style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1rem" }}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}

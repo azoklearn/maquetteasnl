@@ -9,7 +9,7 @@ import { Calendar } from "lucide-react";
 
 interface Props { initialData: Match; username: string }
 
-const FIELD = "bg-[#1a1a1a] border border-white/10 focus:border-[#C8102E] focus:outline-none rounded-xl px-4 py-3 text-white text-sm w-full transition-colors placeholder-white/20";
+const FIELD = "bg-[#1a1a1a] border border-white/10 focus:border-[#fd0000] focus:outline-none rounded-xl px-4 py-3 text-white text-sm w-full transition-colors placeholder-white/20";
 const LABEL = "block text-white/50 text-xs font-bold uppercase tracking-wider mb-2";
 
 export default function MatchEditor({ initialData, username }: Props) {
@@ -45,7 +45,7 @@ export default function MatchEditor({ initialData, username }: Props) {
         </div>
 
         {/* Aperçu */}
-        <div className="bg-[#C8102E] rounded-2xl p-5 mb-6 flex items-center gap-6 flex-wrap">
+        <div className="bg-[#fd0000] rounded-2xl p-5 mb-6 flex items-center gap-6 flex-wrap">
           <Calendar className="w-8 h-8 text-white/60 shrink-0" />
           <div>
             <p className="text-white/60 text-xs uppercase tracking-wider font-bold">{data.competition}</p>
@@ -65,7 +65,7 @@ export default function MatchEditor({ initialData, username }: Props) {
           {/* Équipes */}
           <div className="bg-[#161616] rounded-2xl p-6 border border-white/5">
             <h2 className="text-white font-bold text-sm uppercase tracking-wider mb-5 flex items-center gap-2">
-              <span className="w-1 h-4 bg-[#C8102E] rounded-full inline-block" />
+              <span className="w-1 h-4 bg-[#fd0000] rounded-full inline-block" />
               Équipes
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -84,7 +84,7 @@ export default function MatchEditor({ initialData, username }: Props) {
                 id="isHome"
                 checked={data.isHome}
                 onChange={(e) => set("isHome", e.target.checked)}
-                className="w-4 h-4 accent-[#C8102E]"
+                className="w-4 h-4 accent-[#fd0000]"
               />
               <label htmlFor="isHome" className="text-white/60 text-sm cursor-pointer">Match à domicile (Marcel Picot)</label>
             </div>
@@ -93,7 +93,7 @@ export default function MatchEditor({ initialData, username }: Props) {
           {/* Date & Lieu */}
           <div className="bg-[#161616] rounded-2xl p-6 border border-white/5">
             <h2 className="text-white font-bold text-sm uppercase tracking-wider mb-5 flex items-center gap-2">
-              <span className="w-1 h-4 bg-[#C8102E] rounded-full inline-block" />
+              <span className="w-1 h-4 bg-[#fd0000] rounded-full inline-block" />
               Date, heure & lieu
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -119,7 +119,7 @@ export default function MatchEditor({ initialData, username }: Props) {
           {/* Billetterie */}
           <div className="bg-[#161616] rounded-2xl p-6 border border-white/5">
             <h2 className="text-white font-bold text-sm uppercase tracking-wider mb-5 flex items-center gap-2">
-              <span className="w-1 h-4 bg-[#C8102E] rounded-full inline-block" />
+              <span className="w-1 h-4 bg-[#fd0000] rounded-full inline-block" />
               Billetterie
             </h2>
             <div>
@@ -137,7 +137,7 @@ export default function MatchEditor({ initialData, username }: Props) {
           {/* Marketing */}
           <div className="bg-[#161616] rounded-2xl p-6 border border-white/5">
             <h2 className="text-white font-bold text-sm uppercase tracking-wider mb-5 flex items-center gap-2">
-              <span className="w-1 h-4 bg-[#C8102E] rounded-full inline-block" />
+              <span className="w-1 h-4 bg-[#fd0000] rounded-full inline-block" />
               Mise en avant
             </h2>
             <div className="flex items-center gap-3">
@@ -146,7 +146,7 @@ export default function MatchEditor({ initialData, username }: Props) {
                 id="isHighProfile"
                 checked={!!data.isHighProfile}
                 onChange={(e) => set("isHighProfile", e.target.checked)}
-                className="w-4 h-4 accent-[#C8102E]"
+                className="w-4 h-4 accent-[#fd0000]"
               />
               <label htmlFor="isHighProfile" className="text-white/60 text-sm cursor-pointer">
                 Afficher le badge "Choc de la saison" (urgence marketing)

@@ -150,7 +150,7 @@ export function MediasClient() {
           }}
         />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-[#C8102E] text-xs font-semibold uppercase tracking-[0.35em] mb-3">
+          <p className="text-[#fd0000] text-xs font-semibold uppercase tracking-[0.35em] mb-3">
             Centre Médias
           </p>
           <h1
@@ -175,7 +175,7 @@ export function MediasClient() {
               onClick={() => setTab(key)}
               className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold uppercase tracking-wider transition-all ${
                 tab === key
-                  ? "bg-[#C8102E] text-white shadow-lg shadow-[#C8102E]/30"
+                  ? "bg-[#fd0000] text-white shadow-lg shadow-[#fd0000]/30"
                   : "bg-white/5 text-white/50 border border-white/10 hover:bg-white/10 hover:text-white"
               }`}
             >
@@ -218,7 +218,7 @@ export function MediasClient() {
                         />
                         {/* Bouton play */}
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm border border-white/40 flex items-center justify-center transition-all group-hover:bg-[#C8102E] group-hover:border-[#C8102E] group-hover:scale-110">
+                          <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm border border-white/40 flex items-center justify-center transition-all group-hover:bg-[#fd0000] group-hover:border-[#fd0000] group-hover:scale-110">
                             <Play className="w-6 h-6 text-white fill-white ml-0.5" />
                           </div>
                         </div>
@@ -229,11 +229,11 @@ export function MediasClient() {
                       </div>
                       {/* Infos */}
                       <div className="p-4">
-                        <p className="text-[#C8102E] text-[10px] font-bold uppercase tracking-widest mb-1">
+                        <p className="text-[#fd0000] text-[10px] font-bold uppercase tracking-widest mb-1">
                           {video.competition}
                         </p>
                         <h3
-                          className="text-white font-black text-xl leading-none group-hover:text-[#C8102E] transition-colors"
+                          className="text-white font-black text-xl leading-none group-hover:text-[#fd0000] transition-colors"
                           style={{ fontFamily: "'Bebas Neue', sans-serif" }}
                         >
                           {video.title}
@@ -264,7 +264,7 @@ export function MediasClient() {
                     onClick={() => setPhotoFilter(cat)}
                     className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
                       photoFilter === cat
-                        ? "bg-[#C8102E] text-white"
+                        ? "bg-[#fd0000] text-white"
                         : "bg-white/5 text-white/50 border border-white/10 hover:bg-white/10 hover:text-white"
                     }`}
                   >

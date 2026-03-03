@@ -5,7 +5,7 @@ export const CLUB = {
   stadium: "Stade Marcel Picot",
   city: "Nancy",
   country: "France",
-  colors: { primary: "#C8102E", secondary: "#FFFFFF" },
+  colors: { primary: "#fd0000", secondary: "#FFFFFF" },
 };
 
 export const TICKETING = {
@@ -30,6 +30,7 @@ export const NAVIGATION = [
   { label: "Le Club", href: "/histoire" },
   { label: "Effectif", href: "/effectif" },
   { label: "Calendrier", href: "/calendrier" },
+  { label: "Actualités", href: "/actualites" },
   { label: "Médias", href: "/medias" },
   { label: "Partenaires", href: "/partenaires" },
   { label: "Boutique", href: "/boutique" },

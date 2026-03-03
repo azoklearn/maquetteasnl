@@ -45,7 +45,7 @@ export default function AdminLoginPage() {
           backgroundImage: "repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 40px)",
         }}
       />
-      <div className="fixed top-0 left-0 right-0 h-1 bg-[#C8102E]" />
+      <div className="fixed top-0 left-0 right-0 h-1 bg-[#fd0000]" />
 
       <div className="w-full max-w-md">
         {/* Logo */}
@@ -86,7 +86,7 @@ export default function AdminLoginPage() {
                   placeholder="Votre identifiant"
                   required
                   autoComplete="username"
-                  className="w-full pl-11 pr-4 py-3.5 rounded-xl bg-[#f5f5f5] border border-[#e5e5e5] focus:border-[#C8102E] focus:outline-none text-sm text-[#0A0A0A] placeholder-[#0A0A0A]/30 transition-colors"
+                  className="w-full pl-11 pr-4 py-3.5 rounded-xl bg-[#f5f5f5] border border-[#e5e5e5] focus:border-[#fd0000] focus:outline-none text-sm text-[#0A0A0A] placeholder-[#0A0A0A]/30 transition-colors"
                 />
               </div>
             </div>
@@ -105,7 +105,7 @@ export default function AdminLoginPage() {
                   placeholder="••••••••"
                   required
                   autoComplete="current-password"
-                  className="w-full pl-11 pr-12 py-3.5 rounded-xl bg-[#f5f5f5] border border-[#e5e5e5] focus:border-[#C8102E] focus:outline-none text-sm text-[#0A0A0A] placeholder-[#0A0A0A]/30 transition-colors"
+                  className="w-full pl-11 pr-12 py-3.5 rounded-xl bg-[#f5f5f5] border border-[#e5e5e5] focus:border-[#fd0000] focus:outline-none text-sm text-[#0A0A0A] placeholder-[#0A0A0A]/30 transition-colors"
                 />
                 <button
                   type="button"
@@ -120,7 +120,7 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="mt-2 flex items-center justify-center gap-2 bg-[#C8102E] hover:bg-[#A00C24] disabled:opacity-60 text-white font-black text-base py-4 rounded-xl transition-colors uppercase tracking-wider"
+              className="mt-2 flex items-center justify-center gap-2 bg-[#fd0000] hover:bg-[#cc0000] disabled:opacity-60 text-white font-black text-base py-4 rounded-xl transition-colors uppercase tracking-wider"
               style={{ fontFamily: "'Bebas Neue', sans-serif" }}
             >
               {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Se connecter"}

@@ -25,7 +25,7 @@ export function PartenairesClient({ sponsors }: Props) {
     <div className="min-h-screen bg-[#0A0A0A]">
 
       {/* Header */}
-      <div className="bg-[#C8102E] py-20 relative overflow-hidden">
+      <div className="bg-[#fd0000] py-20 relative overflow-hidden">
         <div
           className="absolute inset-0 opacity-[0.06]"
           style={{
@@ -75,7 +75,7 @@ export function PartenairesClient({ sponsors }: Props) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.07 }}
-                  className={`group flex flex-col items-center justify-center bg-white rounded-2xl transition-all hover:scale-[1.03] hover:shadow-xl hover:shadow-[#C8102E]/15 ${
+                  className={`group flex flex-col items-center justify-center bg-white rounded-2xl transition-all hover:scale-[1.03] hover:shadow-xl hover:shadow-[#fd0000]/15 ${
                     tier === "platinum" ? "py-10 px-8" : "py-7 px-6"
                   }`}
                 >
@@ -84,7 +84,7 @@ export function PartenairesClient({ sponsors }: Props) {
                     alt={sponsor.name}
                     className={`object-contain ${tier === "platinum" ? "max-h-14 max-w-[180px]" : "max-h-10 max-w-[130px]"}`}
                   />
-                  <p className="mt-4 text-[#0A0A0A]/50 text-xs font-semibold group-hover:text-[#C8102E] transition-colors text-center">
+                  <p className="mt-4 text-[#0A0A0A]/50 text-xs font-semibold group-hover:text-[#fd0000] transition-colors text-center">
                     {sponsor.name}
                   </p>
                 </motion.a>

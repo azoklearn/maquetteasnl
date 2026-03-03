@@ -117,12 +117,12 @@ export function LiveStandingsWidget() {
           <div className={cn(
             "flex items-center gap-1.5 rounded-full px-2.5 py-1 border",
             isLive
-              ? "bg-[#C8102E]/20 border-[#C8102E]/40"
+              ? "bg-[#fd0000]/20 border-[#fd0000]/40"
               : "bg-amber-500/20 border-amber-500/40",
           )}>
             {isLive
-              ? <><span className="w-1.5 h-1.5 rounded-full bg-[#C8102E] animate-pulse" />
-                  <span className="text-[#C8102E] text-[10px] font-black uppercase tracking-wider">Live</span></>
+              ? <><span className="w-1.5 h-1.5 rounded-full bg-[#fd0000] animate-pulse" />
+                  <span className="text-[#fd0000] text-[10px] font-black uppercase tracking-wider">Live</span></>
               : <><WifiOff className="w-3 h-3 text-amber-400" />
                   <span className="text-amber-400 text-[10px] font-black uppercase tracking-wider">Local</span></>
             }
@@ -151,7 +151,7 @@ export function LiveStandingsWidget() {
 
       {/* ── Bandeau ASNL ── */}
       {asnl && (
-        <div className="bg-[#C8102E] px-5 py-3 flex items-center justify-between gap-4">
+        <div className="bg-[#fd0000] px-5 py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0 overflow-hidden p-0.5">
               <div className="relative w-full h-full">
@@ -214,11 +214,11 @@ export function LiveStandingsWidget() {
                 {entry.position === 16 && <ZoneSeparator label="Zone de relégation"dotColor="bg-red-400"   lineColor="border-red-300" />}
 
                 <motion.div
-                  animate={flashRow === entry.team ? { backgroundColor: ["#ffffff", "#C8102E0A", "#ffffff"] } : {}}
+                  animate={flashRow === entry.team ? { backgroundColor: ["#ffffff", "#fd00000A", "#ffffff"] } : {}}
                   transition={{ duration: 1.5 }}
                   className={cn(
                     "grid grid-cols-[1.5rem_1fr_2rem_2rem_2rem_2rem_2.5rem_auto] gap-1.5 px-4 py-3 items-center relative transition-colors",
-                    entry.isASNL ? "bg-[#C8102E]/[0.04] hover:bg-[#C8102E]/[0.08]" : "hover:bg-[#fafafa]",
+                    entry.isASNL ? "bg-[#fd0000]/[0.04] hover:bg-[#fd0000]/[0.08]" : "hover:bg-[#fafafa]",
                   )}
                 >
                   {/* Barre zone colorée */}
@@ -231,7 +231,7 @@ export function LiveStandingsWidget() {
                       zone === "promotion"  ? "text-green-600" :
                       zone === "playoff"    ? "text-blue-500"  :
                       zone === "relegation" ? "text-red-500"   :
-                      entry.isASNL         ? "text-[#C8102E]" : "text-[#0A0A0A]/35",
+                      entry.isASNL         ? "text-[#fd0000]" : "text-[#0A0A0A]/35",
                     )}
                     style={{ fontFamily: "'Bebas Neue', sans-serif" }}
                   >
@@ -242,7 +242,7 @@ export function LiveStandingsWidget() {
                   <div className="flex items-center gap-2 min-w-0">
                     {entry.isASNL ? (
                       /* Logo ASNL réel */
-                      <div className="w-6 h-6 rounded-full bg-white border border-[#C8102E]/20 flex items-center justify-center shrink-0 overflow-hidden p-0.5 shadow-sm">
+                      <div className="w-6 h-6 rounded-full bg-white border border-[#fd0000]/20 flex items-center justify-center shrink-0 overflow-hidden p-0.5 shadow-sm">
                         <div className="relative w-full h-full">
                           <Image src="/logo.jpeg" alt="ASNL" fill className="object-contain" sizes="24px" />
                         </div>
@@ -273,7 +273,7 @@ export function LiveStandingsWidget() {
 
                     <span className={cn(
                       "text-sm truncate",
-                      entry.isASNL ? "font-black text-[#C8102E]" : "font-medium text-[#0A0A0A]/80",
+                      entry.isASNL ? "font-black text-[#fd0000]" : "font-medium text-[#0A0A0A]/80",
                     )}>
                       {entry.team}
                     </span>
@@ -289,7 +289,7 @@ export function LiveStandingsWidget() {
                   <span
                     className={cn(
                       "text-center font-black text-base leading-none tabular-nums",
-                      entry.isASNL ? "text-[#C8102E]" : "text-[#0A0A0A]",
+                      entry.isASNL ? "text-[#fd0000]" : "text-[#0A0A0A]",
                     )}
                     style={{ fontFamily: "'Bebas Neue', sans-serif" }}
                   >
@@ -333,7 +333,7 @@ export function LiveStandingsWidget() {
       <div className="border-t border-[#f0f0f0]">
         <button
           onClick={() => setShowAll(!showAll)}
-          className="w-full py-3.5 text-xs font-bold text-[#C8102E] hover:bg-[#C8102E]/5 transition-colors uppercase tracking-wider flex items-center justify-center gap-2"
+          className="w-full py-3.5 text-xs font-bold text-[#fd0000] hover:bg-[#fd0000]/5 transition-colors uppercase tracking-wider flex items-center justify-center gap-2"
         >
           {showAll
             ? <><ArrowUp className="w-3.5 h-3.5" /> Réduire</>

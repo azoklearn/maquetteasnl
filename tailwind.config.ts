@@ -11,8 +11,8 @@ const config: Config = {
     extend: {
       colors: {
         asnl: {
-          red: "#C8102E",
-          "red-dark": "#A00C24",
+          red: "#fd0000",
+          "red-dark": "#cc0000",
           "red-light": "#E8193E",
           white: "#FFFFFF",
           black: "#0A0A0A",
@@ -52,7 +52,7 @@ const config: Config = {
         "hero-overlay":
           "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%)",
         "red-gradient":
-          "linear-gradient(135deg, #C8102E 0%, #A00C24 100%)",
+          "linear-gradient(135deg, #fd0000 0%, #cc0000 100%)",
       },
     },
   },

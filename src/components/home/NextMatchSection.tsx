@@ -17,7 +17,7 @@ export function NextMatchSection({ match: matchProp }: { match?: Match }) {
   }
 
   return (
-    <section className="relative bg-[#C8102E] overflow-hidden">
+    <section className="relative bg-[#fd0000] overflow-hidden">
       {/* ── Texture pattern blanc sur rouge ── */}
       <div
         className="absolute inset-0 opacity-[0.06]"
@@ -56,7 +56,7 @@ export function NextMatchSection({ match: matchProp }: { match?: Match }) {
           transition={{ duration: 0.5 }}
         >
           {match.isHighProfile && (
-            <span className="flex items-center gap-2 bg-white text-[#C8102E] text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider shadow-lg">
+            <span className="flex items-center gap-2 bg-white text-[#fd0000] text-xs font-black px-4 py-2 rounded-full uppercase tracking-wider shadow-lg">
               <Flame className="w-3 h-3" />
               Choc de la saison
             </span>
@@ -187,7 +187,7 @@ export function NextMatchSection({ match: matchProp }: { match?: Match }) {
             target="_blank"
             rel="noopener noreferrer nofollow"
             onClick={() => handleTicketClick("next_match_section_primary")}
-            className="group flex items-center gap-3 bg-white hover:bg-white/90 text-[#C8102E] font-black text-lg md:text-xl px-10 md:px-16 py-5 rounded-full transition-all hover:scale-105 uppercase tracking-wider shadow-2xl shadow-black/30"
+            className="group flex items-center gap-3 bg-white hover:bg-white/90 text-[#fd0000] font-black text-lg md:text-xl px-10 md:px-16 py-5 rounded-full transition-all hover:scale-105 uppercase tracking-wider shadow-2xl shadow-black/30"
             style={{ fontFamily: "'Bebas Neue', sans-serif" }}
           >
             <Ticket className="w-6 h-6 transition-transform group-hover:rotate-12" />

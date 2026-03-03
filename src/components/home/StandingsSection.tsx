@@ -20,7 +20,7 @@ export function StandingsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <span className="text-[#C8102E] text-xs font-bold uppercase tracking-[0.3em] block mb-2">
+              <span className="text-[#fd0000] text-xs font-bold uppercase tracking-[0.3em] block mb-2">
                 Ligue 2 BKT · Saison 2025–26
               </span>
               <h2
@@ -28,7 +28,7 @@ export function StandingsSection() {
                 style={{ fontFamily: "'Bebas Neue', sans-serif" }}
               >
                 Classement<br />
-                <span className="text-[#C8102E]">en direct</span>
+                <span className="text-[#fd0000]">en direct</span>
               </h2>
             </motion.div>
 
@@ -45,7 +45,7 @@ export function StandingsSection() {
                 target="_blank"
                 rel="noopener noreferrer nofollow"
                 onClick={() => trackTicketingClick("standings_section", "Prochain match")}
-                className="flex items-center justify-center gap-2 bg-[#C8102E] hover:bg-[#A00C24] text-white font-black text-base py-4 rounded-2xl transition-all hover:scale-[1.02] uppercase tracking-wider shadow-lg shadow-[#C8102E]/25"
+                className="flex items-center justify-center gap-2 bg-[#fd0000] hover:bg-[#cc0000] text-white font-black text-base py-4 rounded-2xl transition-all hover:scale-[1.02] uppercase tracking-wider shadow-lg shadow-[#fd0000]/25"
                 style={{ fontFamily: "'Bebas Neue', sans-serif" }}
               >
                 <Ticket className="w-5 h-5" />
@@ -53,7 +53,7 @@ export function StandingsSection() {
               </a>
               <Link
                 href="/calendrier"
-                className="flex items-center justify-center gap-2 mt-3 text-sm font-semibold text-[#0A0A0A]/40 hover:text-[#C8102E] transition-colors group"
+                className="flex items-center justify-center gap-2 mt-3 text-sm font-semibold text-[#0A0A0A]/40 hover:text-[#fd0000] transition-colors group"
               >
                 Voir le calendrier complet
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />

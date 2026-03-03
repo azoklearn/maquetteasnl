@@ -8,7 +8,7 @@ import type { NewsArticle } from "@/types";
 import { formatShortDate } from "@/lib/utils";
 
 const CATEGORY_COLORS: Record<string, string> = {
-  Match: "bg-[#C8102E] text-white",
+  Match: "bg-[#fd0000] text-white",
   Transfert: "bg-[#1a56db] text-white",
   Billetterie: "bg-amber-500 text-black",
   Club: "bg-[#0A0A0A] text-white",
@@ -29,7 +29,7 @@ export function NewsSection({ articles }: { articles?: NewsArticle[] }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-[#C8102E] text-xs font-bold uppercase tracking-[0.3em] block mb-2">
+            <span className="text-[#fd0000] text-xs font-bold uppercase tracking-[0.3em] block mb-2">
               Actualités
             </span>
             <h2
@@ -41,8 +41,8 @@ export function NewsSection({ articles }: { articles?: NewsArticle[] }) {
           </motion.div>
 
           <Link
-            href="/medias"
-            className="hidden md:flex items-center gap-2 text-sm font-semibold text-[#C8102E] hover:text-[#A00C24] transition-colors group"
+            href="/actualites"
+            className="hidden md:flex items-center gap-2 text-sm font-semibold text-[#fd0000] hover:text-[#cc0000] transition-colors group"
           >
             Toutes les actus
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -59,7 +59,7 @@ export function NewsSection({ articles }: { articles?: NewsArticle[] }) {
               transition={{ duration: 0.6 }}
               className="lg:row-span-2"
             >
-              <Link href={`/medias/${featured.slug}`} className="group block h-full">
+              <Link href={`/actualites/${featured.slug}`} className="group block h-full">
                 <div className="relative h-64 lg:h-full min-h-[420px] rounded-2xl overflow-hidden bg-[#f0f0f0] shadow-xl shadow-black/10">
                   <Image
                     src={featured.image}
@@ -74,7 +74,7 @@ export function NewsSection({ articles }: { articles?: NewsArticle[] }) {
                       {featured.category}
                     </span>
                     <h3
-                      className="text-white text-2xl md:text-3xl font-black uppercase leading-tight mb-2 group-hover:text-[#C8102E] transition-colors"
+                      className="text-white text-2xl md:text-3xl font-black uppercase leading-tight mb-2 group-hover:text-[#fd0000] transition-colors"
                       style={{ fontFamily: "'Bebas Neue', sans-serif" }}
                     >
                       {featured.title}
@@ -101,8 +101,8 @@ export function NewsSection({ articles }: { articles?: NewsArticle[] }) {
                 transition={{ duration: 0.5, delay: i * 0.1 }}
               >
                 <Link
-                  href={`/medias/${article.slug}`}
-                  className="group flex gap-4 bg-[#f7f7f7] hover:bg-[#C8102E]/5 border border-[#e5e5e5] hover:border-[#C8102E]/20 rounded-2xl p-4 transition-all"
+                  href={`/actualites/${article.slug}`}
+                  className="group flex gap-4 bg-[#f7f7f7] hover:bg-[#fd0000]/5 border border-[#e5e5e5] hover:border-[#fd0000]/20 rounded-2xl p-4 transition-all"
                 >
                   <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden shrink-0 bg-[#e0e0e0]">
                     <Image
@@ -118,7 +118,7 @@ export function NewsSection({ articles }: { articles?: NewsArticle[] }) {
                       <span className={`inline-flex text-xs font-black px-2 py-0.5 rounded-full mb-2 ${CATEGORY_COLORS[article.category] ?? "bg-[#0A0A0A] text-white"}`}>
                         {article.category}
                       </span>
-                      <h3 className="text-[#0A0A0A] font-bold text-sm sm:text-base leading-snug line-clamp-2 group-hover:text-[#C8102E] transition-colors">
+                      <h3 className="text-[#0A0A0A] font-bold text-sm sm:text-base leading-snug line-clamp-2 group-hover:text-[#fd0000] transition-colors">
                         {article.title}
                       </h3>
                     </div>
@@ -135,8 +135,8 @@ export function NewsSection({ articles }: { articles?: NewsArticle[] }) {
 
         <div className="mt-8 text-center md:hidden">
           <Link
-            href="/medias"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-[#C8102E] hover:text-[#A00C24] transition-colors"
+            href="/actualites"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-[#fd0000] hover:text-[#cc0000] transition-colors"
           >
             Toutes les actualités <ArrowRight className="w-4 h-4" />
           </Link>

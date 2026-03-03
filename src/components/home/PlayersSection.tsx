@@ -28,7 +28,7 @@ export function PlayersSection({ players = [] }: { players?: Player[] }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-[#C8102E] text-xs font-bold uppercase tracking-[0.3em] block mb-2">
+            <span className="text-[#fd0000] text-xs font-bold uppercase tracking-[0.3em] block mb-2">
               L'Effectif
             </span>
             <h2
@@ -36,7 +36,7 @@ export function PlayersSection({ players = [] }: { players?: Player[] }) {
               style={{ fontFamily: "'Bebas Neue', sans-serif" }}
             >
               Les joueurs<br />
-              <span className="text-[#C8102E]">clés</span>
+              <span className="text-[#fd0000]">clés</span>
             </h2>
           </motion.div>
 
@@ -60,7 +60,7 @@ export function PlayersSection({ players = [] }: { players?: Player[] }) {
               transition={{ duration: 0.5, delay: i * 0.07 }}
             >
               <Link href={`/effectif/${player.id}`} className="group block">
-                <div className="relative bg-white hover:bg-[#C8102E] rounded-2xl overflow-hidden transition-all duration-300 border border-[#e5e5e5] hover:border-[#C8102E] hover:shadow-xl hover:shadow-[#C8102E]/25">
+                <div className="relative bg-white hover:bg-[#fd0000] rounded-2xl overflow-hidden transition-all duration-300 border border-[#e5e5e5] hover:border-[#fd0000] hover:shadow-xl hover:shadow-[#fd0000]/25">
 
                   {/* Numéro en watermark */}
                   <div
@@ -71,7 +71,7 @@ export function PlayersSection({ players = [] }: { players?: Player[] }) {
                   </div>
 
                   {/* Avatar */}
-                  <div className="relative h-36 md:h-48 bg-[#f5f5f5] group-hover:bg-[#B00D27] flex items-center justify-center overflow-hidden transition-colors">
+                  <div className="relative h-36 md:h-48 bg-[#f5f5f5] group-hover:bg-[#d40000] flex items-center justify-center overflow-hidden transition-colors">
                     {/* Numéro haut droite */}
                     <div
                       className="absolute top-3 right-3 text-[#0A0A0A]/20 group-hover:text-white/40 text-3xl font-black leading-none transition-colors z-10"
@@ -80,19 +80,19 @@ export function PlayersSection({ players = [] }: { players?: Player[] }) {
                       {player.number}
                     </div>
 
-                    {player.photo ? (
+                    {player.photo?.trim() ? (
                       <>
                         {/* Photo principale */}
                         <Image
                           src={player.photo}
                           alt={`${player.firstName} ${player.name}`}
                           fill
-                          className={`object-cover object-top transition-opacity duration-300 ${player.photoHover ? "group-hover:opacity-0" : ""}`}
+                          className={`object-cover object-top transition-opacity duration-300 ${player.photoHover?.trim() ? "group-hover:opacity-0" : ""}`}
                           sizes="(max-width: 768px) 50vw, 33vw"
                           unoptimized={player.photo.startsWith("data:")}
                         />
                         {/* Photo hover */}
-                        {player.photoHover && (
+                        {player.photoHover?.trim() && (
                           <Image
                             src={player.photoHover}
                             alt={`${player.firstName} ${player.name} — action`}
@@ -104,9 +104,9 @@ export function PlayersSection({ players = [] }: { players?: Player[] }) {
                         )}
                       </>
                     ) : (
-                      <div className="w-18 h-18 md:w-24 md:h-24 rounded-full bg-[#C8102E]/15 group-hover:bg-white/20 border border-[#C8102E]/20 group-hover:border-white/30 flex items-center justify-center transition-all">
+                      <div className="w-18 h-18 md:w-24 md:h-24 rounded-full bg-[#fd0000]/15 group-hover:bg-white/20 border border-[#fd0000]/20 group-hover:border-white/30 flex items-center justify-center transition-all">
                         <span
-                          className="text-[#C8102E] group-hover:text-white text-2xl md:text-3xl font-black transition-colors"
+                          className="text-[#fd0000] group-hover:text-white text-2xl md:text-3xl font-black transition-colors"
                           style={{ fontFamily: "'Bebas Neue', sans-serif" }}
                         >
                           {player.firstName[0]}{player.name[0]}
@@ -117,7 +117,7 @@ export function PlayersSection({ players = [] }: { players?: Player[] }) {
 
                   <div className="p-4">
                     {/* Badge poste */}
-                    <span className="inline-flex text-[10px] font-black px-2 py-0.5 rounded mb-2 bg-[#C8102E]/10 text-[#C8102E] group-hover:bg-white/20 group-hover:text-white uppercase tracking-wider transition-colors">
+                    <span className="inline-flex text-[10px] font-black px-2 py-0.5 rounded mb-2 bg-[#fd0000]/10 text-[#fd0000] group-hover:bg-white/20 group-hover:text-white uppercase tracking-wider transition-colors">
                       {POSITION_LABELS[player.position]}
                     </span>
 
@@ -132,7 +132,7 @@ export function PlayersSection({ players = [] }: { players?: Player[] }) {
                     {/* Stats */}
                     <div className="flex gap-4 mt-3 pt-3 border-t border-black/8 group-hover:border-white/15 transition-colors">
                       <div className="flex items-center gap-1.5 text-xs text-[#0A0A0A]/50 group-hover:text-white/60 transition-colors">
-                        <Target className="w-3 h-3 text-[#C8102E] group-hover:text-white/80 transition-colors" />
+                        <Target className="w-3 h-3 text-[#fd0000] group-hover:text-white/80 transition-colors" />
                         <span className="text-[#0A0A0A] group-hover:text-white font-bold transition-colors">{player.stats.goals}</span>
                         <span>buts</span>
                       </div>

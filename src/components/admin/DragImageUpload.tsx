@@ -54,8 +54,9 @@ export default function DragImageUpload({
   const [loading,  setLoading]  = useState(false);
   const [error,    setError]    = useState<string | null>(null);
 
-  const isDataUrl = value?.startsWith("data:") ?? false;
-  const isUrl     = value && !isDataUrl;
+  const trimmed   = value?.trim() || undefined;
+  const isDataUrl = trimmed?.startsWith("data:") ?? false;
+  const isUrl     = trimmed && !isDataUrl;
 
   const handleFiles = useCallback(
     async (files: FileList | null) => {
@@ -98,16 +99,16 @@ export default function DragImageUpload({
       </label>
 
       {/* Aperçu + suppression */}
-      {value && (
+      {trimmed && (
         <div className="relative mb-3 group w-fit">
           <div className="relative w-24 h-28 rounded-xl overflow-hidden border border-white/10 bg-[#1e1e1e]">
             <Image
-              src={value}
+              src={trimmed!}
               alt={label}
               fill
               className="object-cover"
               sizes="96px"
-              unoptimized={isDataUrl}
+              unoptimized={!!isDataUrl}
             />
             {/* Overlay hover pour remplacer */}
             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -136,7 +137,7 @@ export default function DragImageUpload({
         className={cn(
           "relative flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed px-4 py-5 cursor-pointer transition-all text-center select-none",
           dragging
-            ? "border-[#C8102E] bg-[#C8102E]/10"
+            ? "border-[#fd0000] bg-[#fd0000]/10"
             : "border-white/10 bg-[#1a1a1a] hover:border-white/25 hover:bg-[#222]",
           loading && "pointer-events-none opacity-60"
         )}
@@ -176,12 +177,12 @@ export default function DragImageUpload({
       </div>
       <input
         placeholder="https://..."
-        value={isUrl ? value : ""}
+        value={isUrl ? (trimmed ?? "") : ""}
         onChange={(e) => {
           setError(null);
           onChange(e.target.value || undefined);
         }}
-        className="w-full bg-[#1a1a1a] border border-white/10 rounded-xl px-3 py-2 text-white text-xs placeholder:text-white/20 focus:outline-none focus:border-[#C8102E]/50 transition-colors"
+        className="w-full bg-[#1a1a1a] border border-white/10 rounded-xl px-3 py-2 text-white text-xs placeholder:text-white/20 focus:outline-none focus:border-[#fd0000]/50 transition-colors"
       />
 
       {/* Input fichier caché */}

@@ -49,8 +49,8 @@ export default function SaveButton({ onSave, label = "Enregistrer", className }:
         "inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm uppercase tracking-wider transition-all",
         status === "saved"  && "bg-green-500 text-white",
         status === "error"  && "bg-red-500 text-white",
-        status === "saving" && "bg-[#C8102E]/70 text-white cursor-wait",
-        (status === "idle") && "bg-[#C8102E] text-white hover:bg-[#A00C24]",
+        status === "saving" && "bg-[#fd0000]/70 text-white cursor-wait",
+        (status === "idle") && "bg-[#fd0000] text-white hover:bg-[#cc0000]",
         "disabled:opacity-60",
         className,
       )}

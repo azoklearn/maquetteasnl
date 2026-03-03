@@ -35,7 +35,7 @@ export function SectionTitle({
       transition={{ duration: 0.6 }}
     >
       {label && (
-        <span className="text-[#C8102E] text-xs font-semibold uppercase tracking-[0.25em]">
+        <span className="text-[#fd0000] text-xs font-semibold uppercase tracking-[0.25em]">
           {label}
         </span>
       )}

@@ -126,7 +126,7 @@ export default function CalendrierEditor({ initialData, username }: Props) {
             <button
               onClick={save}
               disabled={saving || !dirty}
-              className="flex items-center gap-2 bg-[#C8102E] hover:bg-[#A00C24] disabled:opacity-40 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-all"
+              className="flex items-center gap-2 bg-[#fd0000] hover:bg-[#cc0000] disabled:opacity-40 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-all"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
               Sauvegarder
@@ -157,7 +157,7 @@ export default function CalendrierEditor({ initialData, username }: Props) {
                     {/* Statut */}
                     <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full shrink-0 ${
                       match.status === "upcoming"
-                        ? "bg-[#C8102E]/20 text-[#C8102E]"
+                        ? "bg-[#fd0000]/20 text-[#fd0000]"
                         : match.status === "live"
                         ? "bg-green-500/20 text-green-400"
                         : "bg-white/10 text-white/40"
@@ -252,7 +252,7 @@ export default function CalendrierEditor({ initialData, username }: Props) {
                                 type="checkbox"
                                 checked={!!match.isHighProfile}
                                 onChange={(e) => update(match.id, "isHighProfile", e.target.checked)}
-                                className="w-4 h-4 accent-[#C8102E]"
+                                className="w-4 h-4 accent-[#fd0000]"
                               />
                               <span className="text-white/60 text-sm">Choc de la saison (badge)</span>
                             </label>
@@ -296,7 +296,7 @@ export default function CalendrierEditor({ initialData, username }: Props) {
 
 // ── Helpers UI ─────────────────────────────────────────────────────────────────
 const input =
-  "w-full bg-[#1e1e1e] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm placeholder:text-white/20 focus:outline-none focus:border-[#C8102E]/60 transition-colors";
+  "w-full bg-[#1e1e1e] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm placeholder:text-white/20 focus:outline-none focus:border-[#fd0000]/60 transition-colors";
 
 function Field({
   label, children, className = "",

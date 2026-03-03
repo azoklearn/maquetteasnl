@@ -39,7 +39,7 @@ export function Header({ tickerMessages, ticketingUrl }: HeaderProps) {
   return (
     <>
       {/* ── Live Ticker — fond rouge, texte blanc ── */}
-      <div className="bg-[#C8102E] text-white text-xs font-semibold overflow-hidden h-8 flex items-center">
+      <div className="bg-[#fd0000] text-white text-xs font-semibold overflow-hidden h-8 flex items-center">
         <div className="flex animate-ticker whitespace-nowrap">
           {[...Array(2)].map((_, i) => (
             <span key={i} className="flex items-center gap-8 px-4">
@@ -59,7 +59,7 @@ export function Header({ tickerMessages, ticketingUrl }: HeaderProps) {
         className={cn(
           "sticky top-0 z-50 transition-all duration-400",
           isScrolled
-            ? "bg-white shadow-xl shadow-black/10 border-b-2 border-[#C8102E]"
+            ? "bg-white shadow-xl shadow-black/10 border-b-2 border-[#fd0000]"
             : "bg-black/80 backdrop-blur-md",
         )}
       >
@@ -88,7 +88,7 @@ export function Header({ tickerMessages, ticketingUrl }: HeaderProps) {
                 >
                   AS Nancy
                 </div>
-                <div className="text-[#C8102E] text-[10px] font-bold uppercase tracking-[0.25em] leading-none">
+                <div className="text-[#fd0000] text-[10px] font-bold uppercase tracking-[0.25em] leading-none">
                   Lorraine
                 </div>
               </div>
@@ -103,7 +103,7 @@ export function Header({ tickerMessages, ticketingUrl }: HeaderProps) {
                   className={cn(
                     "px-4 py-2 text-sm font-semibold transition-colors rounded-lg uppercase tracking-wide",
                     isScrolled
-                      ? "text-[#0A0A0A]/70 hover:text-[#C8102E] hover:bg-[#C8102E]/5"
+                      ? "text-[#0A0A0A]/70 hover:text-[#fd0000] hover:bg-[#fd0000]/5"
                       : "text-white/80 hover:text-white hover:bg-white/5",
                   )}
                 >
@@ -118,7 +118,7 @@ export function Header({ tickerMessages, ticketingUrl }: HeaderProps) {
                 href="/boutique"
                 className={cn(
                   "p-2 transition-colors",
-                  isScrolled ? "text-[#0A0A0A]/50 hover:text-[#C8102E]" : "text-white/60 hover:text-white",
+                  isScrolled ? "text-[#0A0A0A]/50 hover:text-[#fd0000]" : "text-white/60 hover:text-white",
                 )}
                 aria-label="Boutique"
               >
@@ -134,8 +134,8 @@ export function Header({ tickerMessages, ticketingUrl }: HeaderProps) {
                 className={cn(
                   "cta-pulse flex items-center gap-2 font-bold text-sm px-5 py-2.5 rounded-full transition-all hover:scale-105 uppercase tracking-wider",
                   isScrolled
-                    ? "bg-[#C8102E] text-white hover:bg-[#A00C24] shadow-lg shadow-[#C8102E]/25"
-                    : "bg-white text-[#C8102E] hover:bg-white/90 shadow-lg shadow-black/20",
+                    ? "bg-[#fd0000] text-white hover:bg-[#cc0000] shadow-lg shadow-[#fd0000]/25"
+                    : "bg-white text-[#fd0000] hover:bg-white/90 shadow-lg shadow-black/20",
                 )}
               >
                 <Ticket className="w-4 h-4" />
@@ -179,11 +179,11 @@ export function Header({ tickerMessages, ticketingUrl }: HeaderProps) {
                   <Link
                     href={item.href}
                     onClick={() => setIsMobileOpen(false)}
-                    className="flex items-center justify-between py-5 text-3xl font-black text-[#0A0A0A] uppercase tracking-wider border-b border-[#0A0A0A]/8 hover:text-[#C8102E] transition-colors"
+                    className="flex items-center justify-between py-5 text-3xl font-black text-[#0A0A0A] uppercase tracking-wider border-b border-[#0A0A0A]/8 hover:text-[#fd0000] transition-colors"
                     style={{ fontFamily: "'Bebas Neue', sans-serif" }}
                   >
                     {item.label}
-                    <span className="text-[#C8102E] text-lg">→</span>
+                    <span className="text-[#fd0000] text-lg">→</span>
                   </Link>
                 </motion.div>
               ))}
@@ -196,7 +196,7 @@ export function Header({ tickerMessages, ticketingUrl }: HeaderProps) {
                 target="_blank"
                 rel="noopener noreferrer nofollow"
                 onClick={() => { handleTicketClick(); setIsMobileOpen(false); }}
-                className="mt-8 flex items-center justify-center gap-3 bg-[#C8102E] text-white font-black text-xl py-5 rounded-2xl uppercase tracking-widest shadow-xl shadow-[#C8102E]/30"
+                className="mt-8 flex items-center justify-center gap-3 bg-[#fd0000] text-white font-black text-xl py-5 rounded-2xl uppercase tracking-widest shadow-xl shadow-[#fd0000]/30"
                 style={{ fontFamily: "'Bebas Neue', sans-serif" }}
               >
                 <Ticket className="w-6 h-6" />
@@ -210,7 +210,7 @@ export function Header({ tickerMessages, ticketingUrl }: HeaderProps) {
                 </div>
                 <div>
                   <div className="text-[#0A0A0A] font-black text-sm" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>AS Nancy Lorraine</div>
-                  <div className="text-[#C8102E] text-[10px] font-bold uppercase tracking-[0.25em]">Depuis 1913</div>
+                  <div className="text-[#fd0000] text-[10px] font-bold uppercase tracking-[0.25em]">Depuis 1913</div>
                 </div>
               </div>
             </nav>

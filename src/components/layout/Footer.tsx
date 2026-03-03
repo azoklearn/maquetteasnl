@@ -47,7 +47,7 @@ export function Footer({ social, ticketingUrl, seasonTicketUrl, groupUrl }: Foot
     <footer className="bg-[#0A0A0A]">
 
       {/* ── Bande rouge supérieure ── */}
-      <div className="bg-[#C8102E]">
+      <div className="bg-[#fd0000]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
             <p
@@ -82,7 +82,7 @@ export function Footer({ social, ticketingUrl, seasonTicketUrl, groupUrl }: Foot
                 <div className="text-white font-black text-sm leading-none" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
                   AS Nancy
                 </div>
-                <div className="text-[#C8102E] text-[10px] font-bold uppercase tracking-[0.2em]">
+                <div className="text-[#fd0000] text-[10px] font-bold uppercase tracking-[0.2em]">
                   Lorraine
                 </div>
               </div>
@@ -106,7 +106,7 @@ export function Footer({ social, ticketingUrl, seasonTicketUrl, groupUrl }: Foot
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="w-9 h-9 rounded-lg bg-white/5 hover:bg-[#C8102E] transition-colors flex items-center justify-center text-white/40 hover:text-white"
+                  className="w-9 h-9 rounded-lg bg-white/5 hover:bg-[#fd0000] transition-colors flex items-center justify-center text-white/40 hover:text-white"
                 >
                   <Icon className="w-4 h-4" />
                 </a>
@@ -128,9 +128,9 @@ export function Footer({ social, ticketingUrl, seasonTicketUrl, groupUrl }: Foot
                         href={link.href}
                         target="_blank"
                         rel="noopener noreferrer nofollow"
-                        className="text-white/35 hover:text-[#C8102E] text-sm transition-colors flex items-center gap-1.5 font-medium"
+                        className="text-white/35 hover:text-[#fd0000] text-sm transition-colors flex items-center gap-1.5 font-medium"
                       >
-                        {link.label === "Billetterie" && <Ticket className="w-3 h-3 text-[#C8102E]" />}
+                        {link.label === "Billetterie" && <Ticket className="w-3 h-3 text-[#fd0000]" />}
                         {link.label}
                       </a>
                     ) : (

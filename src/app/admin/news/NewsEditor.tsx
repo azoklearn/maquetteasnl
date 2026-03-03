@@ -9,7 +9,7 @@ import { Plus, Trash2, ChevronDown, ChevronUp, Star } from "lucide-react";
 
 interface Props { initialData: NewsArticle[]; username: string }
 
-const FIELD = "bg-[#1a1a1a] border border-white/10 focus:border-[#C8102E] focus:outline-none rounded-xl px-4 py-3 text-white text-sm w-full transition-colors placeholder-white/20";
+const FIELD = "bg-[#1a1a1a] border border-white/10 focus:border-[#fd0000] focus:outline-none rounded-xl px-4 py-3 text-white text-sm w-full transition-colors placeholder-white/20";
 const LABEL = "block text-white/50 text-xs font-bold uppercase tracking-wider mb-2";
 
 const CATEGORIES = ["Match", "Transfert", "Jeunes", "Club", "Partenaires", "Communiqué"];
@@ -112,7 +112,7 @@ export default function NewsEditor({ initialData, username }: Props) {
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
-                      <span className="text-[#C8102E] text-xs font-bold uppercase tracking-wider">{article.category}</span>
+                      <span className="text-[#fd0000] text-xs font-bold uppercase tracking-wider">{article.category}</span>
                       {article.isFeatured && <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />}
                     </div>
                     <p className="text-white font-semibold text-sm truncate">{article.title}</p>
@@ -191,7 +191,7 @@ export default function NewsEditor({ initialData, username }: Props) {
                         id={`feat-${article.id}`}
                         checked={!!article.isFeatured}
                         onChange={(e) => update(article.id, "isFeatured", e.target.checked)}
-                        className="w-4 h-4 accent-[#C8102E]"
+                        className="w-4 h-4 accent-[#fd0000]"
                       />
                       <label htmlFor={`feat-${article.id}`} className="text-white/60 text-sm cursor-pointer flex items-center gap-1.5">
                         <Star className="w-3.5 h-3.5 text-yellow-400" /> Article mis en avant (hero de la section actualités)

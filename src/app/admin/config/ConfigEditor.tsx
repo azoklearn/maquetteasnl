@@ -9,14 +9,14 @@ import { Plus, Trash2 } from "lucide-react";
 
 interface Props { initialData: SiteConfig; username: string }
 
-const FIELD = "bg-[#1a1a1a] border border-white/10 focus:border-[#C8102E] focus:outline-none rounded-xl px-4 py-3 text-white text-sm w-full transition-colors placeholder-white/20";
+const FIELD = "bg-[#1a1a1a] border border-white/10 focus:border-[#fd0000] focus:outline-none rounded-xl px-4 py-3 text-white text-sm w-full transition-colors placeholder-white/20";
 const LABEL = "block text-white/50 text-xs font-bold uppercase tracking-wider mb-2";
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="bg-[#161616] rounded-2xl p-6 border border-white/5">
       <h2 className="text-white font-bold text-sm uppercase tracking-wider mb-5 flex items-center gap-2">
-        <span className="w-1 h-4 bg-[#C8102E] rounded-full inline-block" />
+        <span className="w-1 h-4 bg-[#fd0000] rounded-full inline-block" />
         {title}
       </h2>
       {children}
