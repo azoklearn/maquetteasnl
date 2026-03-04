@@ -56,11 +56,16 @@ export function PartenairesClient({ sponsors }: Props) {
                   href={s.url || "#"}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="shrink-0 flex items-center justify-center mx-6 grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all"
+                  className="shrink-0 flex items-center justify-center mx-4 grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all"
+                  style={{ width: 120, height: 48 }}
                 >
                   {s.logo?.trim() ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={s.logo} alt={s.name} className="h-8 max-w-[120px] object-contain" />
+                    <img
+                      src={s.logo}
+                      alt={s.name}
+                      style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
+                    />
                   ) : (
                     <span className="text-[#0A0A0A] text-sm font-bold uppercase tracking-wide">{s.name}</span>
                   )}
@@ -101,15 +106,17 @@ export function PartenairesClient({ sponsors }: Props) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.04 }}
-                  className="group flex flex-col items-center justify-center bg-white rounded-2xl py-8 px-6 hover:scale-[1.04] hover:shadow-xl hover:shadow-[#fd0000]/15 transition-all"
+                  className="group flex flex-col items-center justify-center bg-white rounded-2xl p-4 hover:scale-[1.04] hover:shadow-xl hover:shadow-[#fd0000]/15 transition-all"
                 >
                   {sponsor.logo?.trim() ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={sponsor.logo}
-                      alt={sponsor.name}
-                      className="max-h-12 max-w-[130px] object-contain"
-                    />
+                    <div style={{ width: "100%", height: 80 }}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={sponsor.logo}
+                        alt={sponsor.name}
+                        style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
+                      />
+                    </div>
                   ) : (
                     <div className="w-12 h-12 rounded-full bg-[#fd0000]/10 flex items-center justify-center">
                       <span className="text-[#fd0000] text-lg font-black">{sponsor.name.charAt(0)}</span>

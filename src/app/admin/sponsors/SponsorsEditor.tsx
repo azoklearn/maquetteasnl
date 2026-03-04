@@ -12,14 +12,6 @@ interface Props { initialData: Sponsor[]; username: string }
 
 const FIELD = "bg-[#1a1a1a] border border-white/10 focus:border-[#fd0000] focus:outline-none rounded-xl px-4 py-3 text-white text-sm w-full transition-colors placeholder-white/20";
 const LABEL = "block text-white/50 text-xs font-bold uppercase tracking-wider mb-2";
-const TIERS: Sponsor["tier"][] = ["platinum", "gold", "silver", "official"];
-const TIER_LABELS: Record<Sponsor["tier"], string> = { platinum: "Platine", gold: "Or", silver: "Argent", official: "Officiel" };
-const TIER_COLORS: Record<Sponsor["tier"], string> = {
-  platinum: "text-white bg-white/10",
-  gold: "text-yellow-400 bg-yellow-400/10",
-  silver: "text-gray-300 bg-gray-400/10",
-  official: "text-[#fd0000] bg-[#fd0000]/10",
-};
 
 function newSponsor(): Sponsor {
   return {
@@ -105,16 +97,10 @@ export default function SponsorsEditor({ initialData, username }: Props) {
                 </div>
 
                 {/* Infos texte */}
-                <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className={LABEL}>Nom</label>
                     <input className={FIELD} value={sponsor.name} onChange={(e) => update(sponsor.id, "name", e.target.value)} />
-                  </div>
-                  <div>
-                    <label className={LABEL}>Niveau</label>
-                    <select className={FIELD} value={sponsor.tier} onChange={(e) => update(sponsor.id, "tier", e.target.value as Sponsor["tier"])}>
-                      {TIERS.map((t) => <option key={t} value={t}>{TIER_LABELS[t]}</option>)}
-                    </select>
                   </div>
                   <div>
                     <label className={LABEL}>Site web</label>
@@ -122,11 +108,8 @@ export default function SponsorsEditor({ initialData, username }: Props) {
                   </div>
                 </div>
 
-                {/* Actions */}
-                <div className="flex flex-col items-end gap-2 shrink-0">
-                  <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${TIER_COLORS[sponsor.tier]}`}>
-                    {TIER_LABELS[sponsor.tier]}
-                  </span>
+                {/* Supprimer */}
+                <div className="flex flex-col items-end shrink-0">
                   <button
                     onClick={() => { if (window.confirm("Supprimer ce partenaire ?")) remove(sponsor.id); }}
                     className="p-1.5 rounded-lg hover:bg-red-500/20 text-white/30 hover:text-red-400 transition-colors"

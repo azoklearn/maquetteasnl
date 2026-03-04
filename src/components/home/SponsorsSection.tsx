@@ -16,13 +16,18 @@ function SponsorCard({ sponsor }: { sponsor: Sponsor }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={sponsor.name}
-      className="shrink-0 flex items-center justify-center bg-white rounded-xl px-7 py-4 h-16 mx-3 hover:scale-105 hover:shadow-lg hover:shadow-[#fd0000]/20 transition-all border-2 border-transparent hover:border-[#fd0000] min-w-[120px]"
+      className="shrink-0 flex items-center justify-center bg-white rounded-xl mx-3 hover:scale-105 hover:shadow-lg hover:shadow-[#fd0000]/20 transition-all border-2 border-transparent hover:border-[#fd0000]"
+      style={{ width: 140, height: 64, padding: 8 }}
     >
       {sponsor.logo?.trim() ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={sponsor.logo} alt={sponsor.name} className="max-h-8 max-w-[120px] object-contain" />
+        <img
+          src={sponsor.logo}
+          alt={sponsor.name}
+          style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
+        />
       ) : (
-        <span className="text-[#0A0A0A] text-xs font-bold uppercase tracking-wider">{sponsor.name}</span>
+        <span className="text-[#0A0A0A] text-xs font-bold uppercase tracking-wider text-center leading-tight">{sponsor.name}</span>
       )}
     </a>
   );
