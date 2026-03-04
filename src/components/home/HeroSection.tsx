@@ -138,7 +138,7 @@ export function HeroSection({
             >
               <Link
                 href="/medias"
-                className="group flex items-center gap-5 text-white/90 glass-dark px-6 py-4 rounded-2xl w-full max-w-lg"
+                className="group flex items-center gap-5 text-white/90 glass-dark px-6 py-4 rounded-2xl w-full max-w-lg transition-all duration-300 hover:scale-[1.02] hover:border-white/20 hover:shadow-xl hover:shadow-black/30"
               >
                 <div className="relative w-40 h-24 sm:w-52 sm:h-32 rounded-xl overflow-hidden border border-white/10 bg-black/40 shrink-0">
                   <Image
@@ -186,7 +186,7 @@ export function HeroSection({
                 target="_blank"
                 rel="noopener noreferrer nofollow"
                 onClick={() => trackTicketingClick("hero_cta_bottom", "Derby vs Metz")}
-                className="group flex items-center gap-5 text-white/90 glass-dark px-6 py-4 rounded-2xl max-w-lg w-full"
+                className="group flex items-center gap-5 text-white/90 glass-dark px-6 py-4 rounded-2xl max-w-lg w-full transition-all duration-300 hover:scale-[1.02] hover:border-white/20 hover:shadow-xl hover:shadow-black/30"
               >
                 {/* Vignette logos / VS avec fond section prochain match */}
                 <div
@@ -277,7 +277,7 @@ export function HeroSection({
             >
               <Link
                 href="/actualites"
-                className="group block w-full glass-dark rounded-2xl overflow-hidden p-6 sm:p-8 text-white/90 hover:text-white transition-colors"
+                className="group block w-full glass-dark rounded-2xl overflow-hidden p-6 sm:p-8 text-white/90 hover:text-white transition-all duration-300 hover:scale-[1.02] hover:border-white/20 hover:shadow-xl hover:shadow-black/30"
               >
                 <div className="flex items-center justify-between mb-5">
                   <span className="inline-flex items-center gap-2 bg-transparent text-white/90 border border-white/40 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">

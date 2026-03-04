@@ -328,7 +328,7 @@ export default function PlayersEditor({ initialData, username }: Props) {
                           />
                           <span className="flex items-center gap-2 text-sm text-white/70 group-hover:text-white transition-colors">
                             <Star className={`w-4 h-4 transition-colors ${player.isFeatured ? "text-amber-400 fill-amber-400" : "text-white/20"}`} />
-                            <span>Joueur clé <span className="text-white/30 font-normal">(affiché dans la section &quot;Les joueurs clés&quot; de la homepage)</span></span>
+                            <span>Joueur clé <span className="text-white/30 font-normal">(affiché dans la section &quot;L&apos;équipe&quot; de la homepage)</span></span>
                           </span>
                         </label>
 

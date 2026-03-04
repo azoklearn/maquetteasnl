@@ -40,7 +40,7 @@ export function PlayersSection({ players = [], sectionStyle }: { players?: Playe
               className={`font-black uppercase leading-none ${titleCls}`}
               style={{ fontFamily: "'Bebas Neue', sans-serif", color: textCol }}
             >
-              {sectionStyle?.title ? sectionStyle.title : (<>Les joueurs<br /><span style={{ color: accent }}>clés</span></>)}
+              {sectionStyle?.title ? sectionStyle.title : (<>L'<span style={{ color: accent }}>équipe</span></>)}
             </h2>
           </motion.div>
 
