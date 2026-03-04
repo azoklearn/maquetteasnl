@@ -91,7 +91,7 @@ export function EffectifClient({ players: playersProp }: EffectifClientProps) {
         </div>
 
         {/* ── Grid ── */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-8">
           {filtered.map((player, i) => (
             <PlayerCard key={player.id} player={player} index={i} />
           ))}
@@ -107,38 +107,38 @@ function PlayerCard({ player, index }: { player: Player; index: number }) {
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
-      className="group glass-dark rounded-2xl overflow-hidden transition-all cursor-pointer px-5 py-4 flex items-center gap-5"
+      className="group glass-dark rounded-2xl overflow-hidden transition-all cursor-pointer p-6 flex flex-col sm:flex-row sm:items-center gap-5"
     >
       {player.photo?.trim() ? (
-        <div className="relative w-20 h-20 rounded-xl overflow-hidden shrink-0">
+        <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-xl overflow-hidden shrink-0 mx-auto sm:mx-0">
           <Image
             src={player.photo}
             alt={`${player.firstName} ${player.name}`}
             fill
             className="object-cover object-top"
-            sizes="80px"
+            sizes="128px"
             unoptimized={player.photo.startsWith("data:")}
           />
         </div>
       ) : (
-        <div className="w-20 h-20 rounded-xl bg-[#fd0000]/20 border border-[#fd0000]/20 flex items-center justify-center shrink-0">
+        <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl bg-[#fd0000]/20 border border-[#fd0000]/20 flex items-center justify-center shrink-0 mx-auto sm:mx-0">
           <span
-            className="text-[#fd0000] text-lg font-black"
+            className="text-[#fd0000] text-2xl font-black"
             style={{ fontFamily: "'Bebas Neue', sans-serif" }}
           >
             {player.firstName[0]}{player.name[0]}
           </span>
         </div>
       )}
-      <div className="min-w-0 flex-1">
-        <span className={`inline-flex text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider mb-1 ${POSITION_COLORS[player.position]}`}>
+      <div className="min-w-0 flex-1 text-center sm:text-left">
+        <span className={`inline-flex text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider mb-2 ${POSITION_COLORS[player.position]}`}>
           {POSITION_LABELS[player.position]}
         </span>
-        <h3 className="text-white font-black uppercase leading-tight truncate" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-          <span className="text-white/50 text-sm block">{player.firstName}</span>
-          <span className="text-lg group-hover:text-[#fd0000] transition-colors">{player.name}</span>
+        <h3 className="text-white font-black uppercase leading-tight" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
+          <span className="text-white/50 text-base block">{player.firstName}</span>
+          <span className="text-xl sm:text-2xl group-hover:text-[#fd0000] transition-colors">{player.name}</span>
         </h3>
-        <p className="text-white/40 text-xs mt-1 line-clamp-2">
+        <p className="text-white/40 text-sm mt-2">
           N°{player.number} · {player.stats?.appearances ?? 0} matchs cette saison
         </p>
       </div>
