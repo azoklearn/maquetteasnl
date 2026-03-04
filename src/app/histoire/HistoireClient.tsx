@@ -4,17 +4,21 @@ import { motion } from "framer-motion";
 import { Trophy, Star, Flag } from "lucide-react";
 
 const TIMELINE = [
-  { year: "1913", title: "Fondation du club", desc: "L'AS Nancy Lorraine est fondée le 2 juin 1913. Le rouge et le blanc deviennent les couleurs emblématiques." },
-  { year: "1958", title: "Montée en Division 1", desc: "Le club accède pour la première fois à l'élite du football français. Une page historique s'écrit." },
-  { year: "1978", title: "Coupe de France", desc: "Sacre historique en Coupe de France. L'ASNL entre définitivement dans la légende du football français." },
-  { year: "2006", title: "Ligue des Champions", desc: "Qualification historique pour la phase de groupes de la Ligue des Champions. Nancy sur la scène européenne." },
-  { year: "2013", title: "Centenaire du club", desc: "Celebration du centenaire. 100 ans d'histoire, de passion et de combativité lorraine." },
-  { year: "2026", title: "En route pour la Ligue 2", desc: "En tête de National, le club vise le retour parmi les professionnels. La renaissance est en marche." },
+  { year: "1967", title: "Fondation de l'ASNL", desc: "L'AS Nancy-Lorraine est fondée pour succéder au FC Nancy. Le rouge et le blanc s'imposent comme couleurs emblématiques du club lorrain.", trophy: false },
+  { year: "1973", title: "Première montée en Division 1", desc: "Le club accède pour la première fois à l'élite du football français. Une page historique s'écrit pour la Lorraine.", trophy: false },
+  { year: "1978", title: "🏆 Coupe de France", desc: "Sacre historique en Coupe de France. Premier grand titre du club, l'ASNL entre définitivement dans la légende du football français.", trophy: true },
+  { year: "1979", title: "Finale de Coupe de France", desc: "Retour en finale de la Coupe de France. Le club confirme son statut de grand club français de l'époque.", trophy: false },
+  { year: "2005", title: "Champion de Ligue 2", desc: "Champion de Ligue 2 et retour en Ligue 1 après quelques années d'absence. La renaissance lorraine est en marche.", trophy: false },
+  { year: "2006", title: "🏆 Coupe de la Ligue", desc: "Victoire en Coupe de la Ligue, deuxième titre majeur du club. L'ASNL s'offre une qualification historique pour l'Europe.", trophy: true },
+  { year: "2006–2007", title: "Coupe UEFA", desc: "Participation à la Coupe UEFA, aventure européenne inédite pour le club. Nancy représente la Lorraine sur la scène continentale.", trophy: false },
+  { year: "2016", title: "Champion de Ligue 2", desc: "Nouveau titre de champion de Ligue 2 et retour en Ligue 1. Le club prouve une nouvelle fois sa résilience.", trophy: false },
+  { year: "2022", title: "Relégation en National", desc: "Difficile relégation en National. Mais le club lorrain reste debout et se donne pour mission de retrouver le monde professionnel.", trophy: false },
 ];
 
 const PALMARES = [
   { title: "Coupe de France", count: 1, year: "1978", icon: Trophy },
-  { title: "Ligue 2", count: 3, year: "1958, 1983, 2002", icon: Star },
+  { title: "Coupe de la Ligue", count: 1, year: "2006", icon: Trophy },
+  { title: "Champion de Ligue 2", count: 2, year: "2005, 2016", icon: Star },
   { title: "Participations Ligue 1", count: 27, year: "", icon: Flag },
 ];
 
@@ -36,7 +40,7 @@ export function HistoireClient() {
             className="text-[#fd0000] text-xs font-semibold uppercase tracking-[0.35em] mb-3"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           >
-            Depuis 1913
+            Depuis 1967
           </motion.p>
           <motion.h1
             className="text-white text-6xl md:text-9xl font-black uppercase leading-none"
@@ -52,7 +56,7 @@ export function HistoireClient() {
       <section className="bg-[#111] py-16 border-y border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-[#fd0000] text-xs font-semibold uppercase tracking-[0.35em] mb-10 text-center">Palmarès</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {PALMARES.map((item, i) => (
               <motion.div
                 key={item.title}
@@ -95,23 +99,31 @@ export function HistoireClient() {
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
+              transition={{ delay: i * 0.08 }}
               className="relative flex gap-8 mb-12"
             >
               <div className="shrink-0 w-32 text-right">
                 <span
-                  className="text-[#fd0000] text-3xl font-black"
+                  className="text-[#fd0000] text-2xl md:text-3xl font-black leading-none"
                   style={{ fontFamily: "'Bebas Neue', sans-serif" }}
                 >
                   {event.year}
                 </span>
               </div>
               {/* Dot */}
-              <div className="relative shrink-0 flex items-start pt-2">
-                <div className="w-3 h-3 rounded-full bg-[#fd0000] border-2 border-[#0A0A0A] ring-2 ring-[#fd0000]/30" />
+              <div className="relative shrink-0 flex items-start pt-1.5">
+                {event.trophy ? (
+                  <div className="w-5 h-5 rounded-full bg-[#fd0000] flex items-center justify-center ring-4 ring-[#fd0000]/20">
+                    <Trophy className="w-3 h-3 text-white" />
+                  </div>
+                ) : (
+                  <div className="w-3 h-3 rounded-full bg-[#fd0000]/60 border-2 border-[#0A0A0A] ring-2 ring-[#fd0000]/20 mt-1" />
+                )}
               </div>
-              <div className="flex-1 pb-4">
-                <h3 className="text-white font-bold text-xl mb-2">{event.title}</h3>
+              <div className={`flex-1 pb-4 ${event.trophy ? "bg-[#fd0000]/5 border border-[#fd0000]/15 rounded-xl p-4 -mt-1" : ""}`}>
+                <h3 className={`font-bold text-lg mb-1.5 ${event.trophy ? "text-white" : "text-white/90"}`}>
+                  {event.title}
+                </h3>
                 <p className="text-white/50 text-sm leading-relaxed">{event.desc}</p>
               </div>
             </motion.div>
