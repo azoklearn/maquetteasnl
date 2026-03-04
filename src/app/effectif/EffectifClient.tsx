@@ -88,6 +88,9 @@ export function EffectifClient({ players: playersProp }: EffectifClientProps) {
 }
 
 function PlayerCard({ player, index }: { player: Player; index: number }) {
+  const hasPhoto = player.photo?.trim();
+  const hasHoverPhoto = player.photoHover?.trim();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -95,30 +98,50 @@ function PlayerCard({ player, index }: { player: Player; index: number }) {
       transition={{ duration: 0.4, delay: index * 0.05 }}
       className="group flex flex-col"
     >
-      {player.photo?.trim() ? (
-        <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-[#111]">
-          <Image
-            src={player.photo}
-            alt={`${player.firstName} ${player.name}`}
-            fill
-            className="object-cover object-top transition-transform duration-300 group-hover:scale-105"
-            sizes="(max-width: 640px) 50vw, 33vw"
-            unoptimized={player.photo.startsWith("data:")}
-          />
-        </div>
-      ) : (
-        <div className="w-full aspect-[3/4] rounded-2xl bg-[#fd0000]/10 border border-[#fd0000]/20 flex items-center justify-center">
-          <span
-            className="text-[#fd0000] text-5xl font-black"
-            style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+      <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-[#111]">
+        {hasPhoto ? (
+          <>
+            <Image
+              src={player.photo!}
+              alt={`${player.firstName} ${player.name}`}
+              fill
+              className={`object-cover object-top transition-all duration-300 group-hover:scale-105 ${hasHoverPhoto ? "group-hover:opacity-0" : ""}`}
+              sizes="(max-width: 640px) 50vw, 33vw"
+              unoptimized={player.photo!.startsWith("data:")}
+            />
+            {hasHoverPhoto && (
+              <Image
+                src={player.photoHover!}
+                alt={`${player.firstName} ${player.name} — action`}
+                fill
+                className="object-cover object-top opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute inset-0"
+                sizes="(max-width: 640px) 50vw, 33vw"
+                unoptimized={player.photoHover!.startsWith("data:")}
+              />
+            )}
+          </>
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <span
+              className="text-[#fd0000] text-5xl font-black"
+              style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+            >
+              {player.firstName[0]}{player.name[0]}
+            </span>
+          </div>
+        )}
+        {/* Nom en overlay au survol */}
+        <div
+          className="absolute inset-0 flex items-end justify-center p-4 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        >
+          <h3
+            className="text-white font-black uppercase leading-tight text-center drop-shadow-lg"
+            style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(1.25rem, 3vw, 1.75rem)" }}
           >
-            {player.firstName[0]}{player.name[0]}
-          </span>
+            {player.firstName} {player.name}
+          </h3>
         </div>
-      )}
-      <h3 className="text-white font-black uppercase leading-tight mt-4 group-hover:text-[#fd0000] transition-colors text-center" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-        {player.firstName} {player.name}
-      </h3>
+      </div>
     </motion.div>
   );
 }
