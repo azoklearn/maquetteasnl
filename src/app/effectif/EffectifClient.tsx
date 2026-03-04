@@ -107,21 +107,21 @@ function PlayerCard({ player, index }: { player: Player; index: number }) {
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
-      className="group glass-dark rounded-2xl overflow-hidden transition-all cursor-pointer px-4 py-3 flex items-center gap-4"
+      className="group glass-dark rounded-2xl overflow-hidden transition-all cursor-pointer px-5 py-4 flex items-center gap-5"
     >
       {player.photo?.trim() ? (
-        <div className="relative w-14 h-14 rounded-xl overflow-hidden shrink-0">
+        <div className="relative w-20 h-20 rounded-xl overflow-hidden shrink-0">
           <Image
             src={player.photo}
             alt={`${player.firstName} ${player.name}`}
             fill
             className="object-cover object-top"
-            sizes="56px"
+            sizes="80px"
             unoptimized={player.photo.startsWith("data:")}
           />
         </div>
       ) : (
-        <div className="w-14 h-14 rounded-xl bg-[#fd0000]/20 border border-[#fd0000]/20 flex items-center justify-center shrink-0">
+        <div className="w-20 h-20 rounded-xl bg-[#fd0000]/20 border border-[#fd0000]/20 flex items-center justify-center shrink-0">
           <span
             className="text-[#fd0000] text-lg font-black"
             style={{ fontFamily: "'Bebas Neue', sans-serif" }}
@@ -130,14 +130,17 @@ function PlayerCard({ player, index }: { player: Player; index: number }) {
           </span>
         </div>
       )}
-      <div className="min-w-0">
+      <div className="min-w-0 flex-1">
         <span className={`inline-flex text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider mb-1 ${POSITION_COLORS[player.position]}`}>
           {POSITION_LABELS[player.position]}
         </span>
         <h3 className="text-white font-black uppercase leading-tight truncate" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-          <span className="text-white/50 text-xs block">{player.firstName}</span>
-          <span className="text-base group-hover:text-[#fd0000] transition-colors">{player.name}</span>
+          <span className="text-white/50 text-sm block">{player.firstName}</span>
+          <span className="text-lg group-hover:text-[#fd0000] transition-colors">{player.name}</span>
         </h3>
+        <p className="text-white/40 text-xs mt-1 line-clamp-2">
+          N°{player.number} · {player.stats?.appearances ?? 0} matchs cette saison
+        </p>
       </div>
     </motion.div>
   );

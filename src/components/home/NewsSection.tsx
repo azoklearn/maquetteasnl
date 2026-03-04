@@ -33,13 +33,13 @@ export function NewsSection({ articles, sectionStyle }: { articles?: NewsArticle
             viewport={{ once: true }}
           >
             <span className="text-xs font-bold uppercase tracking-[0.3em] block mb-2" style={{ color: sectionStyle?.accentColor?.trim() || "#fd0000" }}>
-              {sectionStyle?.subtitle ?? "Actualités"}
+              {sectionStyle?.subtitle ?? "Les dernières nouveautés"}
             </span>
             <h2
               className={`font-black uppercase leading-none ${titleCls}`}
               style={{ fontFamily: "'Bebas Neue', sans-serif", color: sectionStyle?.textColor?.trim() || "#0A0A0A" }}
             >
-              {sectionStyle?.title ?? <>Les dernières<br />nouveautés</>}
+              {sectionStyle?.title ?? "Actualités"}
             </h2>
           </motion.div>
 

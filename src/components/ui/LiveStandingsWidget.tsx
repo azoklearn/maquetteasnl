@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { RefreshCw, ArrowUp, ArrowDown, WifiOff } from "lucide-react";
+import { RefreshCw, ArrowUp, ArrowDown } from "lucide-react";
 import { STANDINGS } from "@/lib/mock-data";
 import type { StandingEntry } from "@/types";
 import { cn } from "@/lib/utils";
@@ -48,7 +48,6 @@ export function LiveStandingsWidget() {
   const [isRefreshing,setIsRefreshing]= useState(false);
   const [showAll,     setShowAll]     = useState(false);
   const [flashRow,    setFlashRow]    = useState<string | null>(null);
-  const [journee,     setJournee]     = useState<number | null>(null);
 
   const fetchStandings = useCallback(async (showLoader = false) => {
     if (showLoader) setIsRefreshing(true);
@@ -59,10 +58,6 @@ export function LiveStandingsWidget() {
       setStandings(data.standings);
       setSource(data.source);
       setLastUpdated(new Date(data.updatedAt));
-
-      // Calcule la journée depuis le nombre de matchs joués
-      const played = data.standings[0]?.played;
-      if (played) setJournee(played);
 
       // Flash la ligne ASNL
       const asnlName = data.standings.find((e) => e.isASNL)?.team;
@@ -87,57 +82,20 @@ export function LiveStandingsWidget() {
   }, [fetchStandings]);
 
   const displayed = showAll ? standings : standings.slice(0, 8);
-  const asnl      = standings.find((e) => e.isASNL);
-  const isLive    = source === "live";
 
   return (
     <div className="rounded-2xl overflow-hidden border border-[#e5e5e5] shadow-xl shadow-black/8 bg-white">
 
-      {/* ── Header ── */}
-      <div className="bg-[#0A0A0A] px-5 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          {/* Logo ASNL */}
-          <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center shrink-0 overflow-hidden p-0.5">
-            <div className="relative w-full h-full">
-              <Image src="/logo.jpeg" alt="ASNL" fill className="object-contain" sizes="36px" />
-            </div>
-          </div>
-          <div>
-            <p className="text-white font-black text-sm leading-none" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-              Ligue 2 BKT
-            </p>
-            <p className="text-white/40 text-[10px] font-medium mt-0.5">
-              Saison 2024–25{journee ? ` · J${journee}` : ""}
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2.5">
-          {/* Indicateur source */}
-          <div className={cn(
-            "flex items-center gap-1.5 rounded-full px-2.5 py-1 border",
-            isLive
-              ? "bg-[#fd0000]/20 border-[#fd0000]/40"
-              : "bg-amber-500/20 border-amber-500/40",
-          )}>
-            {isLive
-              ? <><span className="w-1.5 h-1.5 rounded-full bg-[#fd0000] animate-pulse" />
-                  <span className="text-[#fd0000] text-[10px] font-black uppercase tracking-wider">Live</span></>
-              : <><WifiOff className="w-3 h-3 text-amber-400" />
-                  <span className="text-amber-400 text-[10px] font-black uppercase tracking-wider">Local</span></>
-            }
-          </div>
-
-          {/* Refresh */}
-          <button
-            onClick={() => fetchStandings(true)}
-            disabled={isRefreshing}
-            className="p-1.5 text-white/40 hover:text-white transition-colors disabled:opacity-40"
-            aria-label="Rafraîchir le classement"
-          >
-            <RefreshCw className={cn("w-3.5 h-3.5", isRefreshing && "animate-spin")} />
-          </button>
-        </div>
+      {/* ── Header minimal (refresh uniquement) ── */}
+      <div className="bg-[#0A0A0A] px-5 py-3 flex items-center justify-end">
+        <button
+          onClick={() => fetchStandings(true)}
+          disabled={isRefreshing}
+          className="p-1.5 text-white/40 hover:text-white transition-colors disabled:opacity-40"
+          aria-label="Rafraîchir le classement"
+        >
+          <RefreshCw className={cn("w-3.5 h-3.5", isRefreshing && "animate-spin")} />
+        </button>
       </div>
 
       {/* ── Skeleton loader ── */}
@@ -146,38 +104,6 @@ export function LiveStandingsWidget() {
           {[...Array(8)].map((_, i) => (
             <div key={i} className="h-10 bg-[#f5f5f5] rounded-lg animate-pulse" />
           ))}
-        </div>
-      )}
-
-      {/* ── Bandeau ASNL ── */}
-      {asnl && (
-        <div className="bg-[#fd0000] px-5 py-3 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0 overflow-hidden p-0.5">
-              <div className="relative w-full h-full">
-                <Image src="/logo.jpeg" alt="ASNL" fill className="object-contain" sizes="32px" />
-              </div>
-            </div>
-            <div>
-              <p className="text-white font-black text-sm leading-none">{asnl.team}</p>
-              <p className="text-white/60 text-[10px] mt-0.5 font-medium">{asnl.played} matchs joués</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4 shrink-0">
-            {[
-              { val: `${asnl.position}e`, lbl: "Rang" },
-              { val: String(asnl.points),  lbl: "Pts"  },
-              { val: asnl.goalDiff > 0 ? `+${asnl.goalDiff}` : String(asnl.goalDiff), lbl: "Diff" },
-            ].map((s, i, arr) => (
-              <div key={s.lbl} className="flex items-center gap-4">
-                <div className="text-center">
-                  <p className="text-white font-black text-xl leading-none" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>{s.val}</p>
-                  <p className="text-white/50 text-[9px] uppercase tracking-wider">{s.lbl}</p>
-                </div>
-                {i < arr.length - 1 && <div className="w-px h-8 bg-white/20" />}
-              </div>
-            ))}
-          </div>
         </div>
       )}
 
