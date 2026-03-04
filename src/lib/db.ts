@@ -55,6 +55,11 @@ export interface SiteConfig {
   };
 }
 
+export interface HeroBg {
+  type: "image" | "video";
+  value: string; // URL externe ou base64 pour image
+}
+
 export interface CmsData {
   nextMatch: Match;
   news: NewsArticle[];
@@ -63,6 +68,7 @@ export interface CmsData {
   config: SiteConfig;
   matches: Match[];
   standings: StandingEntry[] | null;
+  heroBg: HeroBg | null;
 }
 
 // ── Valeurs par défaut ─────────────────────────────────────────────────────────
@@ -97,6 +103,7 @@ const KV_KEYS = {
   config:    "cms:config",
   matches:   "cms:matches",
   standings: "cms:standings",
+  heroBg:    "cms:heroBg",
 } as const;
 
 // Fallback en mémoire pour dev sans KV configuré
@@ -195,8 +202,20 @@ export async function setSiteConfig(cfg: SiteConfig) {
   await kvSet(KV_KEYS.config, cfg);
 }
 
+export async function getHeroBg(): Promise<HeroBg | null> {
+  return await kvGet<HeroBg>(KV_KEYS.heroBg);
+}
+export async function setHeroBg(bg: HeroBg) {
+  await kvSet(KV_KEYS.heroBg, bg);
+}
+export async function clearHeroBg() {
+  const redis = getRedis();
+  if (redis) await redis.del(KV_KEYS.heroBg);
+  else memStore.delete(KV_KEYS.heroBg);
+}
+
 export async function getAllCmsData(): Promise<CmsData> {
-  const [nextMatch, news, players, sponsors, config, matches, standings] = await Promise.all([
+  const [nextMatch, news, players, sponsors, config, matches, standings, heroBg] = await Promise.all([
     getNextMatch(),
     getNews(),
     getPlayers(),
@@ -204,6 +223,7 @@ export async function getAllCmsData(): Promise<CmsData> {
     getSiteConfig(),
     getMatches(),
     getStandings(),
+    getHeroBg(),
   ]);
-  return { nextMatch, news, players, sponsors, config, matches, standings };
+  return { nextMatch, news, players, sponsors, config, matches, standings, heroBg };
 }

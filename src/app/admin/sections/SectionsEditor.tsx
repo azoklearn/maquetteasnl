@@ -2,8 +2,9 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Save, Eye, EyeOff, ChevronDown, ChevronUp, RotateCcw } from "lucide-react";
-import type { SectionStyle } from "@/lib/db";
+import { Save, Eye, EyeOff, ChevronDown, ChevronUp, RotateCcw, Image as ImageIcon, Video, Trash2 } from "lucide-react";
+import type { SectionStyle, HeroBg } from "@/lib/db";
+import DragImageUpload from "@/components/admin/DragImageUpload";
 
 // ── Config des sections éditables ──────────────────────────────────────────────
 
@@ -356,7 +357,15 @@ function SectionPanel({
 
 // ── Composant principal ─────────────────────────────────────────────────────────
 
-export function SectionsEditor({ initialData, username }: { initialData?: Partial<SectionsConfig>; username?: string }) {
+export function SectionsEditor({
+  initialData,
+  initialHeroBg,
+  username,
+}: {
+  initialData?: Partial<SectionsConfig>;
+  initialHeroBg?: HeroBg | null;
+  username?: string;
+}) {
   const router = useRouter();
   const [sections, setSections] = useState<SectionsConfig>(() => buildInitial(initialData));
   const [saving, setSaving] = useState(false);
@@ -364,6 +373,13 @@ export function SectionsEditor({ initialData, username }: { initialData?: Partia
   const [error, setError] = useState<string | null>(null);
   const [dirty, setDirty] = useState(false);
   const sectionsRef = useRef(sections);
+
+  // ── Hero background ──
+  const [heroBg, setHeroBgState] = useState<HeroBg | null>(initialHeroBg ?? null);
+  const [bgTab, setBgTab] = useState<"image" | "video">(initialHeroBg?.type ?? "image");
+  const [bgSaving, setBgSaving] = useState(false);
+  const [bgSaved, setBgSaved] = useState(false);
+  const [bgError, setBgError] = useState<string | null>(null);
 
   function patchSection(key: SectionKey, patch: Partial<SectionStyle>) {
     setSections((prev) => {
@@ -395,10 +411,166 @@ export function SectionsEditor({ initialData, username }: { initialData?: Partia
     }
   }
 
+  async function saveHeroBg(bg: HeroBg | null) {
+    setBgSaving(true);
+    setBgError(null);
+    try {
+      const res = await fetch("/api/admin/data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ section: "heroBg", data: bg }),
+      });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        throw new Error(j.error ?? `Erreur ${res.status}`);
+      }
+      setBgSaved(true);
+      setHeroBgState(bg);
+      router.refresh();
+      setTimeout(() => setBgSaved(false), 2500);
+    } catch (e) {
+      setBgError(e instanceof Error ? e.message : "Erreur inconnue");
+    } finally {
+      setBgSaving(false);
+    }
+  }
+
   return (
     <div style={{ padding: "24px 0", maxWidth: 800, margin: "0 auto" }}>
 
-      {/* ── Header ── */}
+      {/* ── Bloc fond Hero ── */}
+      <div style={{ marginBottom: 32, border: "1px solid #374151", borderRadius: 12, background: "#0f172a", overflow: "hidden" }}>
+        {/* Header */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 20px", borderBottom: "1px solid #1f2937" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ width: 20, height: 20, borderRadius: 6, background: "#fd0000", flexShrink: 0 }} />
+            <span style={{ fontWeight: 700, fontSize: 15, color: "#f9fafb" }}>Fond du Hero (Image ou Vidéo)</span>
+          </div>
+          {heroBg && (
+            <button
+              type="button"
+              onClick={() => saveHeroBg(null)}
+              title="Supprimer le fond personnalisé"
+              style={{ background: "none", border: "none", color: "#6b7280", cursor: "pointer", padding: 4, display: "flex", alignItems: "center", gap: 4, fontSize: 12 }}
+            >
+              <Trash2 size={14} /> Réinitialiser
+            </button>
+          )}
+        </div>
+
+        <div style={{ padding: "16px 20px", display: "flex", flexDirection: "column", gap: 16 }}>
+
+          {/* Onglets Image / Vidéo */}
+          <div style={{ display: "flex", gap: 8 }}>
+            {(["image", "video"] as const).map((t) => (
+              <button
+                key={t}
+                type="button"
+                onClick={() => setBgTab(t)}
+                style={{
+                  display: "flex", alignItems: "center", gap: 6,
+                  padding: "8px 18px", borderRadius: 20, fontSize: 13, cursor: "pointer",
+                  border: "1px solid",
+                  borderColor: bgTab === t ? "#fd0000" : "#374151",
+                  background: bgTab === t ? "#fd000020" : "#1f2937",
+                  color: bgTab === t ? "#fd0000" : "#9ca3af",
+                  fontWeight: 600,
+                }}
+              >
+                {t === "image" ? <ImageIcon size={14} /> : <Video size={14} />}
+                {t === "image" ? "Image" : "Vidéo"}
+              </button>
+            ))}
+          </div>
+
+          {bgTab === "image" ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {/* URL externe */}
+              <div>
+                <label style={{ fontSize: 11, fontWeight: 600, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.08em", display: "block", marginBottom: 6 }}>
+                  URL d&apos;image externe
+                </label>
+                <input
+                  type="url"
+                  placeholder="https://exemple.com/photo-stade.jpg"
+                  value={heroBg?.type === "image" && !heroBg.value.startsWith("data:") ? heroBg.value : ""}
+                  onChange={(e) => setHeroBgState({ type: "image", value: e.target.value })}
+                  style={{ width: "100%", padding: "8px 12px", background: "#1f2937", border: "1px solid #374151", borderRadius: 6, color: "#f9fafb", fontSize: 14, boxSizing: "border-box" }}
+                />
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, color: "#6b7280", fontSize: 12 }}>
+                <div style={{ flex: 1, height: 1, background: "#374151" }} />
+                <span>ou</span>
+                <div style={{ flex: 1, height: 1, background: "#374151" }} />
+              </div>
+              {/* Upload */}
+              <DragImageUpload
+                label="Uploader une image (1280×720 recommandé)"
+                hint="JPG/PNG — sera compressée automatiquement"
+                value={heroBg?.type === "image" && heroBg.value.startsWith("data:") ? heroBg.value : undefined}
+                onChange={(v) => v && setHeroBgState({ type: "image", value: v })}
+                maxW={1280}
+                maxH={720}
+              />
+              {/* Aperçu */}
+              {heroBg?.type === "image" && heroBg.value?.trim() && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={heroBg.value}
+                  alt="Aperçu fond hero"
+                  style={{ width: "100%", height: 140, objectFit: "cover", borderRadius: 8, border: "1px solid #374151" }}
+                />
+              )}
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <div>
+                <label style={{ fontSize: 11, fontWeight: 600, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.08em", display: "block", marginBottom: 6 }}>
+                  URL de la vidéo (MP4 direct)
+                </label>
+                <input
+                  type="url"
+                  placeholder="https://exemple.com/video-stade.mp4"
+                  value={heroBg?.type === "video" ? heroBg.value : ""}
+                  onChange={(e) => setHeroBgState({ type: "video", value: e.target.value })}
+                  style={{ width: "100%", padding: "8px 12px", background: "#1f2937", border: "1px solid #374151", borderRadius: 6, color: "#f9fafb", fontSize: 14, boxSizing: "border-box" }}
+                />
+                <p style={{ fontSize: 11, color: "#6b7280", marginTop: 6 }}>
+                  Utilisez un lien direct vers un fichier .mp4 (hébergé sur votre serveur ou un CDN). Les liens YouTube ne sont pas compatibles.
+                </p>
+              </div>
+              {heroBg?.type === "video" && heroBg.value?.trim() && (
+                <video
+                  src={heroBg.value}
+                  muted autoPlay loop playsInline
+                  style={{ width: "100%", height: 140, objectFit: "cover", borderRadius: 8, border: "1px solid #374151" }}
+                />
+              )}
+            </div>
+          )}
+
+          {/* Bouton sauvegarder le fond */}
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <button
+              type="button"
+              onClick={() => saveHeroBg(heroBg)}
+              disabled={bgSaving}
+              style={{
+                display: "flex", alignItems: "center", gap: 8,
+                padding: "9px 20px", background: bgSaved ? "#10b981" : bgSaving ? "#374151" : "#fd0000",
+                color: "#fff", border: "none", borderRadius: 8, fontWeight: 700, fontSize: 14,
+                cursor: bgSaving ? "not-allowed" : "pointer",
+              }}
+            >
+              <Save size={15} />
+              {bgSaving ? "Sauvegarde…" : bgSaved ? "Sauvegardé !" : "Appliquer le fond"}
+            </button>
+            {bgError && <span style={{ color: "#fca5a5", fontSize: 12 }}>{bgError}</span>}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Header sections ── */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 28 }}>
         <div>
           <h1 style={{ fontSize: 26, fontWeight: 800, color: "#f9fafb", margin: 0 }}>

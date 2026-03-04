@@ -18,13 +18,13 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const { nextMatch, news, players, sponsors, config } = await getAllCmsData();
+  const { nextMatch, news, players, sponsors, config, heroBg } = await getAllCmsData();
   const s = config.sections ?? {};
 
   return (
     <>
       {s.hero?.visible !== false && (
-        <HeroSection subtitle={config.heroSubtitle} season={config.heroSeason} ticketingUrl={config.ticketingUrl} sectionStyle={s.hero} />
+        <HeroSection subtitle={config.heroSubtitle} season={config.heroSeason} ticketingUrl={config.ticketingUrl} sectionStyle={s.hero} heroBg={heroBg} />
       )}
       {s.nextMatch?.visible !== false && (
         <NextMatchSection match={nextMatch} sectionStyle={s.nextMatch} />

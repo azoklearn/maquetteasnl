@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Play, ChevronDown, Ticket } from "lucide-react";
 import { TICKETING } from "@/lib/constants";
 import { trackTicketingClick } from "@/lib/analytics";
-import type { SectionStyle } from "@/lib/db";
+import type { SectionStyle, HeroBg } from "@/lib/db";
 import { sectionAccent, titleSizeClass } from "@/lib/sectionStyle";
 
 interface HeroProps {
@@ -15,6 +15,7 @@ interface HeroProps {
   season?: string;
   ticketingUrl?: string;
   sectionStyle?: SectionStyle;
+  heroBg?: HeroBg | null;
 }
 
 // Tailles spécifiques au Hero (beaucoup plus grand que les autres sections)
@@ -25,25 +26,39 @@ const HERO_SIZE: Record<string, string> = {
   xl: "text-9xl sm:text-[11rem] md:text-[13rem]",
 };
 
-export function HeroSection({ subtitle, season, ticketingUrl, sectionStyle }: HeroProps) {
+const DEFAULT_BG_URL = "https://images.unsplash.com/photo-1577223625816-7546f13df25d?w=1920&q=80";
+
+export function HeroSection({ subtitle, season, ticketingUrl, sectionStyle, heroBg }: HeroProps) {
   const accent    = sectionAccent(sectionStyle);
   const titleCls  = HERO_SIZE[sectionStyle?.titleSize ?? "md"] || HERO_SIZE.md;
   const textCol   = sectionStyle?.textColor?.trim() || "#ffffff";
   const ticketUrl = ticketingUrl ?? TICKETING.nextMatchUrl;
+
+  const isVideo = heroBg?.type === "video" && heroBg.value?.trim();
+  const bgImage = heroBg?.type === "image" && heroBg.value?.trim() ? heroBg.value : DEFAULT_BG_URL;
+
   return (
     <section className="relative h-[100svh] min-h-[600px] max-h-[1000px] overflow-hidden flex items-center"
       style={sectionStyle?.bgColor ? { backgroundColor: sectionStyle.bgColor } : undefined}
     >
 
-      {/* ── Fond photo ── */}
+      {/* ── Fond : vidéo ou image ── */}
       <div className="absolute inset-0 z-0">
-        <div
-          className="w-full h-full bg-cover bg-center"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1577223625816-7546f13df25d?w=1920&q=80')",
-          }}
-        />
+        {isVideo ? (
+          <video
+            src={heroBg!.value}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div
+            className="w-full h-full bg-cover bg-center"
+            style={{ backgroundImage: `url('${bgImage}')` }}
+          />
+        )}
       </div>
 
       {/* ── Overlay rouge diagonal — signature visuelle ASNL ── */}

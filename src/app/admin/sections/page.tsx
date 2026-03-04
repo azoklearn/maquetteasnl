@@ -1,7 +1,7 @@
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { getSiteConfig } from "@/lib/db";
+import { getSiteConfig, getHeroBg } from "@/lib/db";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { SectionsEditor } from "./SectionsEditor";
 
@@ -20,11 +20,11 @@ export default async function AdminSectionsPage() {
   );
   if (!session.username) redirect("/admin/login");
 
-  const config = await getSiteConfig();
+  const [config, heroBg] = await Promise.all([getSiteConfig(), getHeroBg()]);
 
   return (
     <AdminShell username={session.username}>
-      <SectionsEditor initialData={config.sections} username={session.username} />
+      <SectionsEditor initialData={config.sections} initialHeroBg={heroBg} username={session.username} />
     </AdminShell>
   );
 }

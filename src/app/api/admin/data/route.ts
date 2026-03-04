@@ -13,6 +13,7 @@ import {
   getSiteConfig,setSiteConfig,
   getMatches,   setMatches,
   getStandings, setStandings, clearStandings,
+  getHeroBg,    setHeroBg,    clearHeroBg,
   getAllCmsData,
 } from "@/lib/db";
 
@@ -36,6 +37,7 @@ export async function GET(req: NextRequest) {
     case "matches":   return NextResponse.json(await getMatches());
     case "standings": return NextResponse.json(await getStandings() ?? []);
     case "sections":  return NextResponse.json((await getSiteConfig()).sections ?? {});
+    case "heroBg":    return NextResponse.json(await getHeroBg() ?? null);
     default:          return NextResponse.json(await getAllCmsData());
   }
 }
@@ -69,6 +71,11 @@ export async function POST(req: NextRequest) {
       case "sections": {
         const current = await getSiteConfig();
         await setSiteConfig({ ...current, sections: data as Parameters<typeof setSiteConfig>[0]["sections"] });
+        break;
+      }
+      case "heroBg": {
+        if (!data) await clearHeroBg();
+        else await setHeroBg(data as { type: "image" | "video"; value: string });
         break;
       }
       default:
