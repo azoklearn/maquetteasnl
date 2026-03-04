@@ -92,27 +92,25 @@ export function NextMatchSection({ match: matchProp, sectionStyle }: { match?: M
         >
           {/* Équipe domicile */}
           <div className="text-center flex-1 max-w-[240px]">
-            <div className="w-20 h-20 md:w-28 md:h-28 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl shadow-black/30 overflow-hidden p-1">
-              <div className="relative w-full h-full">
-                {match.homeLogo?.trim() ? (
-                  <Image
-                    src={match.homeLogo}
-                    alt={match.homeTeam}
-                    fill
-                    className="object-contain"
-                    sizes="112px"
-                    unoptimized={match.homeLogo.startsWith("data:")}
-                  />
-                ) : (
-                  <Image
-                    src="/logo.jpeg"
-                    alt={match.homeTeam}
-                    fill
-                    className="object-contain"
-                    sizes="112px"
-                  />
-                )}
-              </div>
+            <div className="relative w-20 h-20 md:w-28 md:h-28 mx-auto mb-4">
+              {match.homeLogo?.trim() ? (
+                <Image
+                  src={match.homeLogo}
+                  alt={match.homeTeam}
+                  fill
+                  className="object-contain"
+                  sizes="112px"
+                  unoptimized={match.homeLogo.startsWith("data:")}
+                />
+              ) : (
+                <Image
+                  src="/logo.jpeg"
+                  alt={match.homeTeam}
+                  fill
+                  className="object-contain"
+                  sizes="112px"
+                />
+              )}
             </div>
             <h2
               className="text-white text-2xl md:text-4xl font-black uppercase leading-tight"
@@ -137,25 +135,25 @@ export function NextMatchSection({ match: matchProp, sectionStyle }: { match?: M
 
           {/* Équipe visiteur */}
           <div className="text-center flex-1 max-w-[240px]">
-            <div className="w-20 h-20 md:w-28 md:h-28 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl shadow-black/30 overflow-hidden p-1">
+            <div className="relative w-20 h-20 md:w-28 md:h-28 mx-auto mb-4">
               {match.awayLogo?.trim() ? (
-                <div className="relative w-full h-full">
-                  <Image
-                    src={match.awayLogo}
-                    alt={match.awayTeam}
-                    fill
-                    className="object-contain"
-                    sizes="112px"
-                    unoptimized={match.awayLogo.startsWith("data:")}
-                  />
-                </div>
+                <Image
+                  src={match.awayLogo}
+                  alt={match.awayTeam}
+                  fill
+                  className="object-contain"
+                  sizes="112px"
+                  unoptimized={match.awayLogo.startsWith("data:")}
+                />
               ) : (
-                <span
-                  className="text-[#fd0000] text-xl md:text-2xl font-black"
-                  style={{ fontFamily: "'Bebas Neue', sans-serif" }}
-                >
-                  {match.awayTeam.slice(0, 3).toUpperCase()}
-                </span>
+                <div className="w-full h-full flex items-center justify-center">
+                  <span
+                    className="text-white/40 text-2xl md:text-4xl font-black"
+                    style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+                  >
+                    {match.awayTeam.slice(0, 3).toUpperCase()}
+                  </span>
+                </div>
               )}
             </div>
             <h2
