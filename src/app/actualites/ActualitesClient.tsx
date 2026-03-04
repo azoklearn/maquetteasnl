@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Clock, ArrowRight, Tag } from "lucide-react";
 import type { NewsArticle } from "@/types";
 import { formatShortDate } from "@/lib/utils";
+import { ExcerptWithLinks } from "@/components/ui/ExcerptWithLinks";
 import { NEWS } from "@/lib/mock-data";
 
 const CATEGORY_COLORS: Record<string, { bg: string; text: string; dot: string }> = {
@@ -156,7 +157,7 @@ export function ActualitesClient({ articles }: Props) {
                         {featured.title}
                       </h2>
                       <p className="text-white/60 text-sm md:text-base leading-relaxed line-clamp-2 max-w-3xl mb-4">
-                        {featured.excerpt}
+                        <ExcerptWithLinks text={featured.excerpt} linkClassName="text-white/90 hover:text-[#fd0000] underline" />
                       </p>
                       <div className="flex items-center gap-4">
                         <div className="flex items-center gap-1.5 text-white/40 text-xs font-medium">
@@ -211,7 +212,7 @@ export function ActualitesClient({ articles }: Props) {
                             {article.title}
                           </h3>
                           <p className="text-white/35 text-sm line-clamp-2 leading-relaxed mb-4">
-                            {article.excerpt}
+                            <ExcerptWithLinks text={article.excerpt} linkClassName="text-white/60 hover:text-[#fd0000] underline" />
                           </p>
                           <div className="flex items-center justify-between text-xs">
                             <div className="flex items-center gap-1.5 text-white/25 font-medium">

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowRight, Clock } from "lucide-react";
 import type { NewsArticle } from "@/types";
 import { formatShortDate } from "@/lib/utils";
+import { ExcerptWithLinks } from "@/components/ui/ExcerptWithLinks";
 import type { SectionStyle } from "@/lib/db";
 import { titleSizeClass } from "@/lib/sectionStyle";
 
@@ -84,7 +85,9 @@ export function NewsSection({ articles, sectionStyle }: { articles?: NewsArticle
                     >
                       {featured.title}
                     </h3>
-                    <p className="text-white/60 text-sm leading-relaxed line-clamp-2">{featured.excerpt}</p>
+                    <p className="text-white/60 text-sm leading-relaxed line-clamp-2">
+                      <ExcerptWithLinks text={featured.excerpt} linkClassName="text-white/80 hover:text-white underline" />
+                    </p>
                     <div className="flex items-center gap-2 mt-4 text-white/40 text-xs font-medium">
                       <Clock className="w-3 h-3" />
                       {formatShortDate(featured.publishedAt)}

@@ -178,7 +178,11 @@ export default function NewsEditor({ initialData, username }: Props) {
                         rows={3}
                         value={article.excerpt}
                         onChange={(e) => update(article.id, "excerpt", e.target.value)}
+                        placeholder="Pour ajouter un lien : [texte cliquable](https://exemple.com)"
                       />
+                      <p className="text-white/30 text-xs mt-1.5">
+                        Liens : utilisez <code className="bg-white/10 px-1 rounded">[texte](url)</code> — ex. [Billetterie](https://billetterie.asnl.net)
+                      </p>
                     </div>
 
                     <div>
@@ -188,8 +192,11 @@ export default function NewsEditor({ initialData, username }: Props) {
                         rows={8}
                         value={article.content ?? ""}
                         onChange={(e) => update(article.id, "content", e.target.value)}
-                        placeholder="Contenu de l'article en texte libre ou HTML..."
+                        placeholder="Texte libre, HTML ou liens [texte](url)..."
                       />
+                      <p className="text-white/30 text-xs mt-1.5">
+                        Liens : <code className="bg-white/10 px-1 rounded">[texte](url)</code> — HTML autorisé (&lt;p&gt;, &lt;strong&gt;, etc.)
+                      </p>
                     </div>
 
                     <div className="flex items-center gap-3">

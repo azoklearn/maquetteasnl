@@ -5,7 +5,8 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Clock, Tag } from "lucide-react";
 import { getNews } from "@/lib/db";
 import { NEWS } from "@/lib/mock-data";
-import { formatShortDate } from "@/lib/utils";
+import { formatShortDate, stripExcerptLinks, markdownLinksToHtml } from "@/lib/utils";
+import { ExcerptWithLinks } from "@/components/ui/ExcerptWithLinks";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!article) return { title: "Article introuvable" };
   return {
     title: `${article.title} — ASNL`,
-    description: article.excerpt,
+    description: stripExcerptLinks(article.excerpt),
     openGraph: { images: [article.image] },
   };
 }
@@ -105,14 +106,14 @@ export default async function ArticlePage({ params }: Props) {
 
         {/* Chapeau */}
         <p className="text-white/70 text-lg md:text-xl leading-relaxed font-medium mb-8 border-l-4 border-[#fd0000] pl-5">
-          {article.excerpt}
+          <ExcerptWithLinks text={article.excerpt} linkClassName="text-[#fd0000] hover:underline font-semibold" />
         </p>
 
         {/* Corps de l'article */}
         {article.content ? (
           <div
             className="prose prose-invert prose-lg max-w-none prose-p:text-white/60 prose-p:leading-relaxed prose-headings:text-white prose-headings:font-black prose-a:text-[#fd0000]"
-            dangerouslySetInnerHTML={{ __html: article.content }}
+            dangerouslySetInnerHTML={{ __html: markdownLinksToHtml(article.content) }}
           />
         ) : (
           /* Contenu de démonstration si pas de contenu CMS */

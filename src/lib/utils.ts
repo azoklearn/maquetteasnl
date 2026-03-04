@@ -21,6 +21,24 @@ export function formatShortDate(dateStr: string, locale = "fr-FR"): string {
   });
 }
 
+/** Retire les liens [texte](url) d'un extrait pour affichage brut (ex: meta description) */
+export function stripExcerptLinks(text: string): string {
+  if (!text?.trim()) return "";
+  return text.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
+}
+
+/** Convertit [texte](url) en balises <a> dans du HTML (pour contenu d'article) */
+export function markdownLinksToHtml(html: string): string {
+  if (!html?.trim()) return "";
+  return html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_match, text, url) => {
+    const href = url.trim().replace(/"/g, "&quot;").replace(/</g, "&lt;");
+    const safeText = text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    const ext = href.startsWith("http://") || href.startsWith("https://") || href.startsWith("//");
+    const target = ext ? ' target="_blank" rel="noopener noreferrer nofollow"' : "";
+    return `<a href="${href}"${target} class="text-[#fd0000] hover:underline font-semibold">${safeText}</a>`;
+  });
+}
+
 export function getTimeUntil(dateStr: string, timeStr: string) {
   const target = new Date(`${dateStr}T${timeStr}:00`);
   const now = new Date();

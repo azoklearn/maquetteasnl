@@ -3,12 +3,13 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Play, ChevronDown, Ticket } from "lucide-react";
+import { Play, ChevronDown, Ticket, Newspaper, ArrowRight } from "lucide-react";
 import { TICKETING } from "@/lib/constants";
 import { trackTicketingClick } from "@/lib/analytics";
-import { formatDate } from "@/lib/utils";
+import { formatDate, formatShortDate } from "@/lib/utils";
+import { ExcerptWithLinks } from "@/components/ui/ExcerptWithLinks";
 import type { SectionStyle, HeroBg } from "@/lib/db";
-import type { Match } from "@/types";
+import type { Match, NewsArticle } from "@/types";
 import { VIDEOS } from "@/app/medias/MediasClient";
 
 interface HeroProps {
@@ -20,6 +21,7 @@ interface HeroProps {
   nextMatch?: Match;
   /** Image de fond utilisée dans la section Prochain match (bgImage) */
   nextMatchBgImage?: string;
+  news?: NewsArticle[];
 }
 
 const DEFAULT_BG_URL = "https://images.unsplash.com/photo-1577223625816-7546f13df25d?w=1920&q=80";
@@ -32,6 +34,7 @@ export function HeroSection({
   heroBg,
   nextMatch,
   nextMatchBgImage,
+  news = [],
 }: HeroProps) {
   const textCol   = sectionStyle?.textColor?.trim() || "#ffffff";
   const ticketUrl = ticketingUrl ?? TICKETING.nextMatchUrl;
@@ -46,7 +49,7 @@ export function HeroSection({
 
   return (
     <section
-      className="relative h-[100svh] min-h-[600px] max-h-[1000px] overflow-hidden flex items-center -mt-16 md:-mt-20"
+      className="relative h-[100svh] min-h-[600px] max-h-[1000px] overflow-visible flex items-center -mt-16 md:-mt-20"
       style={sectionStyle?.bgColor ? { backgroundColor: sectionStyle.bgColor } : undefined}
     >
 
@@ -97,8 +100,10 @@ export function HeroSection({
       />
 
       {/* ── Contenu ── */}
-      <div className="relative z-20 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 w-full">
-        <div className="flex flex-col max-w-3xl items-start">
+      <div className="relative z-20 w-full h-full flex items-center justify-center pt-8">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 w-full flex flex-col items-start">
+          {/* Colonne gauche : texte + liquid glass Derniers médias + Prochain match */}
+          <div className="flex flex-col max-w-3xl items-start">
 
           {/* Eyebrow */}
           <motion.div
@@ -258,6 +263,61 @@ export function HeroSection({
                   </p>
                 </div>
               </a>
+            </motion.div>
+          )}
+          </div>
+
+          {/* Carte Actualités — positionnée à droite du viewport */}
+          {news.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1 }}
+              className="hidden lg:block absolute right-6 xl:right-12 2xl:right-20 top-[calc(50%+1rem)] -translate-y-1/2 w-[380px] xl:w-[440px] 2xl:w-[480px]"
+            >
+              <Link
+                href="/actualites"
+                className="group block w-full glass-dark rounded-2xl overflow-hidden p-6 sm:p-8 text-white/90 hover:text-white transition-colors"
+              >
+                <div className="flex items-center justify-between mb-5">
+                  <span className="inline-flex items-center gap-2 bg-transparent text-white/90 border border-white/40 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">
+                    <Newspaper className="w-4 h-4" />
+                    Actualités
+                  </span>
+                  <ArrowRight className="w-5 h-5 text-white/60 group-hover:text-white group-hover:translate-x-1 transition-all" />
+                </div>
+                <div className="space-y-4">
+                  {news.slice(0, 3).map((article) => (
+                    <div key={article.id} className="flex gap-4">
+                      {article.image?.trim() && (
+                        <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden shrink-0 border border-white/10">
+                          <Image
+                            src={article.image}
+                            alt={article.title}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform"
+                            sizes="96px"
+                          />
+                        </div>
+                      )}
+                      <div className="min-w-0 flex-1">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-white/50">
+                          {article.category} · {formatShortDate(article.publishedAt)}
+                        </span>
+                        <h3 className="text-sm sm:text-base font-semibold line-clamp-2 mt-0.5 group-hover:text-[#fd0000] transition-colors">
+                          {article.title}
+                        </h3>
+                        <p className="text-xs text-white/50 line-clamp-2 mt-1">
+                          <ExcerptWithLinks text={article.excerpt} linkClassName="text-white/70 hover:text-[#fd0000] underline" />
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-sm text-white/50 mt-5 leading-relaxed">
+                  Toute l&apos;actualité du club : matchs, transferts, billetterie et vie de l&apos;ASNL.
+                </p>
+              </Link>
             </motion.div>
           )}
         </div>

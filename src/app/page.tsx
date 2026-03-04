@@ -32,6 +32,7 @@ export default async function HomePage() {
           heroBg={heroBg}
           nextMatch={nextMatch}
           nextMatchBgImage={s.nextMatch?.bgImage}
+          news={news}
         />
       )}
       {s.nextMatch?.visible !== false && (
