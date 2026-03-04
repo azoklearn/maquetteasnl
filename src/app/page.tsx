@@ -24,7 +24,13 @@ export default async function HomePage() {
   return (
     <>
       {s.hero?.visible !== false && (
-        <HeroSection subtitle={config.heroSubtitle} season={config.heroSeason} ticketingUrl={config.ticketingUrl} sectionStyle={s.hero} heroBg={heroBg} />
+        <HeroSection
+          subtitle={config?.heroSubtitle ?? "Fondé en 1913. Fier. Lorrain. Irréductible."}
+          season={config?.heroSeason ?? "Saison 2025 – 2026"}
+          ticketingUrl={config?.ticketingUrl}
+          sectionStyle={s.hero}
+          heroBg={heroBg}
+        />
       )}
       {s.nextMatch?.visible !== false && (
         <NextMatchSection match={nextMatch} sectionStyle={s.nextMatch} />

@@ -185,13 +185,13 @@ export function HeroSection({ subtitle, season, ticketingUrl, sectionStyle, hero
 
         {/* Stats côté droit */}
         {(() => {
-          const stats = sectionStyle?.stats?.length
-            ? sectionStyle.stats
-            : [
-                { value: "2ème", label: "au classement" },
-                { value: "48",   label: "points" },
-                { value: "+18",  label: "diff. buts" },
-              ];
+          const defaultStats = [
+            { value: "2ème", label: "au classement" },
+            { value: "48",   label: "points" },
+            { value: "+18",  label: "diff. buts" },
+          ];
+          const custom = sectionStyle?.stats?.filter((s) => s.value?.trim() || s.label?.trim()) ?? [];
+          const stats = custom.length > 0 ? custom : defaultStats;
           return (
             <motion.div
               initial={{ opacity: 0, x: 30 }}
