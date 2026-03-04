@@ -36,7 +36,9 @@ export const NAVIGATION = [
   { label: "Boutique", href: "/boutique" },
 ];
 
-export const NEXT_MATCH = {
+import type { Match } from "@/types";
+
+export const NEXT_MATCH: Match = {
   id: "m-001",
   homeTeam: "AS Nancy Lorraine",
   awayTeam: "FC Metz",
@@ -47,5 +49,5 @@ export const NEXT_MATCH = {
   isHome: true,
   ticketingUrl: "https://asnlbillets.net/(S(3efueez1h0f5lm3ypektwljn))/Pages/PSpectacles.aspx",
   isHighProfile: true,
-  status: "upcoming" as const,
+  status: "upcoming",
 };
