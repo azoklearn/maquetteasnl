@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Play, X, Camera, Film, ZoomIn } from "lucide-react";
 
 // ── Données mock vidéos ────────────────────────────────────────────────────────
-const VIDEOS = [
+export const VIDEOS = [
   {
     id: "v1",
     title: "Nancy 2 - 0 Caen",

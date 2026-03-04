@@ -30,6 +30,8 @@ export default async function HomePage() {
           ticketingUrl={config?.ticketingUrl}
           sectionStyle={s.hero}
           heroBg={heroBg}
+          nextMatch={nextMatch}
+          nextMatchBgImage={s.nextMatch?.bgImage}
         />
       )}
       {s.nextMatch?.visible !== false && (

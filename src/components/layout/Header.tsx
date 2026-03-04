@@ -10,6 +10,7 @@ import { trackTicketingClick } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 interface HeaderProps {
+  tickerEnabled?: boolean;
   tickerMessages?: string[];
   ticketingUrl?: string;
 }
@@ -57,7 +58,7 @@ function HamburgerButton({
 }
 
 // ── Header principal ───────────────────────────────────────────────────────────
-export function Header({ tickerMessages, ticketingUrl }: HeaderProps) {
+export function Header({ tickerEnabled = true, tickerMessages, ticketingUrl }: HeaderProps) {
   const [isScrolled, setIsScrolled]     = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const ticketUrl = ticketingUrl ?? TICKETING.nextMatchUrl;
@@ -88,6 +89,7 @@ export function Header({ tickerMessages, ticketingUrl }: HeaderProps) {
   return (
     <>
       {/* ── Live Ticker ── */}
+      {tickerEnabled && (
       <div className="bg-[#fd0000] text-white text-xs font-semibold overflow-hidden h-8 flex items-center">
         <div className="flex animate-ticker whitespace-nowrap">
           {[...Array(2)].map((_, i) => (
@@ -102,32 +104,24 @@ export function Header({ tickerMessages, ticketingUrl }: HeaderProps) {
           ))}
         </div>
       </div>
+      )}
 
       {/* ── Main Header ── */}
       <header
         className={cn(
           "sticky top-0 z-50 transition-all duration-400",
           isScrolled
-            ? "bg-white shadow-xl shadow-black/10 border-b-2 border-[#fd0000]"
-            : "bg-black/80 backdrop-blur-md",
+            ? "bg-white/95 backdrop-blur-md shadow-lg shadow-black/10"
+            : "bg-transparent",
         )}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 md:h-20">
 
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 group shrink-0">
+            <Link href="/" className="flex items-center group shrink-0">
               <div className="w-10 h-10 md:w-12 md:h-12 relative transition-transform group-hover:scale-105 shrink-0">
                 <Image src="/logo.jpeg" alt="AS Nancy Lorraine" fill className="object-contain drop-shadow-md" sizes="48px" priority />
-              </div>
-              <div className="hidden sm:block">
-                <div
-                  className={cn("font-black text-base leading-none tracking-tight transition-colors", isScrolled ? "text-[#0A0A0A]" : "text-white")}
-                  style={{ fontFamily: "'Bebas Neue', sans-serif" }}
-                >
-                  AS Nancy
-                </div>
-                <div className="text-[#fd0000] text-[10px] font-bold uppercase tracking-[0.25em] leading-none">Lorraine</div>
               </div>
             </Link>
 

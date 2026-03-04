@@ -95,6 +95,15 @@ export default function ConfigEditor({ initialData, username }: Props) {
 
           {/* Ticker */}
           <Section title="Bandeau défilant (ticker)">
+            <label className="flex items-center gap-3 mb-4 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={config.tickerEnabled !== false}
+                onChange={(e) => set("tickerEnabled", e.target.checked)}
+                className="w-4 h-4 rounded border-white/20 bg-[#1a1a1a] text-[#fd0000] focus:ring-[#fd0000]"
+              />
+              <span className="text-white/80 text-sm">Afficher le bandeau rouge</span>
+            </label>
             <div className="space-y-3 mb-4">
               {config.tickerMessages.map((msg, i) => (
                 <div key={i} className="flex gap-2">

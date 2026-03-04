@@ -6,39 +6,47 @@ import Link from "next/link";
 import { Play, ChevronDown, Ticket } from "lucide-react";
 import { TICKETING } from "@/lib/constants";
 import { trackTicketingClick } from "@/lib/analytics";
+import { formatDate } from "@/lib/utils";
 import type { SectionStyle, HeroBg } from "@/lib/db";
-import { sectionAccent, titleSizeClass } from "@/lib/sectionStyle";
+import type { Match } from "@/types";
+import { VIDEOS } from "@/app/medias/MediasClient";
 
 interface HeroProps {
-  title?: string;
   subtitle?: string;
   season?: string;
   ticketingUrl?: string;
   sectionStyle?: SectionStyle;
   heroBg?: HeroBg | null;
+  nextMatch?: Match;
+  /** Image de fond utilisée dans la section Prochain match (bgImage) */
+  nextMatchBgImage?: string;
 }
-
-// Tailles spécifiques au Hero (beaucoup plus grand que les autres sections)
-const HERO_SIZE: Record<string, string> = {
-  sm: "text-5xl sm:text-7xl md:text-8xl",
-  md: "text-7xl sm:text-9xl md:text-[9.5rem]",
-  lg: "text-8xl sm:text-[10rem] md:text-[11rem]",
-  xl: "text-9xl sm:text-[11rem] md:text-[13rem]",
-};
 
 const DEFAULT_BG_URL = "https://images.unsplash.com/photo-1577223625816-7546f13df25d?w=1920&q=80";
 
-export function HeroSection({ subtitle, season, ticketingUrl, sectionStyle, heroBg }: HeroProps) {
-  const accent    = sectionAccent(sectionStyle);
-  const titleCls  = HERO_SIZE[sectionStyle?.titleSize ?? "md"] || HERO_SIZE.md;
+export function HeroSection({
+  subtitle,
+  season,
+  ticketingUrl,
+  sectionStyle,
+  heroBg,
+  nextMatch,
+  nextMatchBgImage,
+}: HeroProps) {
   const textCol   = sectionStyle?.textColor?.trim() || "#ffffff";
   const ticketUrl = ticketingUrl ?? TICKETING.nextMatchUrl;
+
+  const latestVideo = VIDEOS[0];
+  const match       = nextMatch;
+  const homeShort   = (match?.homeTeam ?? "ASNL").slice(0, 3).toUpperCase();
+  const awayShort   = (match?.awayTeam ?? "").slice(0, 3).toUpperCase() || "???";
 
   const isVideo = heroBg?.type === "video" && heroBg.value?.trim();
   const bgImage = heroBg?.type === "image" && heroBg.value?.trim() ? heroBg.value : DEFAULT_BG_URL;
 
   return (
-    <section className="relative h-[100svh] min-h-[600px] max-h-[1000px] overflow-hidden flex items-center"
+    <section
+      className="relative h-[100svh] min-h-[600px] max-h-[1000px] overflow-hidden flex items-center -mt-16 md:-mt-20"
       style={sectionStyle?.bgColor ? { backgroundColor: sectionStyle.bgColor } : undefined}
     >
 
@@ -78,22 +86,6 @@ export function HeroSection({ subtitle, season, ticketingUrl, sectionStyle, hero
         }}
       />
 
-      {/* ── Bande blanche verticale décorative ── */}
-      <div className="absolute left-0 top-0 bottom-0 z-20 w-1.5 bg-white/20" />
-      <div className="absolute left-3 top-0 bottom-0 z-20 w-0.5 bg-white/10" />
-
-      {/* ── Logo watermark côté droit ── */}
-      <div className="absolute right-4 md:right-16 top-1/2 -translate-y-1/2 z-[15] w-56 h-56 md:w-80 md:h-80 opacity-[0.08] pointer-events-none">
-        <Image
-          src="/logo.jpeg"
-          alt=""
-          fill
-          className="object-contain"
-          sizes="320px"
-          aria-hidden="true"
-        />
-      </div>
-
       {/* ── Grain ── */}
       <div
         className="absolute inset-0 z-10 opacity-[0.12] pointer-events-none"
@@ -106,119 +98,163 @@ export function HeroSection({ subtitle, season, ticketingUrl, sectionStyle, hero
 
       {/* ── Contenu ── */}
       <div className="relative z-20 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 w-full">
-        <div className="max-w-3xl">
+        <div className="flex flex-col max-w-3xl">
 
           {/* Eyebrow */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex items-center gap-3 mb-5"
+            className="mb-5"
           >
-            <span className="w-10 h-0.5" style={{ backgroundColor: textCol }} />
             <span className="text-xs font-bold uppercase tracking-[0.4em]" style={{ color: textCol }}>
               {sectionStyle?.title ?? season ?? "Saison 2025 – 2026"}
             </span>
           </motion.div>
 
-          {/* Titre — club name */}
-          <motion.h1
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className={`font-black uppercase leading-none tracking-tighter ${titleCls}`}
-            style={{ fontFamily: "'Bebas Neue', sans-serif" }}
-          >
-            <span className="block drop-shadow-2xl" style={{ color: textCol }}>
-              AS Nancy
-            </span>
-            <span
-              className="block"
-              style={{
-                WebkitTextStroke: `3px ${textCol}`,
-                color: "transparent",
-              }}
-            >
-              Lorraine
-            </span>
-          </motion.h1>
-
           {/* Sous-titre */}
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="text-base md:text-lg mt-6 mb-10 max-w-lg leading-relaxed font-medium"
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-base md:text-xl mt-4 mb-6 max-w-lg leading-relaxed font-medium"
             style={{ color: textCol, opacity: 0.85 }}
           >
             {sectionStyle?.subtitle ?? subtitle ?? "Fondé en 1913. Fier. Lorrain. Irréductible."}
           </motion.p>
 
-          {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.75 }}
-            className="flex flex-wrap gap-4"
-          >
-            {/* CTA Billetterie — blanc avec texte rouge */}
-            <a
-              href={ticketUrl}
-              target="_blank"
-              rel="noopener noreferrer nofollow"
-              onClick={() => trackTicketingClick("hero_cta", "Derby vs Metz")}
-              className="cta-pulse inline-flex items-center gap-3 bg-white hover:bg-white/90 text-[#fd0000] font-black text-base px-8 py-4 rounded-full transition-all hover:scale-105 uppercase tracking-wider shadow-2xl shadow-black/40"
-            >
-              <Ticket className="w-5 h-5" />
-              Prendre ma place
-            </a>
-            {/* CTA secondaire — contour blanc */}
-            <Link
-              href="/medias"
-              className="inline-flex items-center gap-3 bg-transparent text-white border-2 border-white/70 hover:bg-white hover:text-[#fd0000] font-bold text-base px-8 py-4 rounded-full transition-all hover:scale-105 uppercase tracking-wider"
-            >
-              <Play className="w-5 h-5 fill-current" />
-              Derniers médias
-            </Link>
-          </motion.div>
-        </div>
-
-        {/* Stats côté droit */}
-        {(() => {
-          const defaultStats = [
-            { value: "2ème", label: "au classement" },
-            { value: "48",   label: "points" },
-            { value: "+18",  label: "diff. buts" },
-          ];
-          const custom = sectionStyle?.stats?.filter((s) => s.value?.trim() || s.label?.trim()) ?? [];
-          const stats = custom.length > 0 ? custom : defaultStats;
-          return (
+          {/* Derniers médias — carte liquid glass */}
+          {latestVideo && (
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 1.0 }}
-              className="absolute bottom-20 right-4 sm:right-8 flex flex-col gap-1"
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.75 }}
+              className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 -ml-2 sm:-ml-4"
             >
-              {stats.map((stat, i) => (
-                <div key={i} className="text-right px-4 py-2">
-                  <div
-                    className="text-3xl font-black leading-none drop-shadow-lg"
-                    style={{ fontFamily: "'Bebas Neue', sans-serif", color: textCol }}
-                  >
-                    {stat.value}
-                  </div>
-                  <div
-                    className="text-[10px] uppercase tracking-widest font-semibold"
-                    style={{ color: textCol, opacity: 0.6 }}
-                  >
-                    {stat.label}
+              <Link
+                href="/medias"
+                className="group flex items-center gap-4 text-white/90 glass-dark px-4 py-3 rounded-2xl"
+              >
+                <div className="relative w-32 h-20 sm:w-40 sm:h-24 rounded-xl overflow-hidden border border-white/10 bg-black/40">
+                  <Image
+                    src={latestVideo.thumbnail}
+                    alt={latestVideo.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform"
+                    sizes="160px"
+                  />
+                  <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors" />
+                  <Play className="absolute w-5 h-5 text-white/80 left-3 bottom-3" />
+                  <span className="absolute right-2 top-2 text-[11px] px-2 py-0.5 rounded-full bg-black/70 text-white/80 font-semibold">
+                    {latestVideo.duration}
+                  </span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="inline-flex items-center gap-2 bg-transparent text-white/90 border border-white/40 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider">
+                    <Play className="w-3 h-3 fill-current" />
+                    Derniers médias
+                  </span>
+                  <span className="text-sm font-semibold group-hover:text-white line-clamp-2">
+                    {latestVideo.title}
+                  </span>
+                  <span className="text-xs text-white/60">
+                    {latestVideo.competition} · {latestVideo.date}
+                  </span>
+                </div>
+              </Link>
+            </motion.div>
+          )}
+
+          {/* Prochain match — carte liquid glass (en dessous de Derniers médias) */}
+          {match && (
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.9 }}
+              className="mt-4 flex -ml-2 sm:-ml-4"
+            >
+              <a
+                href={ticketUrl}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                onClick={() => trackTicketingClick("hero_cta_bottom", "Derby vs Metz")}
+                className="group flex items-center gap-4 text-white/90 glass-dark px-4 py-3 rounded-2xl max-w-md w-full"
+              >
+                {/* Vignette logos / VS avec fond section prochain match */}
+                <div
+                  className="relative w-32 h-20 sm:w-40 sm:h-24 rounded-xl overflow-hidden border border-white/10 bg-black/40 bg-cover bg-center"
+                  style={
+                    nextMatchBgImage?.trim()
+                      ? { backgroundImage: `url('${nextMatchBgImage}')` }
+                      : undefined
+                  }
+                >
+                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition-colors" />
+                  <div className="absolute inset-0 flex items-center justify-center gap-3">
+                    {/* Logo ASNL ou logo domicile */}
+                    <div className="w-9 h-9 flex items-center justify-center overflow-hidden">
+                      {match.homeLogo?.trim() ? (
+                        <Image
+                          src={match.homeLogo}
+                          alt={match.homeTeam}
+                          width={36}
+                          height={36}
+                          className="object-contain"
+                          unoptimized={match.homeLogo.startsWith("data:")}
+                        />
+                      ) : (
+                        <Image
+                          src="/logo.jpeg"
+                          alt={match.homeTeam}
+                          width={36}
+                          height={36}
+                          className="object-contain"
+                        />
+                      )}
+                    </div>
+                    <span
+                      className="text-white/80 text-xs font-black tracking-[0.25em]"
+                      style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+                    >
+                      VS
+                    </span>
+                    {/* Logo extérieur ou initiales */}
+                    <div className="w-9 h-9 rounded-full bg-white/10 border border-white/40 flex items-center justify-center overflow-hidden">
+                      {match.awayLogo?.trim() ? (
+                        <Image
+                          src={match.awayLogo}
+                          alt={match.awayTeam}
+                          width={36}
+                          height={36}
+                          className="object-contain"
+                          unoptimized={match.awayLogo.startsWith("data:")}
+                        />
+                      ) : (
+                        <span className="text-white text-[11px] font-semibold">
+                          {awayShort}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
-              ))}
-              <div className="absolute right-0 top-2 bottom-2 w-0.5 bg-white/40" />
+
+                {/* Texte + badge */}
+                <div className="flex flex-col gap-1">
+                  <span className="inline-flex items-center gap-2 bg-transparent text-white/90 border border-white/40 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider">
+                    <Ticket className="w-3 h-3" />
+                    Prochain match
+                  </span>
+                  <span className="text-sm font-semibold group-hover:text-white line-clamp-2">
+                    {match.homeTeam} – {match.awayTeam}
+                  </span>
+                  <span className="text-xs text-white/60">
+                    {formatDate(match.date)} · {match.time} · {match.stadium}
+                  </span>
+                </div>
+              </a>
             </motion.div>
-          );
-        })()}
+          )}
+        </div>
       </div>
 
       {/* ── Scroll indicator ── */}

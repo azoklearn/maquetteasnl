@@ -45,6 +45,202 @@ function buildInitial(data?: Partial<SectionsConfig>): SectionsConfig {
   return result;
 }
 
+// ── Presets voile dégradé ───────────────────────────────────────────────────────
+
+const OVERLAY_PRESETS: {
+  label: string;
+  topColor: string;
+  topOpacity: number;
+  bottomColor: string;
+  bottomOpacity: number;
+  direction: number;
+}[] = [
+  { label: "Noir → Rouge", topColor: "#000000", topOpacity: 50, bottomColor: "#c8102e", bottomOpacity: 85, direction: 180 },
+  { label: "Sombre uniforme", topColor: "#000000", topOpacity: 70, bottomColor: "#000000", bottomOpacity: 90, direction: 180 },
+  { label: "Rouge dominant", topColor: "#c8102e", topOpacity: 60, bottomColor: "#8b0000", bottomOpacity: 95, direction: 180 },
+  { label: "Transparent → Rouge", topColor: "#000000", topOpacity: 20, bottomColor: "#c8102e", bottomOpacity: 90, direction: 180 },
+  { label: "Gauche → Droite", topColor: "#000000", topOpacity: 50, bottomColor: "#c8102e", bottomOpacity: 85, direction: 90 },
+  { label: "Diagonal", topColor: "#000000", topOpacity: 40, bottomColor: "#c8102e", bottomOpacity: 80, direction: 135 },
+];
+
+function OverlayEditor({
+  style,
+  onChange,
+}: {
+  style: SectionStyle;
+  onChange: (p: Partial<SectionStyle>) => void;
+}) {
+  const topColor = style.overlayTopColor ?? "#000000";
+  const topOpacity = style.overlayTopOpacity ?? 50;
+  const bottomColor = style.overlayBottomColor ?? "#c8102e";
+  const bottomOpacity = style.overlayBottomOpacity ?? 85;
+  const direction = style.overlayDirection ?? 180;
+
+  const setOverlay = (p: Partial<SectionStyle>) => onChange({ ...p });
+
+  const gradientRgba = (hex: string, a: number) => {
+    const m = hex.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
+    if (!m) return `rgba(0,0,0,${a / 100})`;
+    return `rgba(${parseInt(m[1], 16)},${parseInt(m[2], 16)},${parseInt(m[3], 16)},${a / 100})`;
+  };
+  const previewGradient = `linear-gradient(${direction}deg, ${gradientRgba(topColor, topOpacity)} 0%, ${gradientRgba(bottomColor, bottomOpacity)} 100%)`;
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+      <label style={{ fontSize: 11, fontWeight: 600, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+        Voile dégradé sur l&apos;image
+      </label>
+
+      {/* Presets visuels */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+        {OVERLAY_PRESETS.map((preset) => (
+          <button
+            key={preset.label}
+            type="button"
+            onClick={() => setOverlay({
+              overlayTopColor: preset.topColor,
+              overlayTopOpacity: preset.topOpacity,
+              overlayBottomColor: preset.bottomColor,
+              overlayBottomOpacity: preset.bottomOpacity,
+              overlayDirection: preset.direction,
+            })}
+            style={{
+              display: "flex", alignItems: "center", gap: 8, padding: "6px 10px",
+              borderRadius: 8, border: "1px solid #374151", background: "#1f2937",
+              cursor: "pointer", transition: "all 0.2s",
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.borderColor = "#fd0000";
+              e.currentTarget.style.background = "#1f2937";
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.borderColor = "#374151";
+              e.currentTarget.style.background = "#1f2937";
+            }}
+          >
+            <div
+              style={{
+                width: 32, height: 24, borderRadius: 4, overflow: "hidden",
+                background: `linear-gradient(${preset.direction}deg, ${gradientRgba(preset.topColor, preset.topOpacity)} 0%, ${gradientRgba(preset.bottomColor, preset.bottomOpacity)} 100%)`,
+                border: "1px solid rgba(255,255,255,0.2)",
+              }}
+            />
+            <span style={{ fontSize: 12, color: "#fff" }}>{preset.label}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Aperçu du dégradé actuel */}
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <span style={{ fontSize: 11, color: "#6b7280" }}>Aperçu :</span>
+        <div
+          style={{
+            flex: 1, height: 28, borderRadius: 6, background: previewGradient,
+            border: "1px solid rgba(255,255,255,0.15)",
+          }}
+        />
+      </div>
+
+      {/* Direction */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+        <label style={{ fontSize: 11, fontWeight: 600, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+          Direction
+        </label>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          {[
+            { deg: 180, label: "Haut → Bas" },
+            { deg: 0, label: "Bas → Haut" },
+            { deg: 90, label: "Gauche → Droite" },
+            { deg: 270, label: "Droite → Gauche" },
+            { deg: 135, label: "Diagonal ↘" },
+            { deg: 45, label: "Diagonal ↗" },
+          ].map(({ deg, label }) => (
+            <button
+              key={deg}
+              type="button"
+              onClick={() => setOverlay({ overlayDirection: deg })}
+              style={{
+                padding: "6px 12px", borderRadius: 6, fontSize: 12, cursor: "pointer",
+                border: direction === deg ? "1px solid #fd0000" : "1px solid #374151",
+                background: direction === deg ? "#fd000020" : "#1f2937",
+                color: direction === deg ? "#fd0000" : "#9ca3af",
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Couleurs */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+        <div>
+          <label style={{ fontSize: 11, fontWeight: 600, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 4, display: "block" }}>
+            Couleur haut
+          </label>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <input
+              type="color"
+              value={topColor}
+              onChange={(e) => setOverlay({ overlayTopColor: e.target.value })}
+              style={{ width: 36, height: 36, padding: 2, border: "1px solid #374151", borderRadius: 8, cursor: "pointer", background: "transparent" }}
+            />
+            <input
+              type="text"
+              value={topColor}
+              onChange={(e) => setOverlay({ overlayTopColor: e.target.value })}
+              style={{ flex: 1, padding: "6px 10px", background: "#1f2937", border: "1px solid #374151", borderRadius: 6, color: "#f9fafb", fontSize: 13, fontFamily: "monospace" }}
+            />
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 6 }}>
+            <span style={{ fontSize: 11, color: "#6b7280" }}>Opacité</span>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={topOpacity}
+              onChange={(e) => setOverlay({ overlayTopOpacity: parseInt(e.target.value, 10) })}
+              style={{ flex: 1, accentColor: "#fd0000" }}
+            />
+            <span style={{ fontSize: 12, color: "#9ca3af", minWidth: 28 }}>{topOpacity}%</span>
+          </div>
+        </div>
+        <div>
+          <label style={{ fontSize: 11, fontWeight: 600, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 4, display: "block" }}>
+            Couleur bas
+          </label>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <input
+              type="color"
+              value={bottomColor}
+              onChange={(e) => setOverlay({ overlayBottomColor: e.target.value })}
+              style={{ width: 36, height: 36, padding: 2, border: "1px solid #374151", borderRadius: 8, cursor: "pointer", background: "transparent" }}
+            />
+            <input
+              type="text"
+              value={bottomColor}
+              onChange={(e) => setOverlay({ overlayBottomColor: e.target.value })}
+              style={{ flex: 1, padding: "6px 10px", background: "#1f2937", border: "1px solid #374151", borderRadius: 6, color: "#f9fafb", fontSize: 13, fontFamily: "monospace" }}
+            />
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 6 }}>
+            <span style={{ fontSize: 11, color: "#6b7280" }}>Opacité</span>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={bottomOpacity}
+              onChange={(e) => setOverlay({ overlayBottomOpacity: parseInt(e.target.value, 10) })}
+              style={{ flex: 1, accentColor: "#fd0000" }}
+            />
+            <span style={{ fontSize: 12, color: "#9ca3af", minWidth: 28 }}>{bottomOpacity}%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Composant ColorInput ────────────────────────────────────────────────────────
 
 function ColorInput({
@@ -249,6 +445,21 @@ function SectionPanel({
               defaultColor="#fd0000"
             />
           </div>
+
+          {/* Image de fond Prochain match (utilisée aussi dans le hero) */}
+          {meta.key === "nextMatch" && (
+            <>
+              <DragImageUpload
+                label="Image de fond section Prochain match"
+                hint="Utilisée dans le hero et la section dédiée · 1280×720 recommandé"
+                value={style.bgImage}
+                onChange={(v) => onChange({ bgImage: v ?? "" })}
+                maxW={1280}
+                maxH={720}
+              />
+              <OverlayEditor style={style} onChange={onChange} />
+            </>
+          )}
 
           {/* Stats Hero (uniquement pour la section Hero) */}
           {meta.key === "hero" && (() => {

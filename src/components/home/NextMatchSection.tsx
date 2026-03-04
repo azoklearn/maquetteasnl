@@ -1,6 +1,15 @@
 "use client";
 
 import Image from "next/image";
+
+function hexToRgba(hex: string, a: number): string {
+  const m = hex.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
+  if (!m) return `rgba(0,0,0,${a})`;
+  const r = parseInt(m[1], 16);
+  const g = parseInt(m[2], 16);
+  const b = parseInt(m[3], 16);
+  return `rgba(${r},${g},${b},${a})`;
+}
 import { motion } from "framer-motion";
 import { Ticket, Flame, AlertCircle, MapPin, Calendar } from "lucide-react";
 import { CountdownTimer } from "@/components/ui/CountdownTimer";
@@ -11,18 +20,41 @@ import type { Match } from "@/types";
 import type { SectionStyle } from "@/lib/db";
 
 export function NextMatchSection({ match: matchProp, sectionStyle }: { match?: Match; sectionStyle?: SectionStyle }) {
-  const match  = matchProp ?? NEXT_MATCH;
-  const accent = sectionStyle?.bgColor ?? "#fd0000";
+  const match   = matchProp ?? NEXT_MATCH;
+  const accent  = sectionStyle?.bgColor ?? "#fd0000";
+  const bgImage = sectionStyle?.bgImage?.trim();
+
+  const topColor    = sectionStyle?.overlayTopColor ?? "#000000";
+  const topOpacity  = sectionStyle?.overlayTopOpacity ?? 50;
+  const bottomColor = sectionStyle?.overlayBottomColor ?? "#c8102e";
+  const bottomOpacity = sectionStyle?.overlayBottomOpacity ?? 85;
+  const direction   = sectionStyle?.overlayDirection ?? 180;
+
+  const overlayGradient = `linear-gradient(${direction}deg, ${hexToRgba(topColor, topOpacity / 100)} 0%, ${hexToRgba(bottomColor, bottomOpacity / 100)} 100%)`;
 
   function handleTicketClick(source: string) {
     trackTicketingClick(source, `${match.homeTeam} vs ${match.awayTeam}`);
   }
 
   return (
-    <section className="relative overflow-hidden" style={{ backgroundColor: accent }}>
+    <section
+      className="relative overflow-hidden bg-cover bg-center"
+      style={
+        bgImage
+          ? { backgroundImage: `url('${bgImage}')` }
+          : { backgroundColor: accent }
+      }
+    >
+      {/* Overlay dégradé si image de fond (lisibilité) — modifiable en admin */}
+      {bgImage && (
+        <div
+          className="absolute inset-0 z-0"
+          style={{ background: overlayGradient }}
+        />
+      )}
       {/* ── Texture pattern blanc sur rouge ── */}
       <div
-        className="absolute inset-0 opacity-[0.06]"
+        className="absolute inset-0 opacity-[0.06] z-[1]"
         style={{
           backgroundImage:
             "repeating-linear-gradient(0deg, #fff 0, #fff 1px, transparent 0, transparent 40px), repeating-linear-gradient(90deg, #fff 0, #fff 1px, transparent 0, transparent 40px)",
@@ -31,7 +63,7 @@ export function NextMatchSection({ match: matchProp, sectionStyle }: { match?: M
 
       {/* ── Gros texte fantôme en fond ── */}
       <div
-        className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden"
+        className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden z-[1]"
       >
         <span
           className="text-white/[0.04] font-black uppercase leading-none whitespace-nowrap"
@@ -45,9 +77,9 @@ export function NextMatchSection({ match: matchProp, sectionStyle }: { match?: M
       </div>
 
       {/* ── Barre blanche top ── */}
-      <div className="h-1 bg-white/30" />
+      <div className="h-1 bg-white/30 relative z-[1]" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
 
         {/* ── Badges ── */}
         <motion.div

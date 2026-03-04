@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Trophy, Star, Flag } from "lucide-react";
+import { Trophy } from "lucide-react";
 
 const TIMELINE = [
   { year: "1967", title: "Fondation de l'ASNL", desc: "L'AS Nancy-Lorraine est fondée pour succéder au FC Nancy. Le rouge et le blanc s'imposent comme couleurs emblématiques du club lorrain.", trophy: false },
@@ -13,13 +13,6 @@ const TIMELINE = [
   { year: "2006–2007", title: "Coupe UEFA", desc: "Participation à la Coupe UEFA, aventure européenne inédite pour le club. Nancy représente la Lorraine sur la scène continentale.", trophy: false },
   { year: "2016", title: "Champion de Ligue 2", desc: "Nouveau titre de champion de Ligue 2 et retour en Ligue 1. Le club prouve une nouvelle fois sa résilience.", trophy: false },
   { year: "2022", title: "Relégation en National", desc: "Difficile relégation en National. Mais le club lorrain reste debout et se donne pour mission de retrouver le monde professionnel.", trophy: false },
-];
-
-const PALMARES = [
-  { title: "Coupe de France", count: 1, year: "1978", icon: Trophy },
-  { title: "Coupe de la Ligue", count: 1, year: "2006", icon: Trophy },
-  { title: "Champion de Ligue 2", count: 2, year: "2005, 2016", icon: Star },
-  { title: "Participations Ligue 1", count: 27, year: "", icon: Flag },
 ];
 
 export function HistoireClient() {
@@ -51,35 +44,6 @@ export function HistoireClient() {
           </motion.h1>
         </div>
       </div>
-
-      {/* Palmares */}
-      <section className="bg-[#111] py-16 border-y border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-[#fd0000] text-xs font-semibold uppercase tracking-[0.35em] mb-10 text-center">Palmarès</p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {PALMARES.map((item, i) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="text-center bg-[#1A1A1A] border border-white/5 rounded-2xl p-8"
-              >
-                <item.icon className="w-10 h-10 text-[#fd0000] mx-auto mb-4" />
-                <div
-                  className="text-6xl font-black text-white mb-2 leading-none"
-                  style={{ fontFamily: "'Bebas Neue', sans-serif" }}
-                >
-                  {item.count}×
-                </div>
-                <div className="text-white font-bold text-lg mb-1">{item.title}</div>
-                {item.year && <div className="text-white/40 text-sm">{item.year}</div>}
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Timeline */}
       <section className="py-20 max-w-4xl mx-auto px-4 sm:px-6">

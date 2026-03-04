@@ -23,7 +23,6 @@ export function Footer({ social, ticketingUrl, seasonTicketUrl, groupUrl }: Foot
       { label: "Histoire", href: "/histoire" },
       { label: "Effectif", href: "/effectif" },
       { label: "Staff technique", href: "/effectif#staff" },
-      { label: "Palmarès", href: "/histoire#palmares" },
     ],
     Compétitions: [
       { label: "Calendrier", href: "/calendrier" },

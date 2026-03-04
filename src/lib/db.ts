@@ -28,6 +28,13 @@ export interface SectionStyle {
   title?: string;
   subtitle?: string;
   bgColor?: string;
+  bgImage?: string;
+  /** Voile dégradé sur l'image de fond (section Prochain match) */
+  overlayTopColor?: string;
+  overlayTopOpacity?: number;
+  overlayBottomColor?: string;
+  overlayBottomOpacity?: number;
+  overlayDirection?: number;
   textColor?: string;
   accentColor?: string;
   titleSize?: "sm" | "md" | "lg" | "xl";
@@ -37,6 +44,7 @@ export interface SectionStyle {
 
 export interface SiteConfig {
   clubName: string;
+  tickerEnabled?: boolean;
   tickerMessages: string[];
   ticketingUrl: string;
   seasonTicketUrl: string;

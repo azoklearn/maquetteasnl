@@ -112,6 +112,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <LoadingScreen />
           <Analytics />
           <Header
+            tickerEnabled={config.tickerEnabled ?? true}
             tickerMessages={config.tickerMessages}
             ticketingUrl={config.ticketingUrl}
           />
