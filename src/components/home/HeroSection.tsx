@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Play, ChevronDown, Ticket, Newspaper, ArrowRight } from "lucide-react";
 import { TICKETING } from "@/lib/constants";
 import { trackTicketingClick } from "@/lib/analytics";
-import { formatDate, formatShortDate } from "@/lib/utils";
+import { formatDate, formatShortDate, cn } from "@/lib/utils";
 import { ExcerptWithLinks } from "@/components/ui/ExcerptWithLinks";
 import type { SectionStyle, HeroBg } from "@/lib/db";
 import type { Match, NewsArticle } from "@/types";
@@ -230,7 +230,7 @@ export function HeroSection({
                   <div className="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition-colors" />
                   <div className="absolute inset-0 flex items-center justify-center gap-4">
                     {/* Logo ASNL ou logo domicile */}
-                    <div className="w-11 h-11 flex items-center justify-center overflow-hidden">
+                    <div className="w-11 h-11 flex items-center justify-center overflow-hidden bg-transparent">
                       {match.homeLogo?.trim() ? (
                         <Image
                           src={match.homeLogo}
@@ -257,7 +257,10 @@ export function HeroSection({
                       VS
                     </span>
                     {/* Logo extérieur ou initiales */}
-                    <div className="w-11 h-11 rounded-full bg-white/10 border border-white/40 flex items-center justify-center overflow-hidden">
+                    <div className={cn(
+                      "w-11 h-11 rounded-full flex items-center justify-center overflow-hidden",
+                      match.awayLogo?.trim() ? "bg-transparent" : "bg-white/10 border border-white/40"
+                    )}>
                       {match.awayLogo?.trim() ? (
                         <Image
                           src={match.awayLogo}

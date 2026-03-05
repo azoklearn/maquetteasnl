@@ -124,7 +124,7 @@ export function NextMatchSection({ match: matchProp, sectionStyle }: { match?: M
         >
           {/* Équipe domicile */}
           <div className="text-center flex-1 max-w-[240px]">
-            <div className="relative w-20 h-20 md:w-28 md:h-28 mx-auto mb-4">
+            <div className="relative w-20 h-20 md:w-28 md:h-28 mx-auto mb-4 bg-transparent">
               {match.homeLogo?.trim() ? (
                 <Image
                   src={match.homeLogo}
@@ -167,7 +167,7 @@ export function NextMatchSection({ match: matchProp, sectionStyle }: { match?: M
 
           {/* Équipe visiteur */}
           <div className="text-center flex-1 max-w-[240px]">
-            <div className="relative w-20 h-20 md:w-28 md:h-28 mx-auto mb-4">
+            <div className="relative w-20 h-20 md:w-28 md:h-28 mx-auto mb-4 bg-transparent">
               {match.awayLogo?.trim() ? (
                 <Image
                   src={match.awayLogo}
