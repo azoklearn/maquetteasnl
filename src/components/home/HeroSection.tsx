@@ -110,6 +110,25 @@ export function HeroSection({
         }}
       />
 
+      {/* ── Logo ASNL au centre ── */}
+      <motion.div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[15] pointer-events-none"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.8, delay: 0.3 }}
+      >
+        <div className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 opacity-90 drop-shadow-2xl">
+          <Image
+            src="/logo.jpeg"
+            alt="AS Nancy Lorraine"
+            fill
+            className="object-contain"
+            sizes="(max-width: 640px) 128px, (max-width: 768px) 160px, (max-width: 1024px) 192px, 224px"
+            priority
+          />
+        </div>
+      </motion.div>
+
       {/* ── Contenu ── */}
       <div className="relative z-20 w-full h-full flex items-center justify-center pt-8">
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 w-full flex flex-col items-start">
