@@ -8,6 +8,7 @@ import {
   AlertTriangle, ChevronUp, ChevronDown, Camera,
 } from "lucide-react";
 import type { StandingEntry } from "@/types";
+import { cn } from "@/lib/utils";
 import { AdminShell } from "@/components/admin/AdminShell";
 import DragImageUpload from "@/components/admin/DragImageUpload";
 
@@ -257,11 +258,14 @@ export function StandingsEditor({ initialData, username }: Props) {
                   <button
                     onClick={() => setExpanded(isOpen ? null : row.position)}
                     title="Cliquer pour modifier le logo"
-                    className="relative group w-8 h-8 rounded-full bg-white flex items-center justify-center overflow-hidden p-0.5 mx-auto shrink-0"
+                    className={cn(
+                      "relative group w-8 h-8 rounded-full flex items-center justify-center overflow-hidden p-0.5 mx-auto shrink-0",
+                      row.team === "Montpellier" ? "bg-transparent" : "bg-white"
+                    )}
                   >
                     {row.logo?.trim() ? (
                       <div className="relative w-full h-full">
-                        <Image src={row.logo} alt={row.team} fill className="object-contain" sizes="32px" unoptimized={row.logo.startsWith("data:")} />
+                        <Image src={row.logo} alt={row.team} fill className={cn("object-contain", row.team === "Montpellier" && "mix-blend-multiply")} sizes="32px" unoptimized={row.logo.startsWith("data:")} />
                       </div>
                     ) : (
                       <span className="text-[#0A0A0A] text-[8px] font-black group-hover:hidden">{row.shortName.slice(0, 3)}</span>

@@ -175,13 +175,21 @@ export function LiveStandingsWidget() {
                       </div>
                     ) : entry.logo ? (
                       /* Logo API pour les autres équipes */
-                      <div className="w-6 h-6 rounded-full bg-white border border-[#e5e5e5] flex items-center justify-center shrink-0 overflow-hidden p-0.5">
+                      <div className={cn(
+                        "w-6 h-6 rounded-full flex items-center justify-center shrink-0 overflow-hidden p-0.5",
+                        entry.team === "Montpellier"
+                          ? "bg-transparent"
+                          : "bg-white border border-[#e5e5e5]"
+                      )}>
                         <div className="relative w-full h-full">
                           <Image
                             src={entry.logo}
                             alt={entry.shortName}
                             fill
-                            className="object-contain"
+                            className={cn(
+                              "object-contain",
+                              entry.team === "Montpellier" && "mix-blend-multiply"
+                            )}
                             sizes="24px"
                             onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
                           />
