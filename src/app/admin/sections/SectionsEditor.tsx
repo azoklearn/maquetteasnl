@@ -63,18 +63,28 @@ const OVERLAY_PRESETS: {
   { label: "Diagonal", topColor: "#000000", topOpacity: 40, bottomColor: "#c8102e", bottomOpacity: 80, direction: 135 },
 ];
 
+const HERO_OVERLAY_PRESETS = [
+  { label: "Rouge diagonal ASNL", topColor: "#c8102e", topOpacity: 75, bottomColor: "#000000", bottomOpacity: 55, direction: 110 },
+  { label: "Rouge → Noir", topColor: "#c8102e", topOpacity: 80, bottomColor: "#000000", bottomOpacity: 90, direction: 110 },
+  { label: "Sombre uniforme", topColor: "#000000", topOpacity: 60, bottomColor: "#000000", bottomOpacity: 80, direction: 180 },
+  { label: "Transparent", topColor: "#000000", topOpacity: 20, bottomColor: "#000000", bottomOpacity: 50, direction: 180 },
+];
+
 function OverlayEditor({
   style,
   onChange,
+  variant = "nextMatch",
 }: {
   style: SectionStyle;
   onChange: (p: Partial<SectionStyle>) => void;
+  variant?: "hero" | "nextMatch";
 }) {
-  const topColor = style.overlayTopColor ?? "#000000";
-  const topOpacity = style.overlayTopOpacity ?? 50;
-  const bottomColor = style.overlayBottomColor ?? "#c8102e";
-  const bottomOpacity = style.overlayBottomOpacity ?? 85;
-  const direction = style.overlayDirection ?? 180;
+  const isHero = variant === "hero";
+  const topColor = (isHero ? style.heroOverlayTopColor : style.overlayTopColor) ?? (isHero ? "#c8102e" : "#000000");
+  const topOpacity = (isHero ? style.heroOverlayTopOpacity : style.overlayTopOpacity) ?? (isHero ? 75 : 50);
+  const bottomColor = (isHero ? style.heroOverlayBottomColor : style.overlayBottomColor) ?? (isHero ? "#000000" : "#c8102e");
+  const bottomOpacity = (isHero ? style.heroOverlayBottomOpacity : style.overlayBottomOpacity) ?? (isHero ? 55 : 85);
+  const direction = (isHero ? style.heroOverlayDirection : style.overlayDirection) ?? (isHero ? 110 : 180);
 
   const setOverlay = (p: Partial<SectionStyle>) => onChange({ ...p });
 
@@ -93,17 +103,15 @@ function OverlayEditor({
 
       {/* Presets visuels */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-        {OVERLAY_PRESETS.map((preset) => (
+        {(isHero ? HERO_OVERLAY_PRESETS : OVERLAY_PRESETS).map((preset) => (
           <button
             key={preset.label}
             type="button"
-            onClick={() => setOverlay({
-              overlayTopColor: preset.topColor,
-              overlayTopOpacity: preset.topOpacity,
-              overlayBottomColor: preset.bottomColor,
-              overlayBottomOpacity: preset.bottomOpacity,
-              overlayDirection: preset.direction,
-            })}
+            onClick={() => setOverlay(
+              isHero
+                ? { heroOverlayTopColor: preset.topColor, heroOverlayTopOpacity: preset.topOpacity, heroOverlayBottomColor: preset.bottomColor, heroOverlayBottomOpacity: preset.bottomOpacity, heroOverlayDirection: preset.direction }
+                : { overlayTopColor: preset.topColor, overlayTopOpacity: preset.topOpacity, overlayBottomColor: preset.bottomColor, overlayBottomOpacity: preset.bottomOpacity, overlayDirection: preset.direction }
+            )}
             style={{
               display: "flex", alignItems: "center", gap: 8, padding: "6px 10px",
               borderRadius: 8, border: "1px solid #374151", background: "#1f2937",
@@ -154,11 +162,12 @@ function OverlayEditor({
             { deg: 270, label: "Droite → Gauche" },
             { deg: 135, label: "Diagonal ↘" },
             { deg: 45, label: "Diagonal ↗" },
+            { deg: 110, label: "Diagonal ASNL" },
           ].map(({ deg, label }) => (
             <button
               key={deg}
               type="button"
-              onClick={() => setOverlay({ overlayDirection: deg })}
+              onClick={() => setOverlay(isHero ? { heroOverlayDirection: deg } : { overlayDirection: deg })}
               style={{
                 padding: "6px 12px", borderRadius: 6, fontSize: 12, cursor: "pointer",
                 border: direction === deg ? "1px solid #fd0000" : "1px solid #374151",
@@ -182,13 +191,13 @@ function OverlayEditor({
             <input
               type="color"
               value={topColor}
-              onChange={(e) => setOverlay({ overlayTopColor: e.target.value })}
+              onChange={(e) => setOverlay(isHero ? { heroOverlayTopColor: e.target.value } : { overlayTopColor: e.target.value })}
               style={{ width: 36, height: 36, padding: 2, border: "1px solid #374151", borderRadius: 8, cursor: "pointer", background: "transparent" }}
             />
             <input
               type="text"
               value={topColor}
-              onChange={(e) => setOverlay({ overlayTopColor: e.target.value })}
+              onChange={(e) => setOverlay(isHero ? { heroOverlayTopColor: e.target.value } : { overlayTopColor: e.target.value })}
               style={{ flex: 1, padding: "6px 10px", background: "#1f2937", border: "1px solid #374151", borderRadius: 6, color: "#f9fafb", fontSize: 13, fontFamily: "monospace" }}
             />
           </div>
@@ -199,7 +208,7 @@ function OverlayEditor({
               min={0}
               max={100}
               value={topOpacity}
-              onChange={(e) => setOverlay({ overlayTopOpacity: parseInt(e.target.value, 10) })}
+              onChange={(e) => setOverlay(isHero ? { heroOverlayTopOpacity: parseInt(e.target.value, 10) } : { overlayTopOpacity: parseInt(e.target.value, 10) })}
               style={{ flex: 1, accentColor: "#fd0000" }}
             />
             <span style={{ fontSize: 12, color: "#9ca3af", minWidth: 28 }}>{topOpacity}%</span>
@@ -213,13 +222,13 @@ function OverlayEditor({
             <input
               type="color"
               value={bottomColor}
-              onChange={(e) => setOverlay({ overlayBottomColor: e.target.value })}
+              onChange={(e) => setOverlay(isHero ? { heroOverlayBottomColor: e.target.value } : { overlayBottomColor: e.target.value })}
               style={{ width: 36, height: 36, padding: 2, border: "1px solid #374151", borderRadius: 8, cursor: "pointer", background: "transparent" }}
             />
             <input
               type="text"
               value={bottomColor}
-              onChange={(e) => setOverlay({ overlayBottomColor: e.target.value })}
+              onChange={(e) => setOverlay(isHero ? { heroOverlayBottomColor: e.target.value } : { overlayBottomColor: e.target.value })}
               style={{ flex: 1, padding: "6px 10px", background: "#1f2937", border: "1px solid #374151", borderRadius: 6, color: "#f9fafb", fontSize: 13, fontFamily: "monospace" }}
             />
           </div>
@@ -230,7 +239,7 @@ function OverlayEditor({
               min={0}
               max={100}
               value={bottomOpacity}
-              onChange={(e) => setOverlay({ overlayBottomOpacity: parseInt(e.target.value, 10) })}
+              onChange={(e) => setOverlay(isHero ? { heroOverlayBottomOpacity: parseInt(e.target.value, 10) } : { overlayBottomOpacity: parseInt(e.target.value, 10) })}
               style={{ flex: 1, accentColor: "#fd0000" }}
             />
             <span style={{ fontSize: 12, color: "#9ca3af", minWidth: 28 }}>{bottomOpacity}%</span>
@@ -457,8 +466,13 @@ function SectionPanel({
                 maxW={1280}
                 maxH={720}
               />
-              <OverlayEditor style={style} onChange={onChange} />
+              <OverlayEditor style={style} onChange={onChange} variant="nextMatch" />
             </>
+          )}
+
+          {/* Voile dégradé Hero */}
+          {meta.key === "hero" && (
+            <OverlayEditor style={style} onChange={onChange} variant="hero" />
           )}
 
           {/* Stats Hero (uniquement pour la section Hero) */}

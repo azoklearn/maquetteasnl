@@ -72,12 +72,23 @@ export function HeroSection({
         )}
       </div>
 
-      {/* ── Overlay rouge diagonal — signature visuelle ASNL ── */}
+      {/* ── Overlay dégradé (modifiable en admin) ── */}
       <div
         className="absolute inset-0 z-10"
         style={{
-          background:
-            "linear-gradient(110deg, rgba(200,16,46,0.75) 0%, rgba(200,16,46,0.45) 35%, rgba(0,0,0,0.0) 60%, rgba(0,0,0,0.55) 100%)",
+          background: (() => {
+            const hexToRgba = (hex: string, a: number) => {
+              const m = hex?.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
+              if (!m) return `rgba(0,0,0,${a / 100})`;
+              return `rgba(${parseInt(m[1], 16)},${parseInt(m[2], 16)},${parseInt(m[3], 16)},${a / 100})`;
+            };
+            const topC = sectionStyle?.heroOverlayTopColor ?? "#c8102e";
+            const topO = sectionStyle?.heroOverlayTopOpacity ?? 75;
+            const bottomC = sectionStyle?.heroOverlayBottomColor ?? "#000000";
+            const bottomO = sectionStyle?.heroOverlayBottomOpacity ?? 55;
+            const dir = sectionStyle?.heroOverlayDirection ?? 110;
+            return `linear-gradient(${dir}deg, ${hexToRgba(topC, topO)} 0%, ${hexToRgba(bottomC, bottomO)} 100%)`;
+          })(),
         }}
       />
 

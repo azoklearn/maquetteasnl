@@ -35,6 +35,12 @@ export interface SectionStyle {
   overlayBottomColor?: string;
   overlayBottomOpacity?: number;
   overlayDirection?: number;
+  /** Voile dégradé du hero (overlay diagonal sur fond vidéo/image) */
+  heroOverlayTopColor?: string;
+  heroOverlayTopOpacity?: number;
+  heroOverlayBottomColor?: string;
+  heroOverlayBottomOpacity?: number;
+  heroOverlayDirection?: number;
   textColor?: string;
   accentColor?: string;
   titleSize?: "sm" | "md" | "lg" | "xl";
