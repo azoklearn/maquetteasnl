@@ -41,6 +41,10 @@ export interface SectionStyle {
   heroOverlayBottomColor?: string;
   heroOverlayBottomOpacity?: number;
   heroOverlayDirection?: number;
+  /** Couleurs des cartes liquid glass du hero */
+  heroGlassBgColor?: string;
+  heroGlassBgOpacity?: number;
+  heroGlassTextColor?: string;
   textColor?: string;
   accentColor?: string;
   titleSize?: "sm" | "md" | "lg" | "xl";
