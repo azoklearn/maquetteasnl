@@ -5,13 +5,15 @@ export const dynamic = "force-dynamic";
 import { getAllCmsData } from "@/lib/db";
 import AdminShell from "@/components/admin/AdminShell";
 import Link from "next/link";
-import { Calendar, ListOrdered, Newspaper, Users, HandHeart, Settings, ArrowRight, Layers, BarChart2 } from "lucide-react";
+import { Calendar, ListOrdered, Newspaper, Users, HandHeart, Settings, ArrowRight, Layers, BarChart2, Film } from "lucide-react";
 
 export default async function AdminDashboard() {
   const session = await requireAdmin();
   if (!session) redirect("/admin/login");
 
   const { news, players, sponsors, nextMatch, matches, standings } = await getAllCmsData();
+  const { getMediaVideos, getMediaPhotos } = await import("@/lib/db");
+  const [videos, photos] = await Promise.all([getMediaVideos(), getMediaPhotos()]);
 
   const cards = [
     {
@@ -61,6 +63,14 @@ export default async function AdminDashboard() {
       value: `${sponsors.length} partenaires`,
       sub: "Logos & liens",
       color: "from-slate-700 to-slate-900",
+    },
+    {
+      href: "/admin/medias",
+      icon: Film,
+      label: "Médias",
+      value: `${videos.length} vidéos · ${photos.length} photos`,
+      sub: "Résumés vidéo & galerie",
+      color: "from-violet-700 to-violet-900",
     },
     {
       href: "/admin/sections",

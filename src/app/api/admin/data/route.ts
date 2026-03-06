@@ -14,6 +14,8 @@ import {
   getMatches,   setMatches,
   getStandings, setStandings, clearStandings,
   getHeroBg,    setHeroBg,    clearHeroBg,
+  getMediaVideos, setMediaVideos,
+  getMediaPhotos, setMediaPhotos,
   getAllCmsData,
 } from "@/lib/db";
 
@@ -38,6 +40,8 @@ export async function GET(req: NextRequest) {
     case "standings": return NextResponse.json(await getStandings() ?? []);
     case "sections":  return NextResponse.json((await getSiteConfig()).sections ?? {});
     case "heroBg":    return NextResponse.json(await getHeroBg() ?? null);
+    case "mediaVideos": return NextResponse.json(await getMediaVideos());
+    case "mediaPhotos": return NextResponse.json(await getMediaPhotos());
     default:          return NextResponse.json(await getAllCmsData());
   }
 }
@@ -78,6 +82,8 @@ export async function POST(req: NextRequest) {
         else await setHeroBg(data as { type: "image" | "video"; value: string });
         break;
       }
+      case "mediaVideos": await setMediaVideos(data as Awaited<ReturnType<typeof getMediaVideos>>); break;
+      case "mediaPhotos": await setMediaPhotos(data as Awaited<ReturnType<typeof getMediaPhotos>>); break;
       default:
         return NextResponse.json({ error: `Section inconnue: "${section}"` }, { status: 400 });
     }

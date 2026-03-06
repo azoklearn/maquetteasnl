@@ -9,8 +9,7 @@ import { trackTicketingClick } from "@/lib/analytics";
 import { formatDate, formatShortDate, cn } from "@/lib/utils";
 import { ExcerptWithLinks } from "@/components/ui/ExcerptWithLinks";
 import type { SectionStyle, HeroBg } from "@/lib/db";
-import type { Match, NewsArticle } from "@/types";
-import { VIDEOS } from "@/app/medias/MediasClient";
+import type { Match, NewsArticle, MediaVideo } from "@/types";
 
 interface HeroProps {
   subtitle?: string;
@@ -22,6 +21,8 @@ interface HeroProps {
   /** Image de fond utilisée dans la section Prochain match (bgImage) */
   nextMatchBgImage?: string;
   news?: NewsArticle[];
+  /** Dernière vidéo affichée dans la carte Derniers médias */
+  latestVideo?: MediaVideo | null;
 }
 
 const DEFAULT_BG_URL = "https://images.unsplash.com/photo-1577223625816-7546f13df25d?w=1920&q=80";
@@ -35,11 +36,10 @@ export function HeroSection({
   nextMatch,
   nextMatchBgImage,
   news = [],
+  latestVideo,
 }: HeroProps) {
   const textCol   = sectionStyle?.textColor?.trim() || "#ffffff";
   const ticketUrl = ticketingUrl ?? TICKETING.nextMatchUrl;
-
-  const latestVideo = VIDEOS[0];
   const match       = nextMatch;
   const homeShort   = (match?.homeTeam ?? "ASNL").slice(0, 3).toUpperCase();
   const awayShort   = (match?.awayTeam ?? "").slice(0, 3).toUpperCase() || "???";

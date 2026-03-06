@@ -1,125 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { Play, X, Camera, Film, ZoomIn } from "lucide-react";
-
-// ── Données mock vidéos ────────────────────────────────────────────────────────
-export const VIDEOS = [
-  {
-    id: "v1",
-    title: "Nancy 2 - 0 Caen",
-    competition: "Ligue 2 BKT · J24",
-    date: "22 fév. 2025",
-    thumbnail: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=80",
-    duration: "4:32",
-    youtubeId: "",
-  },
-  {
-    id: "v2",
-    title: "Nancy 1 - 1 Amiens",
-    competition: "Ligue 2 BKT · J23",
-    date: "15 fév. 2025",
-    thumbnail: "https://images.unsplash.com/photo-1511886929837-354d827aae26?w=800&q=80",
-    duration: "5:10",
-    youtubeId: "",
-  },
-  {
-    id: "v3",
-    title: "Rodez 0 - 2 Nancy",
-    competition: "Ligue 2 BKT · J22",
-    date: "8 fév. 2025",
-    thumbnail: "https://images.unsplash.com/photo-1517927033932-b3d18e61fb3a?w=800&q=80",
-    duration: "3:58",
-    youtubeId: "",
-  },
-  {
-    id: "v4",
-    title: "Nancy 3 - 1 Gueugnon",
-    competition: "Ligue 2 BKT · J21",
-    date: "1 fév. 2025",
-    thumbnail: "https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=800&q=80",
-    duration: "6:02",
-    youtubeId: "",
-  },
-  {
-    id: "v5",
-    title: "Dunkerque 0 - 1 Nancy",
-    competition: "Ligue 2 BKT · J20",
-    date: "25 jan. 2025",
-    thumbnail: "https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=800&q=80",
-    duration: "4:45",
-    youtubeId: "",
-  },
-  {
-    id: "v6",
-    title: "Nancy 2 - 2 Troyes",
-    competition: "Ligue 2 BKT · J19",
-    date: "18 jan. 2025",
-    thumbnail: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=800&q=80",
-    duration: "5:28",
-    youtubeId: "",
-  },
-];
-
-// ── Données mock photos ────────────────────────────────────────────────────────
-const PHOTOS = [
-  {
-    id: "p1",
-    src: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200&q=85",
-    caption: "Nancy - Caen · J24",
-    category: "Match",
-  },
-  {
-    id: "p2",
-    src: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1200&q=85",
-    caption: "Entraînement · Semaine 8",
-    category: "Entraînement",
-  },
-  {
-    id: "p3",
-    src: "https://images.unsplash.com/photo-1551958219-acbc595d4023?w=1200&q=85",
-    caption: "Supporters · Virages",
-    category: "Supporters",
-  },
-  {
-    id: "p4",
-    src: "https://images.unsplash.com/photo-1459865264687-595d652de67e?w=1200&q=85",
-    caption: "Stade Marcel-Picot · Nuit",
-    category: "Stade",
-  },
-  {
-    id: "p5",
-    src: "https://images.unsplash.com/photo-1517927033932-b3d18e61fb3a?w=1200&q=85",
-    caption: "Rodez - Nancy · J22",
-    category: "Match",
-  },
-  {
-    id: "p6",
-    src: "https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=1200&q=85",
-    caption: "Nancy - Gueugnon · But de J.Diallo",
-    category: "Match",
-  },
-  {
-    id: "p7",
-    src: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1200&q=85",
-    caption: "Nancy - Troyes · J19",
-    category: "Match",
-  },
-  {
-    id: "p8",
-    src: "https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=1200&q=85",
-    caption: "Dunkerque - Nancy · J20",
-    category: "Match",
-  },
-  {
-    id: "p9",
-    src: "https://images.unsplash.com/photo-1606925797300-0b35e9d1794e?w=1200&q=85",
-    caption: "Séance de tir au but · Entraînement",
-    category: "Entraînement",
-  },
-];
+import { Play, X, Camera, Film, ZoomIn, Loader2 } from "lucide-react";
+import type { MediaVideo, MediaPhoto } from "@/types";
 
 const PHOTO_CATEGORIES = ["Tout", "Match", "Entraînement", "Supporters", "Stade"];
 
@@ -130,11 +15,25 @@ export function MediasClient() {
   const [photoFilter, setPhotoFilter] = useState("Tout");
   const [lightbox, setLightbox] = useState<string | null>(null);
   const [playingVideo, setPlayingVideo] = useState<string | null>(null);
+  const [videos, setVideos] = useState<MediaVideo[]>([]);
+  const [photos, setPhotos] = useState<MediaPhoto[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/medias")
+      .then((res) => res.json())
+      .then((data) => {
+        setVideos(data.videos ?? []);
+        setPhotos(data.photos ?? []);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
 
   const filteredPhotos =
-    photoFilter === "Tout" ? PHOTOS : PHOTOS.filter((p) => p.category === photoFilter);
+    photoFilter === "Tout" ? photos : photos.filter((p) => p.category === photoFilter);
 
-  const lightboxPhoto = PHOTOS.find((p) => p.id === lightbox);
+  const lightboxPhoto = photos.find((p) => p.id === lightbox);
 
   return (
     <div className="min-h-screen bg-[#0A0A0A]">
@@ -188,6 +87,11 @@ export function MediasClient() {
         {/* ── Vidéos ── */}
         <AnimatePresence mode="wait">
           {tab === "videos" && (
+            loading ? (
+              <div className="flex items-center justify-center py-24">
+                <Loader2 className="w-10 h-10 text-white/30 animate-spin" />
+              </div>
+            ) : (
             <motion.div
               key="videos"
               initial={{ opacity: 0, y: 12 }}
@@ -196,7 +100,7 @@ export function MediasClient() {
               transition={{ duration: 0.3 }}
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {VIDEOS.map((video, i) => (
+                {videos.map((video, i) => (
                   <motion.div
                     key={video.id}
                     initial={{ opacity: 0, y: 20 }}
@@ -245,10 +149,16 @@ export function MediasClient() {
                 ))}
               </div>
             </motion.div>
+            )
           )}
 
           {/* ── Photos ── */}
           {tab === "photos" && (
+            loading ? (
+              <div className="flex items-center justify-center py-24">
+                <Loader2 className="w-10 h-10 text-white/30 animate-spin" />
+              </div>
+            ) : (
             <motion.div
               key="photos"
               initial={{ opacity: 0, y: 12 }}
@@ -309,6 +219,7 @@ export function MediasClient() {
                 ))}
               </div>
             </motion.div>
+            )
           )}
         </AnimatePresence>
       </div>
@@ -352,42 +263,51 @@ export function MediasClient() {
         )}
       </AnimatePresence>
 
-      {/* ── Modal vidéo (placeholder) ── */}
+      {/* ── Modal vidéo ── */}
       <AnimatePresence>
-        {playingVideo && (
-          <motion.div
-            className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setPlayingVideo(null)}
-          >
-            <button
-              className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors z-10"
+        {playingVideo && (() => {
+          const video = videos.find((v) => v.id === playingVideo);
+          return (
+            <motion.div
+              key={playingVideo}
+              className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               onClick={() => setPlayingVideo(null)}
             >
-              <X className="w-5 h-5" />
-            </button>
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="relative w-full max-w-4xl aspect-video bg-[#111] rounded-2xl flex items-center justify-center border border-white/10"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Remplacer par un <iframe> YouTube quand les IDs seront disponibles */}
-              <div className="text-center">
-                <Play className="w-16 h-16 text-white/20 mx-auto mb-4" />
-                <p className="text-white/40 text-sm font-medium">
-                  Vidéo disponible bientôt
-                </p>
-                <p className="text-white/20 text-xs mt-1">
-                  Remplacer par l&apos;ID YouTube dans le tableau VIDEOS
-                </p>
-              </div>
+              <button
+                className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors z-10"
+                onClick={() => setPlayingVideo(null)}
+              >
+                <X className="w-5 h-5" />
+              </button>
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="relative w-full max-w-4xl aspect-video bg-[#111] rounded-2xl overflow-hidden border border-white/10"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {video?.youtubeId?.trim() ? (
+                  <iframe
+                    src={`https://www.youtube.com/embed/${video.youtubeId}?autoplay=1`}
+                    title={video.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="absolute inset-0 w-full h-full"
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                    <Play className="w-16 h-16 text-white/20 mb-4" />
+                    <p className="text-white/40 text-sm font-medium">Vidéo disponible bientôt</p>
+                    <p className="text-white/20 text-xs mt-1">Ajoutez l&apos;ID YouTube dans l&apos;admin</p>
+                  </div>
+                )}
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
+          );
+        })()}
       </AnimatePresence>
     </div>
   );

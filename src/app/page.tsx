@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getAllCmsData } from "@/lib/db";
+import { getAllCmsData, getMediaVideos } from "@/lib/db";
 import { HeroSection } from "@/components/home/HeroSection";
 import { NextMatchSection } from "@/components/home/NextMatchSection";
 import { NewsSection } from "@/components/home/NewsSection";
@@ -19,6 +19,7 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   const { nextMatch, news, players, sponsors, config, heroBg } = await getAllCmsData();
+  const videos = await getMediaVideos();
   const s = config.sections ?? {};
 
   return (
@@ -33,6 +34,7 @@ export default async function HomePage() {
           nextMatch={nextMatch}
           nextMatchBgImage={s.nextMatch?.bgImage}
           news={news}
+          latestVideo={videos[0]}
         />
       )}
       {s.nextMatch?.visible !== false && (

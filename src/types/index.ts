@@ -70,6 +70,23 @@ export interface Sponsor {
   tier: "platinum" | "gold" | "silver" | "official";
 }
 
+export interface MediaVideo {
+  id: string;
+  title: string;
+  competition: string;
+  date: string;
+  thumbnail: string;
+  duration: string;
+  youtubeId: string;
+}
+
+export interface MediaPhoto {
+  id: string;
+  src: string;
+  caption: string;
+  category: string;
+}
+
 export interface TrackingEvent {
   category: string;
   action: string;

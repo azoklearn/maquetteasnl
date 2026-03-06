@@ -5,7 +5,7 @@
  * Toutes les données du site transitent par ce module.
  */
 
-import type { Match, NewsArticle, Player, Sponsor, StandingEntry } from "@/types";
+import type { Match, NewsArticle, Player, Sponsor, StandingEntry, MediaVideo, MediaPhoto } from "@/types";
 import {
   NEXT_MATCH,
   TICKETING,
@@ -118,7 +118,30 @@ const KV_KEYS = {
   matches:   "cms:matches",
   standings: "cms:standings",
   heroBg:    "cms:heroBg",
+  mediaVideos: "cms:mediaVideos",
+  mediaPhotos: "cms:mediaPhotos",
 } as const;
+
+const DEFAULT_VIDEOS: MediaVideo[] = [
+  { id: "v1", title: "Nancy 2 - 0 Caen", competition: "Ligue 2 BKT · J24", date: "22 fév. 2025", thumbnail: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=80", duration: "4:32", youtubeId: "" },
+  { id: "v2", title: "Nancy 1 - 1 Amiens", competition: "Ligue 2 BKT · J23", date: "15 fév. 2025", thumbnail: "https://images.unsplash.com/photo-1511886929837-354d827aae26?w=800&q=80", duration: "5:10", youtubeId: "" },
+  { id: "v3", title: "Rodez 0 - 2 Nancy", competition: "Ligue 2 BKT · J22", date: "8 fév. 2025", thumbnail: "https://images.unsplash.com/photo-1517927033932-b3d18e61fb3a?w=800&q=80", duration: "3:58", youtubeId: "" },
+  { id: "v4", title: "Nancy 3 - 1 Gueugnon", competition: "Ligue 2 BKT · J21", date: "1 fév. 2025", thumbnail: "https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=800&q=80", duration: "6:02", youtubeId: "" },
+  { id: "v5", title: "Dunkerque 0 - 1 Nancy", competition: "Ligue 2 BKT · J20", date: "25 jan. 2025", thumbnail: "https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=800&q=80", duration: "4:45", youtubeId: "" },
+  { id: "v6", title: "Nancy 2 - 2 Troyes", competition: "Ligue 2 BKT · J19", date: "18 jan. 2025", thumbnail: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=800&q=80", duration: "5:28", youtubeId: "" },
+];
+
+const DEFAULT_PHOTOS: MediaPhoto[] = [
+  { id: "p1", src: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200&q=85", caption: "Nancy - Caen · J24", category: "Match" },
+  { id: "p2", src: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1200&q=85", caption: "Entraînement · Semaine 8", category: "Entraînement" },
+  { id: "p3", src: "https://images.unsplash.com/photo-1551958219-acbc595d4023?w=1200&q=85", caption: "Supporters · Virages", category: "Supporters" },
+  { id: "p4", src: "https://images.unsplash.com/photo-1459865264687-595d652de67e?w=1200&q=85", caption: "Stade Marcel-Picot · Nuit", category: "Stade" },
+  { id: "p5", src: "https://images.unsplash.com/photo-1517927033932-b3d18e61fb3a?w=1200&q=85", caption: "Rodez - Nancy · J22", category: "Match" },
+  { id: "p6", src: "https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=1200&q=85", caption: "Nancy - Gueugnon · But de J.Diallo", category: "Match" },
+  { id: "p7", src: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1200&q=85", caption: "Nancy - Troyes · J19", category: "Match" },
+  { id: "p8", src: "https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=1200&q=85", caption: "Dunkerque - Nancy · J20", category: "Match" },
+  { id: "p9", src: "https://images.unsplash.com/photo-1606925797300-0b35e9d1794e?w=1200&q=85", caption: "Séance de tir au but · Entraînement", category: "Entraînement" },
+];
 
 // Fallback en mémoire pour dev sans KV configuré
 const memStore = new Map<string, string>();
@@ -226,6 +249,20 @@ export async function clearHeroBg() {
   const redis = getRedis();
   if (redis) await redis.del(KV_KEYS.heroBg);
   else memStore.delete(KV_KEYS.heroBg);
+}
+
+export async function getMediaVideos(): Promise<MediaVideo[]> {
+  return (await kvGet<MediaVideo[]>(KV_KEYS.mediaVideos)) ?? DEFAULT_VIDEOS;
+}
+export async function setMediaVideos(videos: MediaVideo[]) {
+  await kvSet(KV_KEYS.mediaVideos, videos);
+}
+
+export async function getMediaPhotos(): Promise<MediaPhoto[]> {
+  return (await kvGet<MediaPhoto[]>(KV_KEYS.mediaPhotos)) ?? DEFAULT_PHOTOS;
+}
+export async function setMediaPhotos(photos: MediaPhoto[]) {
+  await kvSet(KV_KEYS.mediaPhotos, photos);
 }
 
 export async function getAllCmsData(): Promise<CmsData> {

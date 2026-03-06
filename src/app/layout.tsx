@@ -52,6 +52,11 @@ export const metadata: Metadata = {
     canonical: "https://maquetteasnl.vercel.app",
     languages: { "fr-FR": "https://maquetteasnl.vercel.app" },
   },
+  icons: {
+    icon: "/logo.jpeg",
+    shortcut: "/logo.jpeg",
+    apple: "/logo.jpeg",
+  },
 };
 
 export const viewport: Viewport = {
