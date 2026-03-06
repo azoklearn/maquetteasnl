@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --font-inter: "Inter", system-ui, sans-serif;
+  --font-montserrat: "Montserrat", system-ui, sans-serif;
   --font-bebas: "Bebas Neue", "Impact", sans-serif;
   --asnl-red: #c8102e;
   --asnl-red-dark: #a00c24;
@@ -21,7 +21,8 @@ html {
 body {
   background-color: var(--asnl-black);
   color: #ffffff;
-  font-family: var(--font-inter);
+  font-family: var(--font-montserrat);
+  font-weight: 700;
   overflow-x: hidden;
 }
 
