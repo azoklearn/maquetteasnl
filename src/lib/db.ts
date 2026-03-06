@@ -49,7 +49,6 @@ export interface SectionStyle {
   accentColor?: string;
   titleSize?: "sm" | "md" | "lg" | "xl";
   visible?: boolean;
-  stats?: { value: string; label: string }[];
 }
 
 export interface SiteConfig {
