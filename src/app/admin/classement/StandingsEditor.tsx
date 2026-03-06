@@ -260,12 +260,12 @@ export function StandingsEditor({ initialData, username }: Props) {
                     title="Cliquer pour modifier le logo"
                     className={cn(
                       "relative group w-8 h-8 rounded-full flex items-center justify-center overflow-hidden p-0.5 mx-auto shrink-0",
-                      row.team === "Montpellier" ? "bg-transparent" : "bg-white"
+                      row.logo?.trim() ? "bg-transparent" : "bg-white"
                     )}
                   >
                     {row.logo?.trim() ? (
                       <div className="relative w-full h-full">
-                        <Image src={row.logo} alt={row.team} fill className={cn("object-contain", row.team === "Montpellier" && "mix-blend-multiply")} sizes="32px" unoptimized={row.logo.startsWith("data:")} />
+                        <Image src={row.logo} alt={row.team} fill className={cn("object-contain", row.team === "Montpellier" && "mix-blend-multiply")} sizes="32px" unoptimized />
                       </div>
                     ) : (
                       <span className="text-[#0A0A0A] text-[8px] font-black group-hover:hidden">{row.shortName.slice(0, 3)}</span>

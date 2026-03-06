@@ -238,7 +238,7 @@ export function HeroSection({
                           width={44}
                           height={44}
                           className="object-contain"
-                          unoptimized={match.homeLogo.startsWith("data:")}
+                          unoptimized
                         />
                       ) : (
                         <Image
@@ -268,7 +268,7 @@ export function HeroSection({
                           width={44}
                           height={44}
                           className="object-contain"
-                          unoptimized={match.awayLogo.startsWith("data:")}
+                          unoptimized
                         />
                       ) : (
                         <span className="text-white text-[11px] font-semibold">

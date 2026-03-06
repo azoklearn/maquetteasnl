@@ -132,7 +132,7 @@ export function NextMatchSection({ match: matchProp, sectionStyle }: { match?: M
                   fill
                   className="object-contain"
                   sizes="112px"
-                  unoptimized={match.homeLogo.startsWith("data:")}
+                  unoptimized
                 />
               ) : (
                 <Image
@@ -175,7 +175,7 @@ export function NextMatchSection({ match: matchProp, sectionStyle }: { match?: M
                   fill
                   className="object-contain"
                   sizes="112px"
-                  unoptimized={match.awayLogo.startsWith("data:")}
+                  unoptimized
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">

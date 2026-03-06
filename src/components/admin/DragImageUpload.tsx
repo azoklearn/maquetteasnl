@@ -24,9 +24,12 @@ function compressImage(file: File, maxW = 320, maxH = 400, quality = 0.72): Prom
       const ctx = canvas.getContext("2d");
       if (!ctx) return reject(new Error("Canvas non disponible"));
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      const result = canvas.toDataURL("image/jpeg", quality);
+      // PNG pour préserver la transparence (logos sans fond), JPEG pour les photos
+      const isPng = file.type === "image/png";
+      const result = isPng
+        ? canvas.toDataURL("image/png")
+        : canvas.toDataURL("image/jpeg", quality);
       URL.revokeObjectURL(img.src);
-      // Avertit si l'image compressée dépasse 150 KB
       const kb = Math.round((result.length * 3) / 4 / 1024);
       if (kb > 150) console.warn(`[DragImageUpload] Image compressée: ${kb} KB`);
       resolve(result);
@@ -71,7 +74,7 @@ export default function DragImageUpload({ value, onChange, label, hint, maxW = 3
       {/* Aperçu si image présente */}
       {src && (
         <div style={{ position: "relative", width: "100%", height: "120px", borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.1)" }}>
-          <Image src={src} alt={label} fill style={{ objectFit: "cover" }} sizes="300px" unoptimized={src.startsWith("data:")} />
+          <Image src={src} alt={label} fill style={{ objectFit: "contain" }} sizes="300px" unoptimized />
           <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}>
             <button
               type="button"

@@ -105,8 +105,8 @@ export function CalendrierClient({ matches: matchesProp }: { matches?: Match[] }
                       {match.homeTeam}
                     </span>
                     {match.homeLogo?.trim() ? (
-                      <div className="w-8 h-8 shrink-0 relative">
-                        <Image src={match.homeLogo} alt={match.homeTeam} fill className="object-contain" sizes="32px" unoptimized={match.homeLogo.startsWith("data:")} />
+                      <div className="w-8 h-8 shrink-0 relative bg-transparent">
+                        <Image src={match.homeLogo} alt={match.homeTeam} fill className="object-contain" sizes="32px" unoptimized />
                       </div>
                     ) : (
                       <div className="w-8 h-8 shrink-0 rounded-full bg-white/10 flex items-center justify-center text-[8px] font-black text-white/40">
@@ -135,8 +135,8 @@ export function CalendrierClient({ matches: matchesProp }: { matches?: Match[] }
                     !match.isHome ? "text-white font-bold" : "text-white/70",
                   )}>
                     {match.awayLogo?.trim() ? (
-                      <div className="w-8 h-8 shrink-0 relative">
-                        <Image src={match.awayLogo} alt={match.awayTeam} fill className="object-contain" sizes="32px" unoptimized={match.awayLogo.startsWith("data:")} />
+                      <div className="w-8 h-8 shrink-0 relative bg-transparent">
+                        <Image src={match.awayLogo} alt={match.awayTeam} fill className="object-contain" sizes="32px" unoptimized />
                       </div>
                     ) : (
                       <div className="w-8 h-8 shrink-0 rounded-full bg-white/10 flex items-center justify-center text-[8px] font-black text-white/40">
