@@ -192,10 +192,21 @@ export default function NewsEditor({ initialData, username }: Props) {
                         rows={8}
                         value={article.content ?? ""}
                         onChange={(e) => update(article.id, "content", e.target.value)}
-                        placeholder="Texte libre, HTML ou liens [texte](url)..."
+                        placeholder="Texte libre. Liens [texte](url), images ![légende](https://...) ou HTML (&lt;p&gt;, &lt;img&gt;, ...)."
                       />
-                      <p className="text-white/30 text-xs mt-1.5">
-                        Liens : <code className="bg-white/10 px-1 rounded">[texte](url)</code> — HTML autorisé (&lt;p&gt;, &lt;strong&gt;, etc.)
+                      <p className="text-white/30 text-xs mt-1.5 space-y-1">
+                        <span className="block">
+                          Liens : <code className="bg-white/10 px-1 rounded">[texte](url)</code>
+                        </span>
+                        <span className="block">
+                          Images dans le corps :
+                          {" "}
+                          <code className="bg-white/10 px-1 rounded">![légende](https://image.jpg)</code>
+                          {" "} ou avec taille{" "}
+                          <code className="bg-white/10 px-1 rounded">![légende|small](https://image.jpg)</code>,{" "}
+                          <code className="bg-white/10 px-1 rounded">![légende|medium](https://image.jpg)</code>,{" "}
+                          <code className="bg-white/10 px-1 rounded">![légende|large](https://image.jpg)</code>.
+                        </span>
                       </p>
                     </div>
 

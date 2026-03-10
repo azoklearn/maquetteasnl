@@ -7,6 +7,7 @@ import { PlayersSection } from "@/components/home/PlayersSection";
 import { StandingsSection } from "@/components/home/StandingsSection";
 import { SponsorsSection } from "@/components/home/SponsorsSection";
 import { NewsletterSection } from "@/components/home/NewsletterSection";
+import { MediasClient } from "@/app/medias/MediasClient";
 
 // Dynamique — les changements admin apparaissent immédiatement
 export const dynamic = "force-dynamic";
@@ -29,7 +30,7 @@ export default async function HomePage() {
     <>
       {s.hero?.visible !== false && (
         <HeroSection
-          subtitle={config?.heroSubtitle ?? "Fondé en 1913. Fier. Lorrain. Irréductible."}
+          subtitle={config?.heroSubtitle ?? "Fondé en 1967. Fier. Lorrain. Irréductible."}
           season={config?.heroSeason ?? "Saison 2025 – 2026"}
           ticketingUrl={config?.ticketingUrl}
           sectionStyle={s.hero}
@@ -52,6 +53,8 @@ export default async function HomePage() {
       {s.standings?.visible !== false && (
         <StandingsSection sectionStyle={s.standings} />
       )}
+      {/* Bloc Médias de la page principale, après le classement en direct */}
+      <MediasClient />
       {s.sponsors?.visible !== false && (
         <SponsorsSection sponsors={sponsors} sectionStyle={s.sponsors} />
       )}

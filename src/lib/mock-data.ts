@@ -1,14 +1,14 @@
 import type { Player, NewsArticle, StandingEntry, Match, Sponsor } from "@/types";
 
 export const PLAYERS: Player[] = [
-  { id: "p1", name: "PATRON", firstName: "Thomas", number: 1, position: "GK", nationality: "FR", stats: { appearances: 22, goals: 0, assists: 1 } },
-  { id: "p2", name: "SISSOKO", firstName: "Kévin", number: 5, position: "DEF", nationality: "FR", stats: { appearances: 20, goals: 2, assists: 3 } },
-  { id: "p3", name: "BAMBA", firstName: "Youssouf", number: 8, position: "MID", nationality: "CI", stats: { appearances: 24, goals: 5, assists: 7 } },
-  { id: "p4", name: "SANTOS", firstName: "Diego", number: 9, position: "ATT", nationality: "BR", stats: { appearances: 23, goals: 14, assists: 4 } },
-  { id: "p5", name: "MARTIN", firstName: "Alexis", number: 10, position: "ATT", nationality: "FR", stats: { appearances: 21, goals: 9, assists: 6 } },
-  { id: "p6", name: "DIALLO", firstName: "Mamadou", number: 6, position: "DEF", nationality: "SN", stats: { appearances: 22, goals: 1, assists: 2 } },
-  { id: "p7", name: "LUCAS", firstName: "Pierre", number: 7, position: "MID", nationality: "FR", stats: { appearances: 20, goals: 4, assists: 8 } },
-  { id: "p8", name: "HERNANDEZ", firstName: "Carlos", number: 11, position: "ATT", nationality: "ES", stats: { appearances: 18, goals: 7, assists: 3 } },
+  { id: "p1", name: "PATRON", firstName: "Thomas", number: 1, position: "GK",  category: "SENIOR",   nationality: "FR", stats: { appearances: 22, goals: 0, assists: 1 } },
+  { id: "p2", name: "SISSOKO", firstName: "Kévin", number: 5, position: "DEF", category: "SENIOR",   nationality: "FR", stats: { appearances: 20, goals: 2, assists: 3 } },
+  { id: "p3", name: "BAMBA", firstName: "Youssouf", number: 8, position: "MID", category: "SENIOR",  nationality: "CI", stats: { appearances: 24, goals: 5, assists: 7 } },
+  { id: "p4", name: "SANTOS", firstName: "Diego", number: 9, position: "ATT",  category: "SENIOR",   nationality: "BR", stats: { appearances: 23, goals: 14, assists: 4 } },
+  { id: "p5", name: "MARTIN", firstName: "Alexis", number: 10, position: "ATT", category: "FEMININE", nationality: "FR", stats: { appearances: 21, goals: 9, assists: 6 } },
+  { id: "p6", name: "DIALLO", firstName: "Mamadou", number: 6, position: "DEF", category: "YOUTH",    nationality: "SN", stats: { appearances: 22, goals: 1, assists: 2 } },
+  { id: "p7", name: "LUCAS", firstName: "Pierre", number: 7, position: "MID",  category: "YOUTH",    nationality: "FR", stats: { appearances: 20, goals: 4, assists: 8 } },
+  { id: "p8", name: "HERNANDEZ", firstName: "Carlos", number: 11, position: "ATT", category: "SENIOR", nationality: "ES", stats: { appearances: 18, goals: 7, assists: 3 } },
 ];
 
 export const NEWS: NewsArticle[] = [

@@ -398,7 +398,7 @@ function SectionPanel({
                 type="text"
                 value={style.subtitle ?? ""}
                 onChange={(e) => onChange({ subtitle: e.target.value })}
-                placeholder={meta.key === "hero" ? "ex: Fondé en 1913. Fier. Lorrain." : "Texte au-dessus du titre"}
+                placeholder={meta.key === "hero" ? "ex: Fondé en 1967. Fier. Lorrain." : "Texte au-dessus du titre"}
                 style={{
                   padding: "8px 12px", background: "#1f2937", border: "1px solid #374151",
                   borderRadius: 6, color: "#f9fafb", fontSize: 14,

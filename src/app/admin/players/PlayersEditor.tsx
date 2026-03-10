@@ -18,6 +18,13 @@ const POSITIONS: Player["position"][] = ["GK", "DEF", "MID", "ATT"];
 const POS_LABELS: Record<Player["position"], string> = { GK: "Gardien", DEF: "Défenseur", MID: "Milieu", ATT: "Attaquant" };
 const POS_COLORS: Record<Player["position"], string> = { GK: "text-yellow-400", DEF: "text-blue-400", MID: "text-green-400", ATT: "text-red-400" };
 
+const CATEGORIES = ["SENIOR", "FEMININE", "YOUTH"] as const;
+const CATEGORY_LABELS: Record<NonNullable<Player["category"]>, string> = {
+  SENIOR: "Séniors",
+  FEMININE: "Féminines",
+  YOUTH: "Jeunes",
+};
+
 function newPlayer(): Player {
   return {
     id: `p_${Date.now()}`,
@@ -25,6 +32,7 @@ function newPlayer(): Player {
     firstName: "Prénom",
     number: 99,
     position: "MID",
+    category: "SENIOR",
     nationality: "France",
     photo: undefined,
     photoHover: undefined,
@@ -292,6 +300,18 @@ export default function PlayersEditor({ initialData, username }: Props) {
                             <select className={FIELD} value={player.position}
                               onChange={(e) => update(player.id, "position", e.target.value as Player["position"])}>
                               {POSITIONS.map((p) => <option key={p} value={p}>{POS_LABELS[p]}</option>)}
+                            </select>
+                          </div>
+                          <div className="col-span-2 sm:col-span-2">
+                            <label className={LABEL}>Catégorie</label>
+                            <select
+                              className={FIELD}
+                              value={player.category ?? "SENIOR"}
+                              onChange={(e) => update(player.id, "category", e.target.value as NonNullable<Player["category"]>)}
+                            >
+                              {CATEGORIES.map((c) => (
+                                <option key={c} value={c}>{CATEGORY_LABELS[c]}</option>
+                              ))}
                             </select>
                           </div>
                         </div>

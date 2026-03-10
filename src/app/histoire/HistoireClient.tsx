@@ -1,31 +1,39 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Trophy } from "lucide-react";
+import type { HistoryConfig, HistoryEvent } from "@/lib/db";
 
-const TIMELINE = [
-  { year: "1967", title: "Fondation de l'ASNL", desc: "L'AS Nancy-Lorraine est fondée pour succéder au FC Nancy. Le rouge et le blanc s'imposent comme couleurs emblématiques du club lorrain.", trophy: false },
-  { year: "1973", title: "Première montée en Division 1", desc: "Le club accède pour la première fois à l'élite du football français. Une page historique s'écrit pour la Lorraine.", trophy: false },
-  { year: "1978", title: "🏆 Coupe de France", desc: "Sacre historique en Coupe de France. Premier grand titre du club, l'ASNL entre définitivement dans la légende du football français.", trophy: true },
-  { year: "1979", title: "Finale de Coupe de France", desc: "Retour en finale de la Coupe de France. Le club confirme son statut de grand club français de l'époque.", trophy: false },
-  { year: "2005", title: "Champion de Ligue 2", desc: "Champion de Ligue 2 et retour en Ligue 1 après quelques années d'absence. La renaissance lorraine est en marche.", trophy: false },
-  { year: "2006", title: "🏆 Coupe de la Ligue", desc: "Victoire en Coupe de la Ligue, deuxième titre majeur du club. L'ASNL s'offre une qualification historique pour l'Europe.", trophy: true },
-  { year: "2006–2007", title: "Coupe UEFA", desc: "Participation à la Coupe UEFA, aventure européenne inédite pour le club. Nancy représente la Lorraine sur la scène continentale.", trophy: false },
-  { year: "2016", title: "Champion de Ligue 2", desc: "Nouveau titre de champion de Ligue 2 et retour en Ligue 1. Le club prouve une nouvelle fois sa résilience.", trophy: false },
-  { year: "2022", title: "Relégation en National", desc: "Difficile relégation en National. Mais le club lorrain reste debout et se donne pour mission de retrouver le monde professionnel.", trophy: false },
-];
+const FALLBACK: HistoryConfig = {
+  heroSubtitle: "Depuis 1967",
+  heroImage: "https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=1920&q=80",
+  timeline: [
+    { year: "1967", title: "Fondation de l'ASNL", desc: "L'AS Nancy-Lorraine est fondée pour succéder au FC Nancy. Le rouge et le blanc s'imposent comme couleurs emblématiques du club lorrain." },
+  ],
+};
 
 export function HistoireClient() {
+  const [config, setConfig] = useState<HistoryConfig | null>(null);
+
+  useEffect(() => {
+    fetch("/api/histoire")
+      .then((res) => res.json())
+      .then((data: HistoryConfig) => setConfig(data))
+      .catch(() => setConfig(FALLBACK));
+  }, []);
+
+  const heroSubtitle = config?.heroSubtitle ?? FALLBACK.heroSubtitle!;
+  const heroImage = config?.heroImage ?? FALLBACK.heroImage!;
+  const timeline: HistoryEvent[] = config?.timeline?.length ? config.timeline : FALLBACK.timeline;
+
   return (
     <div className="min-h-screen bg-[#0A0A0A]">
       {/* Hero */}
       <div className="relative h-[60vh] min-h-[400px] overflow-hidden flex items-end pb-16">
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=1920&q=80')",
-          }}
+          style={{ backgroundImage: `url('${heroImage}')` }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/60 to-transparent" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -33,7 +41,7 @@ export function HistoireClient() {
             className="text-[#fd0000] text-xs font-semibold uppercase tracking-[0.35em] mb-3"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           >
-            Depuis 1967
+            {heroSubtitle}
           </motion.p>
           <motion.h1
             className="text-white text-6xl md:text-9xl font-black uppercase leading-none"

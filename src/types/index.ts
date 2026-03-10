@@ -22,6 +22,8 @@ export interface Player {
   firstName: string;
   number: number;
   position: "GK" | "DEF" | "MID" | "ATT";
+  /** Catégorie d'équipe: Séniors, Féminines, Jeunes */
+  category?: "SENIOR" | "FEMININE" | "YOUTH";
   nationality: string;
   photo?: string;
   photoHover?: string;

@@ -27,16 +27,42 @@ export function stripExcerptLinks(text: string): string {
   return text.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
 }
 
-/** Convertit [texte](url) en balises <a> dans du HTML (pour contenu d'article) */
+/** Convertit [texte](url) en <a> et ![alt](url) en <img> dans le HTML des articles */
 export function markdownLinksToHtml(html: string): string {
   if (!html?.trim()) return "";
-  return html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_match, text, url) => {
-    const href = url.trim().replace(/"/g, "&quot;").replace(/</g, "&lt;");
-    const safeText = text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+  let out = html;
+
+  // Images: ![alt|taille](url) — taille: small | medium | large
+  out = out.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_m, alt, url) => {
+    const rawAlt = String(alt || "");
+    const [altText, sizeRaw] = rawAlt.split("|").map((s) => s.trim());
+    const size = (sizeRaw || "large").toLowerCase();
+
+    let sizeClass = "w-full max-w-full";
+    if (size === "small") {
+      sizeClass = "w-full max-w-md mx-auto";
+    } else if (size === "medium") {
+      sizeClass = "w-full max-w-2xl mx-auto";
+    } else {
+      sizeClass = "w-full max-w-3xl mx-auto";
+    }
+
+    const src = String(url).trim().replace(/"/g, "&quot;").replace(/</g, "&lt;");
+    const safeAlt = altText.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    return `<img src="${src}" alt="${safeAlt}" class="rounded-2xl border border-white/10 my-6 object-cover ${sizeClass}" />`;
+  });
+
+  // Liens: [texte](url)
+  out = out.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_match, text, url) => {
+    const href = String(url).trim().replace(/"/g, "&quot;").replace(/</g, "&lt;");
+    const safeText = String(text).replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
     const ext = href.startsWith("http://") || href.startsWith("https://") || href.startsWith("//");
     const target = ext ? ' target="_blank" rel="noopener noreferrer nofollow"' : "";
     return `<a href="${href}"${target} class="text-[#fd0000] hover:underline font-semibold">${safeText}</a>`;
   });
+
+  return out;
 }
 
 export function getTimeUntil(dateStr: string, timeStr: string) {

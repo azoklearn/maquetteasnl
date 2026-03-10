@@ -61,6 +61,14 @@ export default async function AdminDashboard() {
       color: "from-slate-700 to-slate-900",
     },
     {
+      href: "/admin/histoire",
+      icon: Newspaper,
+      label: "Histoire",
+      value: "Page histoire",
+      sub: "Texte & frise chronologique",
+      color: "from-slate-700 to-slate-900",
+    },
+    {
       href: "/admin/sponsors",
       icon: HandHeart,
       label: "Partenaires",

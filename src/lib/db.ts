@@ -77,6 +77,19 @@ export interface HeroBg {
   value: string; // URL externe ou base64 pour image
 }
 
+export interface HistoryEvent {
+  year: string;
+  title: string;
+  desc: string;
+  trophy?: boolean;
+}
+
+export interface HistoryConfig {
+  heroSubtitle?: string;
+  heroImage?: string;
+  timeline: HistoryEvent[];
+}
+
 /** Bloc du contenu email (newsletter envoyée aux abonnés) */
 export type EmailBlock =
   | { id: string; type: "logo"; url?: string }
@@ -139,7 +152,7 @@ const DEFAULT_CONFIG: SiteConfig = {
   groupUrl:        TICKETING.groupUrl,
   social: SOCIAL,
   heroTitle: "AS Nancy Lorraine",
-  heroSubtitle: "Fondé en 1913. Fier. Lorrain. Irréductible.",
+  heroSubtitle: "Fondé en 1967. Fier. Lorrain. Irréductible.",
   heroSeason: "Saison 2025 – 2026",
 };
 
@@ -160,6 +173,7 @@ const KV_KEYS = {
   mediaPhotos: "cms:mediaPhotos",
   newsletterConfig: "cms:newsletterConfig",
   newsletterSubscribers: "cms:newsletterSubscribers",
+  history: "cms:history",
 } as const;
 
 const DEFAULT_VIDEOS: MediaVideo[] = [
@@ -182,6 +196,22 @@ const DEFAULT_PHOTOS: MediaPhoto[] = [
   { id: "p8", src: "https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=1200&q=85", caption: "Dunkerque - Nancy · J20", category: "Match" },
   { id: "p9", src: "https://images.unsplash.com/photo-1606925797300-0b35e9d1794e?w=1200&q=85", caption: "Séance de tir au but · Entraînement", category: "Entraînement" },
 ];
+
+const DEFAULT_HISTORY: HistoryConfig = {
+  heroSubtitle: "Depuis 1967",
+  heroImage: "https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=1920&q=80",
+  timeline: [
+    { year: "1967", title: "Fondation de l'ASNL", desc: "L'AS Nancy-Lorraine est fondée pour succéder au FC Nancy. Le rouge et le blanc s'imposent comme couleurs emblématiques du club lorrain." },
+    { year: "1973", title: "Première montée en Division 1", desc: "Le club accède pour la première fois à l'élite du football français. Une page historique s'écrit pour la Lorraine." },
+    { year: "1978", title: "🏆 Coupe de France", desc: "Sacre historique en Coupe de France. Premier grand titre du club, l'ASNL entre définitivement dans la légende du football français.", trophy: true },
+    { year: "1979", title: "Finale de Coupe de France", desc: "Retour en finale de la Coupe de France. Le club confirme son statut de grand club français de l'époque." },
+    { year: "2005", title: "Champion de Ligue 2", desc: "Champion de Ligue 2 et retour en Ligue 1 après quelques années d'absence. La renaissance lorraine est en marche." },
+    { year: "2006", title: "🏆 Coupe de la Ligue", desc: "Victoire en Coupe de la Ligue, deuxième titre majeur du club. L'ASNL s'offre une qualification historique pour l'Europe.", trophy: true },
+    { year: "2006–2007", title: "Coupe UEFA", desc: "Participation à la Coupe UEFA, aventure européenne inédite pour le club. Nancy représente la Lorraine sur la scène continentale." },
+    { year: "2016", title: "Champion de Ligue 2", desc: "Nouveau titre de champion de Ligue 2 et retour en Ligue 1. Le club prouve une nouvelle fois sa résilience." },
+    { year: "2022", title: "Relégation en National", desc: "Difficile relégation en National. Mais le club lorrain reste debout et se donne pour mission de retrouver le monde professionnel." },
+  ],
+};
 
 // Fallback en mémoire pour dev sans KV configuré
 const memStore = new Map<string, string>();
@@ -349,6 +379,13 @@ export async function addNewsletterSubscriber(email: string): Promise<boolean> {
   subs.push({ email: normalized, subscribedAt: new Date().toISOString() });
   await kvSet(KV_KEYS.newsletterSubscribers, subs);
   return true;
+}
+
+export async function getHistoryConfig(): Promise<HistoryConfig> {
+  return (await kvGet<HistoryConfig>(KV_KEYS.history)) ?? DEFAULT_HISTORY;
+}
+export async function setHistoryConfig(cfg: HistoryConfig) {
+  await kvSet(KV_KEYS.history, cfg);
 }
 
 export async function getAllCmsData(): Promise<CmsData> {

@@ -130,7 +130,7 @@ export function HeroSection({
             className="text-base md:text-xl mt-1 mb-2 max-w-lg leading-relaxed font-medium text-center sm:text-left"
             style={{ color: textCol, opacity: 0.85 }}
           >
-            {sectionStyle?.subtitle ?? subtitle ?? "Fondé en 1913. Fier. Lorrain. Irréductible."}
+            {sectionStyle?.subtitle ?? subtitle ?? "Fondé en 1967. Fier. Lorrain. Irréductible."}
           </motion.p>
 
           {/* Dernière actualité mise en avant */}
