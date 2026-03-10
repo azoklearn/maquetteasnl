@@ -77,6 +77,41 @@ export interface HeroBg {
   value: string; // URL externe ou base64 pour image
 }
 
+/** Bloc du contenu email (newsletter envoyée aux abonnés) */
+export type EmailBlock =
+  | { id: string; type: "logo"; url?: string }
+  | { id: string; type: "heading"; content: string; level?: 1 | 2 }
+  | { id: string; type: "text"; content: string }
+  | { id: string; type: "image"; url: string; alt?: string }
+  | { id: string; type: "divider" }
+  | { id: string; type: "button"; label: string; url: string }
+  | { id: string; type: "html"; content: string };
+
+export interface NewsletterConfig {
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  benefits?: string[];
+  formTitle?: string;
+  formSubtitle?: string;
+  successTitle?: string;
+  successMessage?: string;
+  bgColor?: string;
+  accentColor?: string;
+  textColor?: string;
+  sendDay?: number; // 0=dimanche, 1=lundi...
+  sendTime?: string; // "10:00"
+  /** Sujet du mail envoyé aux abonnés */
+  emailSubject?: string;
+  /** Blocs du contenu email (logo, texte, images, etc.) */
+  emailBlocks?: EmailBlock[];
+}
+
+export interface NewsletterSubscriber {
+  email: string;
+  subscribedAt: string; // ISO date
+}
+
 export interface CmsData {
   nextMatch: Match;
   news: NewsArticle[];
@@ -123,6 +158,8 @@ const KV_KEYS = {
   heroBg:    "cms:heroBg",
   mediaVideos: "cms:mediaVideos",
   mediaPhotos: "cms:mediaPhotos",
+  newsletterConfig: "cms:newsletterConfig",
+  newsletterSubscribers: "cms:newsletterSubscribers",
 } as const;
 
 const DEFAULT_VIDEOS: MediaVideo[] = [
@@ -266,6 +303,52 @@ export async function getMediaPhotos(): Promise<MediaPhoto[]> {
 }
 export async function setMediaPhotos(photos: MediaPhoto[]) {
   await kvSet(KV_KEYS.mediaPhotos, photos);
+}
+
+const DEFAULT_EMAIL_BLOCKS: EmailBlock[] = [
+  { id: "logo1", type: "logo", url: "/logo.jpeg" },
+  { id: "h1", type: "heading", content: "Bienvenue dans la famille ASNL !", level: 1 },
+  { id: "t1", type: "text", content: "Retrouvez chaque semaine les actualités du club : résultats, exclusivités, offres billetterie et bien plus." },
+  { id: "btn1", type: "button", label: "Voir le site", url: "https://asnl.fr" },
+  { id: "div1", type: "divider" },
+  { id: "t2", type: "text", content: "À très bientôt au stade Marcel-Picot !" },
+];
+
+const DEFAULT_NEWSLETTER_CONFIG: NewsletterConfig = {
+  title: "Rejoignez\nla famille\nASNL",
+  subtitle: "Newsletter officielle",
+  description: "Résultats en direct, avant-premières exclusives, offres billetterie prioritaires — directement dans votre boîte mail.",
+  benefits: ["Résultats en direct", "Offres billetterie prioritaires", "Exclusivités club"],
+  formTitle: "S'abonner gratuitement",
+  formSubtitle: "Pas de spam. Désabonnement en un clic.",
+  successTitle: "Bienvenue dans la famille !",
+  successMessage: "Vous recevrez bientôt nos dernières nouvelles.",
+  bgColor: "#fd0000",
+  accentColor: "#fd0000",
+  textColor: "#ffffff",
+  sendDay: 1, // lundi
+  sendTime: "10:00",
+  emailSubject: "Newsletter ASNL — Actualités du club",
+  emailBlocks: DEFAULT_EMAIL_BLOCKS,
+};
+
+export async function getNewsletterConfig(): Promise<NewsletterConfig> {
+  return (await kvGet<NewsletterConfig>(KV_KEYS.newsletterConfig)) ?? DEFAULT_NEWSLETTER_CONFIG;
+}
+export async function setNewsletterConfig(cfg: NewsletterConfig) {
+  await kvSet(KV_KEYS.newsletterConfig, cfg);
+}
+
+export async function getNewsletterSubscribers(): Promise<NewsletterSubscriber[]> {
+  return (await kvGet<NewsletterSubscriber[]>(KV_KEYS.newsletterSubscribers)) ?? [];
+}
+export async function addNewsletterSubscriber(email: string): Promise<boolean> {
+  const subs = await getNewsletterSubscribers();
+  const normalized = email.trim().toLowerCase();
+  if (subs.some((s) => s.email.toLowerCase() === normalized)) return false;
+  subs.push({ email: normalized, subscribedAt: new Date().toISOString() });
+  await kvSet(KV_KEYS.newsletterSubscribers, subs);
+  return true;
 }
 
 export async function getAllCmsData(): Promise<CmsData> {

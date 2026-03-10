@@ -5,15 +5,19 @@ export const dynamic = "force-dynamic";
 import { getAllCmsData } from "@/lib/db";
 import AdminShell from "@/components/admin/AdminShell";
 import Link from "next/link";
-import { Calendar, ListOrdered, Newspaper, Users, HandHeart, Settings, ArrowRight, Layers, BarChart2, Film } from "lucide-react";
+import { Calendar, ListOrdered, Newspaper, Users, HandHeart, Settings, ArrowRight, Layers, BarChart2, Film, Mail } from "lucide-react";
 
 export default async function AdminDashboard() {
   const session = await requireAdmin();
   if (!session) redirect("/admin/login");
 
   const { news, players, sponsors, nextMatch, matches, standings } = await getAllCmsData();
-  const { getMediaVideos, getMediaPhotos } = await import("@/lib/db");
-  const [videos, photos] = await Promise.all([getMediaVideos(), getMediaPhotos()]);
+  const { getMediaVideos, getMediaPhotos, getNewsletterSubscribers } = await import("@/lib/db");
+  const [videos, photos, newsletterSubs] = await Promise.all([
+    getMediaVideos(),
+    getMediaPhotos(),
+    getNewsletterSubscribers(),
+  ]);
 
   const cards = [
     {
@@ -79,6 +83,14 @@ export default async function AdminDashboard() {
       value: "Apparence",
       sub: "Couleurs, titres, visibilité",
       color: "from-indigo-700 to-indigo-900",
+    },
+    {
+      href: "/admin/newsletter",
+      icon: Mail,
+      label: "Newsletter",
+      value: `${newsletterSubs.length} abonnés`,
+      sub: "Contenu, aspect, planning, emails",
+      color: "from-amber-700 to-amber-900",
     },
     {
       href: "/admin/config",
