@@ -52,8 +52,13 @@ export function HeroSection({
   const homeShort   = (match?.homeTeam ?? "ASNL").slice(0, 3).toUpperCase();
   const awayShort   = (match?.awayTeam ?? "").slice(0, 3).toUpperCase() || "???";
 
-  const isVideo = heroBg?.type === "video" && heroBg.value?.trim();
-  const bgImage = heroBg?.type === "image" && heroBg.value?.trim() ? heroBg.value : DEFAULT_BG_URL;
+  const latestArticle = news[0];
+  const bgImage =
+    latestArticle?.image?.trim()
+      ? latestArticle.image
+      : heroBg?.type === "image" && heroBg.value?.trim()
+        ? heroBg.value
+        : DEFAULT_BG_URL;
 
   return (
     <section
@@ -61,23 +66,12 @@ export function HeroSection({
       style={sectionStyle?.bgColor ? { backgroundColor: sectionStyle.bgColor } : undefined}
     >
 
-      {/* ── Fond : vidéo ou image ── */}
+      {/* ── Fond : image de la dernière actualité ── */}
       <div className="absolute inset-0 z-0">
-        {isVideo ? (
-          <video
-            src={heroBg!.value}
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <div
-            className="w-full h-full bg-cover bg-center"
-            style={{ backgroundImage: `url('${bgImage}')` }}
-          />
-        )}
+        <div
+          className="w-full h-full bg-cover bg-center"
+          style={{ backgroundImage: `url('${bgImage}')` }}
+        />
       </div>
 
       {/* ── Overlay dégradé (modifiable en admin) ── */}
@@ -100,14 +94,6 @@ export function HeroSection({
         }}
       />
 
-      {/* Bas vers noir pour transition avec section suivante */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-48 z-10"
-        style={{
-          background: "linear-gradient(to bottom, transparent, rgba(10,10,10,1))",
-        }}
-      />
-
       {/* ── Grain ── */}
       <div
         className="absolute inset-0 z-10 opacity-[0.12] pointer-events-none"
@@ -118,29 +104,10 @@ export function HeroSection({
         }}
       />
 
-      {/* ── Logo ASNL au centre ── */}
-      <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[15] pointer-events-none"
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, delay: 0.3 }}
-      >
-        <div className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 opacity-90 drop-shadow-2xl">
-          <Image
-            src="/logo.jpeg"
-            alt="AS Nancy Lorraine"
-            fill
-            className="object-contain"
-            sizes="(max-width: 640px) 128px, (max-width: 768px) 160px, (max-width: 1024px) 192px, 224px"
-            priority
-          />
-        </div>
-      </motion.div>
-
       {/* ── Contenu ── */}
       <div className="relative z-20 w-full h-full flex items-center justify-center pt-8">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 w-full flex flex-col items-start">
-          {/* Colonne gauche : texte + liquid glass Derniers médias + Prochain match */}
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 w-full flex flex-col md:flex-row items-center justify-between gap-8 mt-12 md:mt-16">
+          {/* Colonne gauche : titre + texte + bloc article */}
           <div className="flex flex-col max-w-3xl items-center sm:items-start">
 
           {/* Eyebrow */}
@@ -160,228 +127,116 @@ export function HeroSection({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-base md:text-xl mt-4 mb-6 max-w-lg leading-relaxed font-medium text-center sm:text-left"
+            className="text-base md:text-xl mt-1 mb-2 max-w-lg leading-relaxed font-medium text-center sm:text-left"
             style={{ color: textCol, opacity: 0.85 }}
           >
             {sectionStyle?.subtitle ?? subtitle ?? "Fondé en 1913. Fier. Lorrain. Irréductible."}
           </motion.p>
 
-          {/* Derniers médias — carte liquid glass */}
-          {latestVideo && (
+          {/* Dernière actualité mise en avant */}
+          {latestArticle && (
             <motion.div
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.75 }}
-              className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 self-center sm:self-start sm:-ml-16 lg:-ml-24 w-full max-w-lg"
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="mt-6 mb-6 w-full max-w-xl self-start ml-0 sm:-ml-10 lg:-ml-24"
             >
-              <Link
-                href="/medias"
-                className="group flex items-center gap-5 px-6 py-4 rounded-2xl w-full max-w-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl backdrop-blur-[20px]"
-                style={{ background: glassBgRgba, color: glassText, border: `1px solid ${glassText}40` }}
-              >
-                <div className="relative w-40 h-24 sm:w-52 sm:h-32 rounded-xl overflow-hidden border border-white/10 bg-black/40 shrink-0">
-                  <Image
-                    src={latestVideo.thumbnail}
-                    alt={latestVideo.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform"
-                    sizes="208px"
-                  />
-                  <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors" />
-                  <Play className="absolute w-6 h-6 text-white/80 left-4 bottom-4" />
-                  <span className="absolute right-3 top-3 text-xs px-2.5 py-1 rounded-full bg-black/70 text-white/80 font-semibold">
-                    {latestVideo.duration}
-                  </span>
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <span className="inline-flex items-center gap-2 bg-transparent px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border" style={{ color: glassText, borderColor: `${glassText}50`, opacity: 0.9 }}>
-                    <Play className="w-3.5 h-3.5 fill-current" />
-                    Derniers médias
-                  </span>
-                  <span className="text-base font-semibold group-hover:text-[#fd0000] line-clamp-2">
-                    {latestVideo.title}
-                  </span>
-                  <span className="text-sm" style={{ color: glassText, opacity: 0.7 }}>
-                    {latestVideo.competition} · {latestVideo.date}
-                  </span>
-                  <p className="text-sm leading-relaxed mt-0.5 line-clamp-2" style={{ color: glassText, opacity: 0.6 }}>
-                    Revivez les temps forts des derniers matchs de l&apos;ASNL en vidéo.
-                  </p>
-                </div>
-              </Link>
+              <div className="flex flex-col gap-2 max-w-xl">
+                <h2 className="text-xl md:text-3xl lg:text-4xl font-black text-white leading-snug line-clamp-2">
+                  {latestArticle.title}
+                </h2>
+                <p className="text-xs md:text-sm text-white/80 line-clamp-3">
+                  {latestArticle.excerpt}
+                </p>
+              </div>
             </motion.div>
           )}
 
-          {/* Prochain match — carte liquid glass (en dessous de Derniers médias) */}
-          {match && (
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.9 }}
-              className="mt-4 flex self-center sm:self-start sm:-ml-16 lg:-ml-24 w-full max-w-lg"
-            >
-              <a
-                href={ticketUrl}
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-                onClick={() => trackTicketingClick("hero_cta_bottom", "Derby vs Metz")}
-                className="group flex items-center gap-5 px-6 py-4 rounded-2xl max-w-lg w-full transition-all duration-300 hover:scale-[1.02] hover:shadow-xl backdrop-blur-[20px]"
-                style={{ background: glassBgRgba, color: glassText, border: `1px solid ${glassText}40` }}
-              >
-                {/* Vignette logos / VS avec fond section prochain match */}
-                <div
-                  className="relative w-40 h-24 sm:w-52 sm:h-32 rounded-xl overflow-hidden border border-white/10 bg-black/40 bg-cover bg-center shrink-0"
-                  style={
-                    nextMatchBgImage?.trim()
-                      ? { backgroundImage: `url('${nextMatchBgImage}')` }
-                      : undefined
-                  }
-                >
-                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition-colors" />
-                  <div className="absolute inset-0 flex items-center justify-center gap-4">
-                    {/* Logo ASNL ou logo domicile */}
-                    <div className="w-11 h-11 flex items-center justify-center overflow-hidden bg-transparent">
-                      {match.homeLogo?.trim() ? (
-                        <Image
-                          src={match.homeLogo}
-                          alt={match.homeTeam}
-                          width={44}
-                          height={44}
-                          className="object-contain"
-                          unoptimized
-                        />
-                      ) : (
-                        <Image
-                          src="/logo.jpeg"
-                          alt={match.homeTeam}
-                          width={44}
-                          height={44}
-                          className="object-contain"
-                        />
-                      )}
-                    </div>
-                    <span
-                      className="text-white/80 text-xs font-black tracking-[0.25em]"
-                      style={{ fontFamily: "'Bebas Neue', sans-serif" }}
-                    >
-                      VS
-                    </span>
-                    {/* Logo extérieur ou initiales */}
-                    <div className={cn(
-                      "w-11 h-11 rounded-full flex items-center justify-center overflow-hidden",
-                      match.awayLogo?.trim() ? "bg-transparent" : "bg-white/10 border border-white/40"
-                    )}>
-                      {match.awayLogo?.trim() ? (
-                        <Image
-                          src={match.awayLogo}
-                          alt={match.awayTeam}
-                          width={44}
-                          height={44}
-                          className="object-contain"
-                          unoptimized
-                        />
-                      ) : (
-                        <span className="text-white text-[11px] font-semibold">
-                          {awayShort}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Texte + badge */}
-                <div className="flex flex-col gap-1.5">
-                  <span className="inline-flex items-center gap-2 bg-transparent px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border" style={{ color: glassText, borderColor: `${glassText}50`, opacity: 0.9 }}>
-                    <Ticket className="w-3.5 h-3.5" />
-                    Prochain match
-                  </span>
-                  <span className="text-base font-semibold group-hover:text-[#fd0000] line-clamp-2">
-                    {match.homeTeam} – {match.awayTeam}
-                  </span>
-                  <span className="text-sm" style={{ color: glassText, opacity: 0.7 }}>
-                    {formatDate(match.date)} · {match.time} · {match.stadium}
-                  </span>
-                  <p className="text-sm leading-relaxed mt-0.5 line-clamp-2" style={{ color: glassText, opacity: 0.6 }}>
-                    Réservez votre place au Stade Marcel Picot et soutenez l&apos;équipe.
-                  </p>
-                </div>
-              </a>
-            </motion.div>
-          )}
           </div>
 
-          {/* Carte Actualités — positionnée à droite du viewport */}
-          {news.length > 0 && (
+          {/* Bouton Lire l'article à droite */}
+          {latestArticle && (
             <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 1 }}
-              className="hidden lg:block absolute right-6 xl:right-12 2xl:right-20 top-[calc(50%+1rem)] -translate-y-1/2 w-[380px] xl:w-[440px] 2xl:w-[480px]"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.7 }}
+              className="hidden md:flex items-center justify-end flex-1"
             >
               <Link
-                href="/actualites"
-                className="group block w-full rounded-2xl overflow-hidden p-6 sm:p-8 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl backdrop-blur-[20px]"
-                style={{ background: glassBgRgba, color: glassText, border: `1px solid ${glassText}40` }}
+                href={`/actualites/${latestArticle.slug}`}
+                className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/15 hover:bg-white/25 text-white font-bold uppercase tracking-[0.18em] text-xs transition-all backdrop-blur-md border border-white/40 hover:border-white"
               >
-                <div className="flex items-center justify-between mb-5">
-                  <span className="inline-flex items-center gap-2 bg-transparent px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border" style={{ color: glassText, borderColor: `${glassText}50`, opacity: 0.9 }}>
-                    <Newspaper className="w-4 h-4" />
-                    Actualités
-                  </span>
-                  <ArrowRight className="w-5 h-5 group-hover:text-[#fd0000] group-hover:translate-x-1 transition-all" style={{ color: glassText, opacity: 0.7 }} />
-                </div>
-                <div className="space-y-4">
-                  {news.slice(0, 3).map((article) => (
-                    <div key={article.id} className="flex gap-4">
-                      {article.image?.trim() && (
-                        <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden shrink-0 border" style={{ borderColor: `${glassText}20` }}>
-                          <Image
-                            src={article.image}
-                            alt={article.title}
-                            fill
-                            className="object-cover group-hover:scale-105 transition-transform"
-                            sizes="96px"
-                          />
-                        </div>
-                      )}
-                      <div className="min-w-0 flex-1">
-                        <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: glassText, opacity: 0.5 }}>
-                          {article.category} · {formatShortDate(article.publishedAt)}
-                        </span>
-                        <h3 className="text-sm sm:text-base font-semibold line-clamp-2 mt-0.5 group-hover:text-[#fd0000] transition-colors">
-                          {article.title}
-                        </h3>
-                        <p className="text-xs line-clamp-2 mt-1" style={{ color: glassText, opacity: 0.6 }}>
-                          <ExcerptWithLinks text={article.excerpt} linkClassName="hover:text-[#fd0000] underline" />
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-sm mt-5 leading-relaxed" style={{ color: glassText, opacity: 0.6 }}>
-                  Toute l&apos;actualité du club : matchs, transferts, billetterie et vie de l&apos;ASNL.
-                </p>
+                Lire l&apos;article
+                <ArrowRight className="w-4 h-4" />
               </Link>
             </motion.div>
           )}
+
         </div>
       </div>
 
-      {/* ── Scroll indicator ── */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.3 }}
-      >
-        <span className="text-white/50 text-[10px] uppercase tracking-[0.35em] font-semibold">Découvrir</span>
+      {/* ── Liquid glass prochain match en bas du hero ── */}
+      {match && (
         <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-0 left-0 right-0 z-20 h-[200px] sm:h-[230px] flex items-end"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.9 }}
         >
-          <ChevronDown className="w-5 h-5 text-white/50" />
+          <a
+            href={ticketUrl}
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+            onClick={() => trackTicketingClick("hero_bottom_glass", match.homeTeam + " vs " + match.awayTeam)}
+            className="group flex items-center justify-between gap-4 sm:gap-8 w-full h-full px-6 sm:px-12 lg:px-20 transition-all duration-300 hover:bg-white/[0.08] backdrop-blur-[20px] border border-t border-x-0 border-b-0"
+            style={{
+              background: "rgba(255,255,255,0.06)",
+              color: "#ffffff",
+              borderColor: "rgba(255,255,255,0.12)",
+            }}
+          >
+            <div className="flex items-center gap-4 sm:gap-6 min-w-0">
+              {/* Logos VS */}
+              <div className="flex items-center gap-4 sm:gap-6 shrink-0">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center p-2 rounded-xl border border-white/25 bg-white/5 backdrop-blur-sm">
+                  {match.homeLogo?.trim() ? (
+                    <Image src={match.homeLogo} alt={match.homeTeam} width={72} height={72} className="object-contain" unoptimized />
+                  ) : (
+                    <Image src="/logo.jpeg" alt={match.homeTeam} width={72} height={72} className="object-contain" />
+                  )}
+                </div>
+                <span className="text-sm sm:text-base font-black tracking-widest text-white/90" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>VS</span>
+                <div className={cn(
+                  "w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center p-2 rounded-xl border border-white/25 bg-white/5 backdrop-blur-sm shrink-0",
+                  !match.awayLogo?.trim() && "bg-white/10"
+                )}>
+                  {match.awayLogo?.trim() ? (
+                    <Image src={match.awayLogo} alt={match.awayTeam} width={72} height={72} className="object-contain" unoptimized />
+                  ) : (
+                    <span className="text-sm font-bold text-white">{awayShort}</span>
+                  )}
+                </div>
+              </div>
+              <div className="min-w-0">
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border border-white/50 text-white mb-2">
+                  <Ticket className="w-4 h-4" /> Prochain match
+                </span>
+                <p className="text-base sm:text-lg font-bold truncate text-white group-hover:text-[#fd0000] transition-colors">
+                  {match.homeTeam} – {match.awayTeam}
+                </p>
+                <p className="text-sm sm:text-base truncate text-white/90">
+                  {formatDate(match.date)} · {match.time} · {match.stadium}
+                </p>
+              </div>
+            </div>
+            <div className="hidden sm:flex items-center gap-2 shrink-0 px-5 py-3 rounded-xl bg-white/15 text-white group-hover:bg-[#fd0000] transition-colors">
+              <span className="text-sm font-bold uppercase tracking-wider">Billetterie</span>
+              <ArrowRight className="w-5 h-5" />
+            </div>
+          </a>
         </motion.div>
-      </motion.div>
+      )}
+
     </section>
   );
 }
