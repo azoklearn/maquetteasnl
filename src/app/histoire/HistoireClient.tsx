@@ -65,7 +65,7 @@ export function HistoireClient() {
           {/* Vertical line */}
           <div className="absolute left-16 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#fd0000] via-[#fd0000]/30 to-transparent" />
 
-          {TIMELINE.map((event, i) => (
+          {timeline.map((event, i) => (
             <motion.div
               key={event.year}
               initial={{ opacity: 0, x: -20 }}
