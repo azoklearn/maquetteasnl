@@ -20,7 +20,7 @@ export const SOCIAL = {
   instagram: "https://instagram.com/asnancylorraine",
   facebook: "https://facebook.com/ASNancyLorraine",
   youtube: "https://youtube.com/@ASNancyLorraine",
-  tiktok: "https://tiktok.com/@asnancylorraine",
+  tiktok: "https://www.tiktok.com/@asnlofficiel",
 };
 
 export const GA4_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID ?? "G-XXXXXXXXXX";
