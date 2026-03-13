@@ -1,7 +1,7 @@
 export const CLUB = {
   name: "AS Nancy Lorraine",
   shortName: "ASNL",
-  founded: 1913,
+  founded: 1967,
   stadium: "Stade Marcel Picot",
   city: "Nancy",
   country: "France",

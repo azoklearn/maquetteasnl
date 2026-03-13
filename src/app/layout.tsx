@@ -89,7 +89,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               alternateName: "ASNL",
               url: "https://maquetteasnl.vercel.app",
               logo: "https://maquetteasnl.vercel.app/logo.jpeg",
-              foundingDate: "1913",
+              foundingDate: "1967",
               sport: "Football",
               location: {
                 "@type": "Place",

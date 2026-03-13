@@ -120,26 +120,35 @@ export function Header({ tickerEnabled = true, tickerMessages, ticketingUrl }: H
 
             {/* Logo */}
             <Link href="/" className="flex items-center group shrink-0">
-              <div className="w-10 h-10 md:w-12 md:h-12 relative transition-transform group-hover:scale-105 shrink-0">
+              <div className="w-10 h-10 md:w-12 md:h-12 relative transition-transform duration-300 group-hover:scale-110 shrink-0">
                 <Image src="/logo.jpeg" alt="AS Nancy Lorraine" fill className="object-contain drop-shadow-md" sizes="48px" priority />
               </div>
             </Link>
 
             {/* Nav desktop */}
             <nav className="hidden lg:flex items-center gap-0.5">
-              {NAVIGATION.map((item) => (
-                <Link
+              {NAVIGATION.map((item, i) => (
+                <motion.div
                   key={item.href}
-                  href={item.href}
-                  className={cn(
-                    "px-4 py-2 text-sm font-semibold transition-colors rounded-lg uppercase tracking-wide",
-                    isScrolled
-                      ? "text-[#0A0A0A]/70 hover:text-[#fd0000] hover:bg-[#fd0000]/5"
-                      : "text-white/80 hover:text-white hover:bg-white/5",
-                  )}
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 + i * 0.04, duration: 0.3 }}
                 >
-                  {item.label}
-                </Link>
+                  <Link
+                    href={item.href}
+                    className={cn(
+                      "group relative px-4 py-2 text-sm font-semibold transition-colors rounded-lg uppercase tracking-wide",
+                      isScrolled
+                        ? "text-[#0A0A0A]/70 hover:text-[#fd0000] hover:bg-[#fd0000]/5"
+                        : "text-white/80 hover:text-white hover:bg-white/5",
+                    )}
+                  >
+                    <span className="relative z-10">{item.label}</span>
+                    <span
+                      className="pointer-events-none absolute left-4 right-4 bottom-1 h-[2px] bg-[#fd0000] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
+                    />
+                  </Link>
+                </motion.div>
               ))}
             </nav>
 
@@ -213,7 +222,7 @@ export function Header({ tickerEnabled = true, tickerMessages, ticketingUrl }: H
                 </div>
                 <div>
                   <p className="text-white font-black text-sm leading-none" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>AS Nancy Lorraine</p>
-                  <p className="text-[#fd0000] text-[9px] font-bold uppercase tracking-[0.25em]">Depuis 1913</p>
+                  <p className="text-[#fd0000] text-[9px] font-bold uppercase tracking-[0.25em]">Depuis 1967</p>
                 </div>
               </div>
               {/* Bouton fermer */}
