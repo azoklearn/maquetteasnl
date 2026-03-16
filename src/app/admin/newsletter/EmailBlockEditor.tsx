@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { EmailBlock } from "@/lib/db";
 import { Image, Type, Heading, Minus, Link2, Code, GripVertical, Trash2, Plus } from "lucide-react";
+import DragImageUpload from "@/components/admin/DragImageUpload";
 
 const FIELD = "bg-[#1a1a1a] border border-white/10 focus:border-[#fd0000] focus:outline-none rounded-xl px-4 py-3 text-white text-sm w-full transition-colors placeholder-white/20";
 const LABEL = "block text-white/50 text-xs font-bold uppercase tracking-wider mb-2";
@@ -138,13 +139,14 @@ export function EmailBlockEditor({ blocks, onChange, accentColor }: Props) {
               {selectedId === block.id && (
                 <div className="p-4 pt-0 space-y-3 border-t border-white/5 mt-0">
                   {block.type === "logo" && (
-                    <div>
-                      <label className={LABEL}>URL du logo</label>
-                      <input
-                        className={FIELD}
-                        value={block.url ?? ""}
-                        onChange={(e) => updateBlock(block.id, { url: e.target.value })}
-                        placeholder="/logo.jpeg"
+                    <div className="space-y-3">
+                      <DragImageUpload
+                        value={block.url}
+                        onChange={(val) => updateBlock(block.id, { url: val ?? "" })}
+                        label="Logo de l'email"
+                        hint="Glisse ton logo ou clique pour l'uploader. Il sera intégré directement dans le mail."
+                        maxW={260}
+                        maxH={120}
                       />
                     </div>
                   )}
