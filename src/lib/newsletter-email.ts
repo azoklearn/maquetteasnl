@@ -16,9 +16,20 @@ function resolveImageUrl(url: string, baseUrl: string): string {
 export function blocksToHtml(
   blocks: EmailBlock[],
   accentColor: string,
-  baseUrl: string = "https://asnl.fr"
+  baseUrl: string = "https://asnl.fr",
+  opts?: {
+    bgColor?: string;
+    cardBgColor?: string;
+    textColor?: string;
+    headingColor?: string;
+  }
 ): string {
   const parts: string[] = [];
+
+  const bgColor = opts?.bgColor || "#0A0A0A";
+  const cardBgColor = opts?.cardBgColor || "#111111";
+  const textColor = opts?.textColor || "#e5e5e5";
+  const headingColor = opts?.headingColor || "#ffffff";
 
   for (const block of blocks) {
     if (block.type === "logo") {
@@ -34,7 +45,7 @@ export function blocksToHtml(
       const size = block.level === 2 ? "24px" : "30px";
       parts.push(`
         <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
-          <tr><td style="padding: 8px 0 16px; font-family: Arial, sans-serif; font-size: ${size}; font-weight: 800; color: #ffffff; line-height: 1.2; text-transform: uppercase; letter-spacing: 0.05em;">
+          <tr><td style="padding: 8px 0 16px; font-family: Arial, sans-serif; font-size: ${size}; font-weight: 800; color: ${headingColor}; line-height: 1.2; text-transform: uppercase; letter-spacing: 0.05em;">
             ${escapeHtml(block.content)}
           </td></tr>
         </table>
@@ -42,7 +53,7 @@ export function blocksToHtml(
     } else if (block.type === "text") {
       parts.push(`
         <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
-          <tr><td style="padding: 8px 0; font-family: Arial, sans-serif; font-size: 14px; color: #e5e5e5; line-height: 1.6;">
+          <tr><td style="padding: 8px 0; font-family: Arial, sans-serif; font-size: 14px; color: ${textColor}; line-height: 1.6;">
             ${escapeHtml(block.content).replace(/\n/g, "<br />")}
           </td></tr>
         </table>
@@ -85,11 +96,11 @@ export function blocksToHtml(
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Newsletter ASNL</title>
 </head>
-<body style="margin: 0; padding: 0; background-color: #0A0A0A; font-family: Arial, sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" role="presentation" bgcolor="#0A0A0A" style="background-color: #0A0A0A;">
+<body style="margin: 0; padding: 0; background-color: ${bgColor}; font-family: Arial, sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" role="presentation" bgcolor="${bgColor}" style="background-color: ${bgColor};">
     <tr>
       <td align="center" style="padding: 40px 20px;">
-        <table width="600" cellpadding="0" cellspacing="0" role="presentation" bgcolor="#111111" style="max-width: 100%; background-color: #111111; border-radius: 16px; overflow: hidden; box-shadow: 0 18px 40px rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.06);">
+        <table width="600" cellpadding="0" cellspacing="0" role="presentation" bgcolor="${cardBgColor}" style="max-width: 100%; background-color: ${cardBgColor}; border-radius: 16px; overflow: hidden; box-shadow: 0 18px 40px rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.06);">
           <tr>
             <td style="padding: 32px 24px;">
               ${parts.join("")}

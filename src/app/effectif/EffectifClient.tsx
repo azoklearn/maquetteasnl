@@ -152,19 +152,46 @@ export function EffectifClient({ players: playersProp, staff: staffProp }: Effec
 
         {tab === "STAFF" && (
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {staff.map((member) => (
-              <div
-                key={member.id}
-                className="bg-[#141414] border border-white/5 rounded-2xl px-5 py-4 flex flex-col gap-1"
-              >
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/40">
-                  {member.role}
-                </p>
-                <p className="text-white text-lg font-black" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-                  {member.name}
-                </p>
-              </div>
-            ))}
+            {staff.map((member) => {
+              const hasPhoto = member.photo?.trim();
+              return (
+                <div
+                  key={member.id}
+                  className="bg-[#141414] border border-white/5 rounded-2xl px-5 py-4 flex items-center gap-4"
+                >
+                  <div className="shrink-0 w-14 h-14 rounded-full overflow-hidden bg-white/5 border border-white/10 flex items-center justify-center">
+                    {hasPhoto ? (
+                      <Image
+                        src={member.photo!}
+                        alt={member.name}
+                        width={56}
+                        height={56}
+                        className="object-cover w-full h-full"
+                        unoptimized={member.photo!.startsWith("data:")}
+                      />
+                    ) : (
+                      <span
+                        className="text-[#fd0000] text-xl font-black"
+                        style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+                      >
+                        {member.name.charAt(0)}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/40">
+                      {member.role}
+                    </p>
+                    <p
+                      className="text-white text-lg font-black"
+                      style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+                    >
+                      {member.name}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>

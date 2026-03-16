@@ -6,6 +6,7 @@ import type { StaffMember } from "@/types";
 import AdminShell from "@/components/admin/AdminShell";
 import SaveButton from "@/components/admin/SaveButton";
 import { Plus, Trash2 } from "lucide-react";
+import DragImageUpload from "@/components/admin/DragImageUpload";
 
 interface Props {
   initialData: StaffMember[];
@@ -29,7 +30,7 @@ export default function StaffEditor({ initialData, username }: Props) {
     const id = `s_${Date.now()}`;
     setStaff((prev) => [
       ...prev,
-      { id, name: "Nouveau membre", role: "Rôle à définir" },
+      { id, name: "Nouveau membre", role: "Rôle à définir", photo: "" },
     ]);
   }
 
@@ -81,6 +82,16 @@ export default function StaffEditor({ initialData, username }: Props) {
               key={member.id}
               className="bg-[#161616] rounded-2xl border border-white/5 px-5 py-4 flex flex-col sm:flex-row items-start sm:items-center gap-4"
             >
+              <div className="w-full sm:w-40">
+                <DragImageUpload
+                  value={member.photo}
+                  onChange={(val) => update(member.id, "photo", val ?? "")}
+                  label="Photo"
+                  hint="Glisse une photo ou clique pour parcourir."
+                  maxW={320}
+                  maxH={400}
+                />
+              </div>
               <div className="flex-1 min-w-0">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>

@@ -45,7 +45,12 @@ export async function POST() {
       process.env.NEXT_PUBLIC_APP_URL ||
       (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://asnl.fr");
 
-    const html = blocksToHtml(blocks, accentColor, baseUrl);
+    const html = blocksToHtml(blocks, accentColor, baseUrl, {
+      bgColor: config.emailBgColor,
+      cardBgColor: config.emailCardBgColor,
+      textColor: config.emailTextColor,
+      headingColor: config.emailHeadingColor,
+    });
 
     const resend = new Resend(apiKey);
 

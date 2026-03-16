@@ -12,9 +12,9 @@ export const PLAYERS: Player[] = [
 ];
 
 export const STAFF_MEMBERS: StaffMember[] = [
-  { id: "s1", name: "Pablo Correa", role: "Entraîneur principal" },
-  { id: "s2", name: "Adjoint à définir", role: "Entraîneur adjoint" },
-  { id: "s3", name: "Préparateur à définir", role: "Préparateur physique" },
+  { id: "s1", name: "Pablo Correa", role: "Entraîneur principal", photo: "" },
+  { id: "s2", name: "Adjoint à définir", role: "Entraîneur adjoint", photo: "" },
+  { id: "s3", name: "Préparateur à définir", role: "Préparateur physique", photo: "" },
 ];
 
 export const NEWS: NewsArticle[] = [

@@ -242,6 +242,74 @@ export default function NewsletterEditor({ initialConfig, initialSubscribers, us
                 placeholder="Newsletter ASNL — Actualités du club"
               />
             </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label className={LABEL}>Fond email</label>
+                <div className="flex gap-2">
+                  <input
+                    type="color"
+                    value={config.emailBgColor ?? "#0A0A0A"}
+                    onChange={(e) => updateConfig({ emailBgColor: e.target.value })}
+                    className="w-12 h-12 rounded-lg cursor-pointer border border-white/10"
+                  />
+                  <input
+                    className={FIELD}
+                    value={config.emailBgColor ?? "#0A0A0A"}
+                    onChange={(e) => updateConfig({ emailBgColor: e.target.value })}
+                  />
+                </div>
+              </div>
+              <div>
+                <label className={LABEL}>Carte centrale</label>
+                <div className="flex gap-2">
+                  <input
+                    type="color"
+                    value={config.emailCardBgColor ?? "#111111"}
+                    onChange={(e) => updateConfig({ emailCardBgColor: e.target.value })}
+                    className="w-12 h-12 rounded-lg cursor-pointer border border-white/10"
+                  />
+                  <input
+                    className={FIELD}
+                    value={config.emailCardBgColor ?? "#111111"}
+                    onChange={(e) => updateConfig({ emailCardBgColor: e.target.value })}
+                  />
+                </div>
+              </div>
+              <div>
+                <label className={LABEL}>Texte du mail</label>
+                <div className="flex gap-2">
+                  <input
+                    type="color"
+                    value={config.emailTextColor ?? "#e5e5e5"}
+                    onChange={(e) => updateConfig({ emailTextColor: e.target.value })}
+                    className="w-12 h-12 rounded-lg cursor-pointer border border-white/10"
+                  />
+                  <input
+                    className={FIELD}
+                    value={config.emailTextColor ?? "#e5e5e5"}
+                    onChange={(e) => updateConfig({ emailTextColor: e.target.value })}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label className={LABEL}>Titres du mail</label>
+                <div className="flex gap-2">
+                  <input
+                    type="color"
+                    value={config.emailHeadingColor ?? "#ffffff"}
+                    onChange={(e) => updateConfig({ emailHeadingColor: e.target.value })}
+                    className="w-12 h-12 rounded-lg cursor-pointer border border-white/10"
+                  />
+                  <input
+                    className={FIELD}
+                    value={config.emailHeadingColor ?? "#ffffff"}
+                    onChange={(e) => updateConfig({ emailHeadingColor: e.target.value })}
+                  />
+                </div>
+              </div>
+            </div>
             <EmailBlockEditor
               blocks={config.emailBlocks ?? []}
               onChange={(blocks: EmailBlock[]) => updateConfig({ emailBlocks: blocks })}

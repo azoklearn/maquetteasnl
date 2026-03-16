@@ -113,6 +113,14 @@ export interface NewsletterConfig {
   bgColor?: string;
   accentColor?: string;
   textColor?: string;
+  /** Couleur de fond générale du mail */
+  emailBgColor?: string;
+  /** Couleur de fond de la carte centrale du mail */
+  emailCardBgColor?: string;
+  /** Couleur du texte des paragraphes dans le mail */
+  emailTextColor?: string;
+  /** Couleur des titres dans le mail */
+  emailHeadingColor?: string;
   sendDay?: number; // 0=dimanche, 1=lundi...
   sendTime?: string; // "10:00"
   /** Sujet du mail envoyé aux abonnés */
@@ -366,6 +374,10 @@ const DEFAULT_NEWSLETTER_CONFIG: NewsletterConfig = {
   bgColor: "#fd0000",
   accentColor: "#fd0000",
   textColor: "#ffffff",
+  emailBgColor: "#0A0A0A",
+  emailCardBgColor: "#111111",
+  emailTextColor: "#e5e5e5",
+  emailHeadingColor: "#ffffff",
   sendDay: 1, // lundi
   sendTime: "10:00",
   emailSubject: "Newsletter ASNL — Actualités du club",

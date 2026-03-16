@@ -39,6 +39,7 @@ export interface StaffMember {
   id: string;
   name: string;
   role: string;
+  photo?: string;
 }
 
 export interface NewsArticle {
