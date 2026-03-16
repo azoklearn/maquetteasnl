@@ -31,10 +31,10 @@ export function blocksToHtml(
         </table>
       `);
     } else if (block.type === "heading") {
-      const size = block.level === 2 ? "24px" : "32px";
+      const size = block.level === 2 ? "24px" : "30px";
       parts.push(`
         <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
-          <tr><td style="padding: 8px 0 16px; font-family: Arial, sans-serif; font-size: ${size}; font-weight: bold; color: #0A0A0A; line-height: 1.2;">
+          <tr><td style="padding: 8px 0 16px; font-family: Arial, sans-serif; font-size: ${size}; font-weight: 800; color: #ffffff; line-height: 1.2; text-transform: uppercase; letter-spacing: 0.05em;">
             ${escapeHtml(block.content)}
           </td></tr>
         </table>
@@ -42,7 +42,7 @@ export function blocksToHtml(
     } else if (block.type === "text") {
       parts.push(`
         <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
-          <tr><td style="padding: 8px 0; font-family: Arial, sans-serif; font-size: 16px; color: #333; line-height: 1.6;">
+          <tr><td style="padding: 8px 0; font-family: Arial, sans-serif; font-size: 14px; color: #e5e5e5; line-height: 1.6;">
             ${escapeHtml(block.content).replace(/\n/g, "<br />")}
           </td></tr>
         </table>
@@ -59,14 +59,14 @@ export function blocksToHtml(
     } else if (block.type === "divider") {
       parts.push(`
         <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
-          <tr><td style="padding: 24px 0; border-top: 1px solid #e5e5e5;"></td></tr>
+          <tr><td style="padding: 24px 0; border-top: 1px solid rgba(255,255,255,0.14);"></td></tr>
         </table>
       `);
     } else if (block.type === "button") {
       parts.push(`
         <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
           <tr><td style="padding: 16px 0;">
-            <a href="${escapeHtml(block.url)}" target="_blank" rel="noopener" style="display: inline-block; padding: 14px 28px; background-color: ${accentColor}; color: #ffffff !important; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; text-decoration: none; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.05em;">
+            <a href="${escapeHtml(block.url)}" target="_blank" rel="noopener" style="display: inline-block; padding: 14px 28px; background-color: ${accentColor}; color: #ffffff !important; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; text-decoration: none; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.12em;">
               ${escapeHtml(block.label)}
             </a>
           </td></tr>
@@ -85,21 +85,22 @@ export function blocksToHtml(
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Newsletter ASNL</title>
 </head>
-<body style="margin: 0; padding: 0; background-color: #f5f5f5; font-family: Arial, sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background-color: #f5f5f5;">
+<body style="margin: 0; padding: 0; background-color: #0A0A0A; font-family: Arial, sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" role="presentation" bgcolor="#0A0A0A" style="background-color: #0A0A0A;">
     <tr>
       <td align="center" style="padding: 40px 20px;">
-        <table width="600" cellpadding="0" cellspacing="0" role="presentation" style="max-width: 100%; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+        <table width="600" cellpadding="0" cellspacing="0" role="presentation" bgcolor="#111111" style="max-width: 100%; background-color: #111111; border-radius: 16px; overflow: hidden; box-shadow: 0 18px 40px rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.06);">
           <tr>
-            <td style="padding: 40px 32px;">
+            <td style="padding: 32px 24px;">
               ${parts.join("")}
             </td>
           </tr>
         </table>
         <table width="600" cellpadding="0" cellspacing="0" role="presentation" style="max-width: 100%;">
           <tr>
-            <td align="center" style="padding: 24px 20px; font-size: 12px; color: #999;">
-              AS Nancy Lorraine — Newsletter
+            <td align="center" style="padding: 24px 20px; font-size: 11px; color: #666666; font-family: Arial, sans-serif;">
+              AS Nancy Lorraine — Newsletter<br />
+              Si vous ne souhaitez plus recevoir ces emails, ignorez pour l'instant (désabonnement à venir).
             </td>
           </tr>
         </table>
