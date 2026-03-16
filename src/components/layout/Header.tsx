@@ -371,9 +371,14 @@ export function Header({ tickerEnabled = true, tickerMessages, ticketingUrl }: H
                   <Link
                     href={item.href}
                     onClick={() => setIsMobileOpen(false)}
-                    className="flex items-center justify-between py-4 px-2 text-white/80 hover:text-white font-semibold text-base uppercase tracking-wider border-b border-white/5 hover:border-[#fd0000]/30 transition-all group"
+                    className="relative flex items-center justify-between py-4 px-2 text-white/80 hover:text-white font-semibold text-base uppercase tracking-wider border-b border-white/5 hover:border-[#fd0000]/30 transition-all group"
                   >
-                    <span className="group-hover:translate-x-1 transition-transform">{item.label}</span>
+                    <span className="relative z-10 group-hover:translate-x-1 transition-transform">
+                      {item.label}
+                    </span>
+                    <span
+                      className="pointer-events-none absolute left-0 right-0 bottom-0 h-[2px] bg-[#fd0000] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
+                    />
                     <span className="text-white/20 group-hover:text-[#fd0000] transition-colors text-sm">→</span>
                   </Link>
                 </motion.div>

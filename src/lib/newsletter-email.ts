@@ -6,6 +6,8 @@ import type { EmailBlock } from "@/lib/db";
 
 function resolveImageUrl(url: string, baseUrl: string): string {
   if (!url) return "";
+  // Data URL (image encodée en base64 depuis l'admin) → on renvoie tel quel
+  if (url.startsWith("data:")) return url;
   if (url.startsWith("http://") || url.startsWith("https://")) return url;
   const base = baseUrl.replace(/\/$/, "");
   return url.startsWith("/") ? `${base}${url}` : `${base}/${url}`;
