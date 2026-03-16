@@ -76,9 +76,9 @@ export function PlayersSection({ players = [], sectionStyle }: { players?: Playe
 
                   {/* Avatar */}
                   <div className="relative h-36 md:h-48 bg-[#f5f5f5] group-hover:bg-[#d40000] flex items-center justify-center overflow-hidden transition-colors">
-                    {/* Numéro haut droite */}
+                    {/* Numéro haut droite (bandeau réduit) */}
                     <div
-                      className="absolute top-3 right-3 text-[#0A0A0A]/20 group-hover:text-white/40 text-3xl font-black leading-none transition-colors z-10"
+                      className="absolute top-2 right-2 text-[#0A0A0A]/25 group-hover:text-white/45 text-base md:text-lg font-black leading-none transition-colors z-10 px-2 py-1 rounded-full bg-white/40 group-hover:bg-black/25"
                       style={{ fontFamily: "'Bebas Neue', sans-serif" }}
                     >
                       {player.number}

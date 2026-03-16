@@ -14,7 +14,11 @@ export function StandingsSection({ sectionStyle }: { sectionStyle?: SectionStyle
   const textCol  = sectionStyle?.textColor?.trim()   || "#0A0A0A";
   const titleCls = titleSizeClass(sectionStyle, "text-5xl md:text-7xl");
   return (
-    <section className="section-padding" style={{ backgroundColor: sectionStyle?.bgColor?.trim() || "#ffffff" }}>
+    <section
+      id="classement"
+      className="section-padding"
+      style={{ backgroundColor: sectionStyle?.bgColor?.trim() || "#ffffff" }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-5 gap-12 items-start">
 

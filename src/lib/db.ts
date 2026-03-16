@@ -5,7 +5,7 @@
  * Toutes les données du site transitent par ce module.
  */
 
-import type { Match, NewsArticle, Player, Sponsor, StandingEntry, MediaVideo, MediaPhoto } from "@/types";
+import type { Match, NewsArticle, Player, Sponsor, StandingEntry, MediaVideo, MediaPhoto, StaffMember } from "@/types";
 import {
   NEXT_MATCH,
   TICKETING,
@@ -19,6 +19,7 @@ import {
   STANDINGS,
   MATCHES,
   SPONSORS,
+  STAFF_MEMBERS,
 } from "@/lib/mock-data";
 
 
@@ -129,6 +130,7 @@ export interface CmsData {
   nextMatch: Match;
   news: NewsArticle[];
   players: Player[];
+  staff: StaffMember[];
   sponsors: Sponsor[];
   config: SiteConfig;
   matches: Match[];
@@ -164,6 +166,7 @@ const KV_KEYS = {
   nextMatch: "cms:nextMatch",
   news:      "cms:news",
   players:   "cms:players",
+  staff:     "cms:staff",
   sponsors:  "cms:sponsors",
   config:    "cms:config",
   matches:   "cms:matches",
@@ -273,6 +276,13 @@ export async function getPlayers(): Promise<Player[]> {
 }
 export async function setPlayers(players: Player[]) {
   await kvSet(KV_KEYS.players, players);
+}
+
+export async function getStaff(): Promise<StaffMember[]> {
+  return (await kvGet<StaffMember[]>(KV_KEYS.staff)) ?? STAFF_MEMBERS;
+}
+export async function setStaff(staff: StaffMember[]) {
+  await kvSet(KV_KEYS.staff, staff);
 }
 
 export async function getSponsors(): Promise<Sponsor[]> {
@@ -389,15 +399,16 @@ export async function setHistoryConfig(cfg: HistoryConfig) {
 }
 
 export async function getAllCmsData(): Promise<CmsData> {
-  const [nextMatch, news, players, sponsors, config, matches, standings, heroBg] = await Promise.all([
+  const [nextMatch, news, players, staff, sponsors, config, matches, standings, heroBg] = await Promise.all([
     getNextMatch(),
     getNews(),
     getPlayers(),
+    getStaff(),
     getSponsors(),
     getSiteConfig(),
     getMatches(),
     getStandings(),
     getHeroBg(),
   ]);
-  return { nextMatch, news, players, sponsors, config, matches, standings, heroBg };
+  return { nextMatch, news, players, staff, sponsors, config, matches, standings, heroBg };
 }

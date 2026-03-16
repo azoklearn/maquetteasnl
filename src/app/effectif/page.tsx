@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getPlayers } from "@/lib/db";
+import { getPlayers, getStaff } from "@/lib/db";
 import { EffectifClient } from "./EffectifClient";
 
 export const dynamic = "force-dynamic";
@@ -14,6 +14,6 @@ export const metadata: Metadata = {
 };
 
 export default async function EffectifPage() {
-  const players = await getPlayers();
-  return <EffectifClient players={players} />;
+  const [players, staff] = await Promise.all([getPlayers(), getStaff()]);
+  return <EffectifClient players={players} staff={staff} />;
 }

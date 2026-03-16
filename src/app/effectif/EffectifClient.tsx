@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { PLAYERS } from "@/lib/mock-data";
-import type { Player } from "@/types";
+import { PLAYERS, STAFF_MEMBERS } from "@/lib/mock-data";
+import type { Player, StaffMember } from "@/types";
 
-interface EffectifClientProps { players?: Player[] }
+interface EffectifClientProps { players?: Player[]; staff?: StaffMember[] }
 
 type Tab = "PLAYERS" | "STAFF";
 type PositionFilter = "ALL" | "GK" | "DEF" | "MID" | "ATT";
@@ -32,14 +32,9 @@ const CATEGORY_FILTERS: { key: CategoryFilter; label: string }[] = [
   { key: "YOUTH",    label: "Jeunes" },
 ];
 
-const STAFF: { id: string; role: string; name: string }[] = [
-  { id: "s1", role: "Entraîneur principal", name: "Pablo Correa" },
-  { id: "s2", role: "Entraîneur adjoint",   name: "Adjoint à définir" },
-  { id: "s3", role: "Préparateur physique", name: "Préparateur à définir" },
-];
-
-export function EffectifClient({ players: playersProp }: EffectifClientProps) {
+export function EffectifClient({ players: playersProp, staff: staffProp }: EffectifClientProps) {
   const players = playersProp?.length ? playersProp : PLAYERS;
+  const staff = staffProp?.length ? staffProp : STAFF_MEMBERS;
   const [tab, setTab] = useState<Tab>("PLAYERS");
   const [positionFilter, setPositionFilter] = useState<PositionFilter>("ALL");
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("ALL");
@@ -49,6 +44,14 @@ export function EffectifClient({ players: playersProp }: EffectifClientProps) {
     categoryFilter === "ALL" ? normalized : normalized.filter((p) => p.category === categoryFilter);
   const filtered =
     positionFilter === "ALL" ? byCategory : byCategory.filter((p) => p.position === positionFilter);
+
+  // Ouvre directement l'onglet "Staff & coach" si l'URL contient #staff
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.location.hash === "#staff") {
+      setTab("STAFF");
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] pt-8">
@@ -149,7 +152,7 @@ export function EffectifClient({ players: playersProp }: EffectifClientProps) {
 
         {tab === "STAFF" && (
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {STAFF.map((member) => (
+            {staff.map((member) => (
               <div
                 key={member.id}
                 className="bg-[#141414] border border-white/5 rounded-2xl px-5 py-4 flex flex-col gap-1"
@@ -168,6 +171,13 @@ export function EffectifClient({ players: playersProp }: EffectifClientProps) {
     </div>
   );
 }
+
+const POS_LABELS: Record<Player["position"], string> = {
+  GK: "Gardien",
+  DEF: "Défenseur",
+  MID: "Milieu",
+  ATT: "Attaquant",
+};
 
 function PlayerCard({ player, index }: { player: Player; index: number }) {
   const hasPhoto = player.photo?.trim();
@@ -212,17 +222,33 @@ function PlayerCard({ player, index }: { player: Player; index: number }) {
             </span>
           </div>
         )}
-        {/* Nom en overlay au survol */}
-        <div
-          className="absolute inset-0 flex items-end justify-center p-4 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        >
-          <h3
-            className="text-white font-black uppercase leading-tight text-center drop-shadow-lg"
-            style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(1.25rem, 3vw, 1.75rem)" }}
-          >
-            {player.firstName} {player.name}
-          </h3>
+
+        {/* Badge numéro + poste au survol */}
+        <div className="absolute inset-0 flex items-end justify-center p-3 pointer-events-none">
+          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/80 border border-white/10">
+              <span
+                className="text-white font-black text-sm leading-none"
+                style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+              >
+                #{player.number}
+              </span>
+              <span className="text-white/70 text-[11px] uppercase tracking-[0.18em]">
+                {POS_LABELS[player.position]}
+              </span>
+            </div>
+          </div>
         </div>
+      </div>
+
+      {/* Nom toujours visible sous la carte */}
+      <div className="mt-2 text-center">
+        <p
+          className="text-white font-black uppercase leading-tight"
+          style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(1rem, 2.4vw, 1.35rem)" }}
+        >
+          {player.firstName} {player.name}
+        </p>
       </div>
     </motion.div>
   );

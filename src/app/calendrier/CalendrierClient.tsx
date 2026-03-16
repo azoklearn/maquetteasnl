@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Ticket, MapPin, Calendar } from "lucide-react";
@@ -20,6 +20,14 @@ export function CalendrierClient({ matches: matchesProp }: { matches?: Match[] }
   const upcoming = allMatches.filter((m) => m.status === "upcoming");
   const finished = allMatches.filter((m) => m.status === "finished");
   const displayed = tab === "upcoming" ? upcoming : finished;
+
+  // Ouvre directement l'onglet "Résultats" si l'URL contient #resultats
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.location.hash === "#resultats") {
+      setTab("finished");
+    }
+  }, []);
 
 
   return (

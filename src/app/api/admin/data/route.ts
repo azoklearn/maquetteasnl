@@ -9,6 +9,7 @@ import {
   getNextMatch, setNextMatch,
   getNews,      setNews,
   getPlayers,   setPlayers,
+  getStaff,     setStaff,
   getSponsors,  setSponsors,
   getSiteConfig,setSiteConfig,
   getMatches,   setMatches,
@@ -34,6 +35,7 @@ export async function GET(req: NextRequest) {
     case "nextMatch": return NextResponse.json(await getNextMatch());
     case "news":      return NextResponse.json(await getNews());
     case "players":   return NextResponse.json(await getPlayers());
+    case "staff":     return NextResponse.json(await getStaff());
     case "sponsors":  return NextResponse.json(await getSponsors());
     case "config":    return NextResponse.json(await getSiteConfig());
     case "matches":   return NextResponse.json(await getMatches());
@@ -65,6 +67,7 @@ export async function POST(req: NextRequest) {
       case "nextMatch": await setNextMatch(data as Parameters<typeof setNextMatch>[0]); break;
       case "news":      await setNews(data as Parameters<typeof setNews>[0]);           break;
       case "players":   await setPlayers(data as Parameters<typeof setPlayers>[0]);    break;
+      case "staff":     await setStaff(data as Parameters<typeof setStaff>[0]);        break;
       case "sponsors":  await setSponsors(data as Parameters<typeof setSponsors>[0]);  break;
       case "config":    await setSiteConfig(data as Parameters<typeof setSiteConfig>[0]); break;
       case "matches":   await setMatches(data as Parameters<typeof setMatches>[0]);    break;

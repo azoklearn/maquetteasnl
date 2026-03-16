@@ -35,6 +35,12 @@ export interface Player {
   };
 }
 
+export interface StaffMember {
+  id: string;
+  name: string;
+  role: string;
+}
+
 export interface NewsArticle {
   id: string;
   title: string;

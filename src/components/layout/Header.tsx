@@ -15,6 +15,96 @@ interface HeaderProps {
   ticketingUrl?: string;
 }
 
+const SUB_MENUS: Record<
+  string,
+  { href: string; label: string; description: string }[]
+> = {
+  "/histoire": [
+    {
+      href: "/histoire",
+      label: "Histoire du club",
+      description: "Les grandes dates et le palmarès de l'ASNL.",
+    },
+    {
+      href: "/partenaires",
+      label: "Partenaires & sponsors",
+      description: "Découvrir les marques qui soutiennent l'ASNL.",
+    },
+  ],
+  "/effectif": [
+    {
+      href: "/effectif",
+      label: "Effectif complet",
+      description: "Joueurs, postes et statistiques de la saison.",
+    },
+    {
+      href: "/effectif#staff",
+      label: "Staff & coach",
+      description: "Encadrement sportif et staff technique.",
+    },
+  ],
+  "/calendrier": [
+    {
+      href: "/calendrier",
+      label: "Prochains matchs",
+      description: "Les rencontres à venir de l'ASNL.",
+    },
+    {
+      href: "/calendrier#resultats",
+      label: "Résultats",
+      description: "Scores et résumés de rencontres.",
+    },
+    {
+      href: "/#classement",
+      label: "Classement",
+      description: "Classement en temps réel.",
+    },
+  ],
+  "/actualites": [
+    {
+      href: "/actualites",
+      label: "Toutes les actualités",
+      description: "Dernières infos du club, du groupe et du stade.",
+    },
+  ],
+  "/medias": [
+    {
+      href: "/medias",
+      label: "Vidéos",
+      description: "Résumés de matchs et contenus vidéo.",
+    },
+    {
+      href: "/medias#photos",
+      label: "Galerie photos",
+      description: "Ambiance, coulisses et clichés du stade.",
+    },
+  ],
+  "/partenaires": [
+    {
+      href: "/partenaires",
+      label: "Nos partenaires",
+      description: "Les entreprises qui soutiennent l'ASNL.",
+    },
+    {
+      href: "/partenaires/service-commercial",
+      label: "Service commercial",
+      description: "Contacts sponsoring, hospitalité et séminaires.",
+    },
+    {
+      href: "/partenaires/loges-privatives",
+      label: "Loges privatives",
+      description: "Vivez les matchs dans un cadre premium.",
+    },
+  ],
+  "/boutique": [
+    {
+      href: "/boutique",
+      label: "Boutique en ligne",
+      description: "Maillots, textiles et produits officiels.",
+    },
+  ],
+};
+
 // ── Bouton hamburger animé ─────────────────────────────────────────────────────
 function HamburgerButton({
   open,
@@ -127,29 +217,64 @@ export function Header({ tickerEnabled = true, tickerMessages, ticketingUrl }: H
 
             {/* Nav desktop */}
             <nav className="hidden lg:flex items-center gap-0.5">
-              {NAVIGATION.map((item, i) => (
-                <motion.div
-                  key={item.href}
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.15 + i * 0.04, duration: 0.3 }}
-                >
-                  <Link
-                    href={item.href}
-                    className={cn(
-                      "group relative px-4 py-2 text-sm font-semibold transition-colors rounded-lg uppercase tracking-wide",
-                      isScrolled
-                        ? "text-[#0A0A0A]/70 hover:text-[#fd0000] hover:bg-[#fd0000]/5"
-                        : "text-white/80 hover:text-white hover:bg-white/5",
-                    )}
+              {NAVIGATION.map((item, i) => {
+                const entries = SUB_MENUS[item.href];
+                const hasSubmenu = !!entries;
+
+                return (
+                  <motion.div
+                    key={item.href}
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.15 + i * 0.04, duration: 0.3 }}
+                    className={hasSubmenu ? "relative group/nav" : undefined}
                   >
-                    <span className="relative z-10">{item.label}</span>
-                    <span
-                      className="pointer-events-none absolute left-4 right-4 bottom-1 h-[2px] bg-[#fd0000] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
-                    />
-                  </Link>
-                </motion.div>
-              ))}
+                    <Link
+                      href={item.href}
+                      className={cn(
+                        "group relative px-4 py-2 text-sm font-semibold transition-colors rounded-lg uppercase tracking-wide",
+                        isScrolled
+                          ? "text-[#0A0A0A]/70 hover:text-[#fd0000] hover:bg-[#fd0000]/5"
+                          : "text-white/80 hover:text-white hover:bg-white/5",
+                      )}
+                    >
+                      <span className="relative z-10">{item.label}</span>
+                      <span
+                        className="pointer-events-none absolute left-4 right-4 bottom-1 h-[2px] bg-[#fd0000] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
+                      />
+                    </Link>
+
+                    {hasSubmenu && (
+                      <div className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 opacity-0 group-hover/nav:opacity-100 group-hover/nav:pointer-events-auto transition-opacity duration-200">
+                        <div className="rounded-2xl bg-[#111] border border-white/10 shadow-xl overflow-hidden min-w-[260px]">
+                          <div className="px-4 py-3 border-b border-white/10">
+                            <p className="text-white/60 text-[10px] font-semibold uppercase tracking-[0.2em]">
+                              {item.label}
+                            </p>
+                          </div>
+                          <div className="py-2">
+                            {entries.map((entry, idx) => (
+                              <Link
+                                key={entry.href}
+                                href={entry.href}
+                                className="flex items-start gap-3 px-4 py-2.5 hover:bg-white/5 transition-colors"
+                              >
+                                <div className="w-2 h-2 mt-1 rounded-full bg-white/30" />
+                                <div>
+                                  <p className="text-sm font-semibold text-white">{entry.label}</p>
+                                  <p className="text-[11px] text-white/50">
+                                    {entry.description}
+                                  </p>
+                                </div>
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
+                );
+              })}
             </nav>
 
             {/* CTAs desktop */}

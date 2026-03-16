@@ -1,4 +1,4 @@
-import type { Player, NewsArticle, StandingEntry, Match, Sponsor } from "@/types";
+import type { Player, NewsArticle, StandingEntry, Match, Sponsor, StaffMember } from "@/types";
 
 export const PLAYERS: Player[] = [
   { id: "p1", name: "PATRON", firstName: "Thomas", number: 1, position: "GK",  category: "SENIOR",   nationality: "FR", stats: { appearances: 22, goals: 0, assists: 1 } },
@@ -9,6 +9,12 @@ export const PLAYERS: Player[] = [
   { id: "p6", name: "DIALLO", firstName: "Mamadou", number: 6, position: "DEF", category: "YOUTH",    nationality: "SN", stats: { appearances: 22, goals: 1, assists: 2 } },
   { id: "p7", name: "LUCAS", firstName: "Pierre", number: 7, position: "MID",  category: "YOUTH",    nationality: "FR", stats: { appearances: 20, goals: 4, assists: 8 } },
   { id: "p8", name: "HERNANDEZ", firstName: "Carlos", number: 11, position: "ATT", category: "SENIOR", nationality: "ES", stats: { appearances: 18, goals: 7, assists: 3 } },
+];
+
+export const STAFF_MEMBERS: StaffMember[] = [
+  { id: "s1", name: "Pablo Correa", role: "Entraîneur principal" },
+  { id: "s2", name: "Adjoint à définir", role: "Entraîneur adjoint" },
+  { id: "s3", name: "Préparateur à définir", role: "Préparateur physique" },
 ];
 
 export const NEWS: NewsArticle[] = [

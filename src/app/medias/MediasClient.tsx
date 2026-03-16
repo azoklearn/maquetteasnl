@@ -30,6 +30,14 @@ export function MediasClient() {
       .finally(() => setLoading(false));
   }, []);
 
+  // Ouvre directement l'onglet "Galerie photos" si l'URL contient #photos
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.location.hash === "#photos") {
+      setTab("photos");
+    }
+  }, []);
+
   const filteredPhotos =
     photoFilter === "Tout" ? photos : photos.filter((p) => p.category === photoFilter);
 

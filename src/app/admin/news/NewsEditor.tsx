@@ -192,20 +192,19 @@ export default function NewsEditor({ initialData, username }: Props) {
                         rows={8}
                         value={article.content ?? ""}
                         onChange={(e) => update(article.id, "content", e.target.value)}
-                        placeholder="Texte libre. Liens [texte](url), images ![légende](https://...) ou HTML (&lt;p&gt;, &lt;img&gt;, ...)."
+                        placeholder="Texte libre. Liens [texte](https://url), images ![légende](https://image.jpg) ou HTML (&lt;h2&gt;, &lt;p&gt;, ...)."
                       />
                       <p className="text-white/30 text-xs mt-1.5 space-y-1">
                         <span className="block">
-                          Liens : <code className="bg-white/10 px-1 rounded">[texte](url)</code>
+                          Liens : <code className="bg-white/10 px-1 rounded">[texte](https://url)</code>
                         </span>
                         <span className="block">
-                          Images dans le corps :
-                          {" "}
+                          Images :{" "}
                           <code className="bg-white/10 px-1 rounded">![légende](https://image.jpg)</code>
-                          {" "} ou avec taille{" "}
-                          <code className="bg-white/10 px-1 rounded">![légende|small](https://image.jpg)</code>,{" "}
-                          <code className="bg-white/10 px-1 rounded">![légende|medium](https://image.jpg)</code>,{" "}
-                          <code className="bg-white/10 px-1 rounded">![légende|large](https://image.jpg)</code>.
+                          {" "} ou tailles{" "}
+                          <code className="bg-white/10 px-1 rounded">![légende|small](...)</code>,{" "}
+                          <code className="bg-white/10 px-1 rounded">![légende|medium](...)</code>,{" "}
+                          <code className="bg-white/10 px-1 rounded">![légende|large](...)</code>.
                         </span>
                       </p>
                     </div>

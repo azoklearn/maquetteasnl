@@ -57,7 +57,15 @@ export default async function AdminDashboard() {
       icon: Users,
       label: "Effectif",
       value: `${players.length} joueurs`,
-      sub: "Gérer le groupe",
+      sub: "Effectif séniors / jeunes / féminines",
+      color: "from-slate-700 to-slate-900",
+    },
+    {
+      href: "/admin/staff",
+      icon: Users,
+      label: "Staff",
+      value: "Staff & coach",
+      sub: "Entraîneurs, préparateurs, encadrement",
       color: "from-slate-700 to-slate-900",
     },
     {
