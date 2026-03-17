@@ -4,7 +4,8 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Analytics } from "@/components/providers/Analytics";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import { getSiteConfig } from "@/lib/db";
+import { SponsorsSection } from "@/components/home/SponsorsSection";
+import { getSiteConfig, getSponsors } from "@/lib/db";
 import { LoadingScreen } from "@/components/ui/LoadingScreen";
 
 export const dynamic = "force-dynamic";
@@ -67,7 +68,7 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const config = await getSiteConfig();
+  const [config, sponsors] = await Promise.all([getSiteConfig(), getSponsors()]);
 
   return (
     <html lang="fr" suppressHydrationWarning>
@@ -122,6 +123,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             ticketingUrl={config.ticketingUrl}
           />
           <main>{children}</main>
+          <SponsorsSection
+            sponsors={sponsors}
+            sectionStyle={config.sections?.sponsors}
+          />
           <Footer
             social={config.social}
             ticketingUrl={config.ticketingUrl}

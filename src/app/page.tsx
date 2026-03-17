@@ -5,7 +5,6 @@ import { NextMatchSection } from "@/components/home/NextMatchSection";
 import { NewsSection } from "@/components/home/NewsSection";
 import { PlayersSection } from "@/components/home/PlayersSection";
 import { StandingsSection } from "@/components/home/StandingsSection";
-import { SponsorsSection } from "@/components/home/SponsorsSection";
 import { NewsletterSection } from "@/components/home/NewsletterSection";
 import { MediasClient } from "@/app/medias/MediasClient";
 
@@ -55,9 +54,6 @@ export default async function HomePage() {
       )}
       {/* Bloc Médias de la page principale, après le classement en direct */}
       <MediasClient />
-      {s.sponsors?.visible !== false && (
-        <SponsorsSection sponsors={sponsors} sectionStyle={s.sponsors} />
-      )}
       <NewsletterSection config={newsletterConfig} />
     </>
   );
