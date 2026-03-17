@@ -32,6 +32,7 @@ export const NAVIGATION = [
   { label: "Calendrier", href: "/calendrier" },
   { label: "Actualités", href: "/actualites" },
   { label: "Médias", href: "/medias" },
+  { label: "Jeu", href: "/jeu" },
   { label: "Partenaires", href: "/partenaires" },
   { label: "Boutique", href: "/boutique" },
 ];
