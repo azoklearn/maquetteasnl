@@ -1,11 +1,82 @@
+\"use client\";
+
 import type { Metadata } from "next";
+import { useState } from "react";
 
 export const metadata: Metadata = {
   title: "Jeu – Quiz ASNL",
-  description: "Testez vos connaissances sur l’AS Nancy Lorraine avec un quiz rapide.",
+  description: "Testez vos connaissances sur l’AS Nancy Lorraine avec un quiz interactif.",
 };
 
+const QUESTIONS = [
+  {
+    question: "En quelle année a été fondé l’AS Nancy-Lorraine ?",
+    options: ["1901", "1967", "1920", "1985"],
+    correctIndex: 1,
+  },
+  {
+    question: "Quel joueur emblématique français a débuté à Nancy ?",
+    options: ["Zinedine Zidane", "Michel Platini", "Thierry Henry", "Karim Benzema"],
+    correctIndex: 1,
+  },
+  {
+    question: "Quel trophée majeur Nancy a-t-il remporté en 1978 ?",
+    options: ["Ligue 1", "Coupe de France", "Coupe de la Ligue", "Trophée des Champions"],
+    correctIndex: 1,
+  },
+  {
+    question: "Comment s’appelle le stade de Nancy ?",
+    options: [
+      "Parc des Princes",
+      "Stade Geoffroy-Guichard",
+      "Stade Marcel-Picot",
+      "Stade Vélodrome",
+    ],
+    correctIndex: 2,
+  },
+  {
+    question: "Quelles sont les couleurs principales du club ?",
+    options: ["Bleu et blanc", "Rouge et blanc", "Jaune et noir", "Vert et blanc"],
+    correctIndex: 1,
+  },
+] as const;
+
 export default function JeuPage() {
+  const [current, setCurrent] = useState(0);
+  const [answers, setAnswers] = useState<number[]>([]);
+  const [showResults, setShowResults] = useState(false);
+
+  const q = QUESTIONS[current];
+  const total = QUESTIONS.length;
+
+  const score = answers.reduce(
+    (acc, a, idx) => (a === QUESTIONS[idx]?.correctIndex ? acc + 1 : acc),
+    0,
+  );
+
+  function handleAnswer(optionIndex: number) {
+    if (showResults) return;
+    const next = [...answers];
+    next[current] = optionIndex;
+    setAnswers(next);
+  }
+
+  function nextQuestion() {
+    if (current < total - 1) {
+      setCurrent(current + 1);
+    } else {
+      setShowResults(true);
+    }
+  }
+
+  function restart() {
+    setAnswers([]);
+    setCurrent(0);
+    setShowResults(false);
+  }
+
+  const selected = answers[current];
+
   return (
     <div className="min-h-screen bg-[#0A0A0A]">
       {/* Hero */}
@@ -21,141 +92,153 @@ export default function JeuPage() {
             Teste tes connaissances
           </h1>
           <p className="text-white/60 text-sm md:text-base max-w-2xl">
-            5 questions rapides sur l’histoire et l’identité de l’AS Nancy Lorraine. À faire entre
-            deux matchs ou à partager avec tes amis supporters.
+            Choisis ta réponse pour chaque question et découvre ton score final. Idéal pour défier
+            tes amis supporters rouge et blanc.
           </p>
         </div>
       </div>
 
       {/* Contenu */}
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14 space-y-10 text-white/90 text-sm md:text-base leading-relaxed">
-        <section className="space-y-6">
-          <div className="bg-[#141414] border border-white/10 rounded-2xl p-6 md:p-7 space-y-5">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14 space-y-8 text-sm md:text-base">
+        {/* Carte principale du quiz */}
+        <section className="bg-[#141414] border border-white/10 rounded-2xl p-6 md:p-7 space-y-6 shadow-xl shadow-black/30">
+          {/* Progression */}
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-white/60 text-xs font-semibold uppercase tracking-[0.25em]">
+              Question {current + 1} / {total}
+            </p>
+            <p className="text-white/70 text-xs">
+              Score provisoire :{" "}
+              <span className="font-semibold text-white">
+                {score} / {total}
+              </span>
+            </p>
+          </div>
+          <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-[#fd0000] transition-all"
+              style={{ width: `${((current + 1) / total) * 100}%` }}
+            />
+          </div>
+
+          {/* Question */}
+          <div className="space-y-3">
             <h2
-              className="text-white text-2xl md:text-3xl font-black uppercase"
+              className="text-white text-xl md:text-2xl font-black uppercase"
               style={{ fontFamily: "'Bebas Neue', sans-serif" }}
             >
-              🔴 Quiz ASNL
+              {q.question}
             </h2>
+            <p className="text-white/40 text-xs">
+              Clique sur une réponse pour la sélectionner.
+            </p>
+          </div>
 
-            <ol className="space-y-5 list-decimal list-inside">
-              <li>
-                <p className="font-semibold mb-1">
-                  1. En quelle année a été fondé l’AS Nancy-Lorraine ?
+          {/* Réponses */}
+          <div className="space-y-3">
+            {q.options.map((opt, idx) => {
+              const isSelected = selected === idx;
+              const isCorrect = showResults && idx === q.correctIndex;
+              const isWrong =
+                showResults && isSelected && selected !== q.correctIndex;
+
+              let bg = "bg-white/5 hover:bg-white/10 border-white/10 text-white/80";
+              if (isSelected && !showResults) {
+                bg = "bg-[#fd0000] border-[#fd0000] text-white";
+              }
+              if (isCorrect) {
+                bg = "bg-emerald-600/80 border-emerald-400 text-white";
+              } else if (isWrong) {
+                bg = "bg-red-600/80 border-red-400 text-white";
+              }
+
+              return (
+                <button
+                  key={idx}
+                  type="button"
+                  disabled={showResults}
+                  onClick={() => handleAnswer(idx)}
+                  className={`w-full text-left px-4 py-3 rounded-xl border text-sm md:text-base font-medium transition-all flex items-center gap-3 ${
+                    showResults ? "cursor-default" : "cursor-pointer"
+                  } ${bg}`}
+                >
+                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-black/20 border border-white/10 text-xs font-semibold">
+                    {String.fromCharCode(65 + idx)}
+                  </span>
+                  <span>{opt}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Boutons d'action */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
+            {!showResults ? (
+              <button
+                type="button"
+                onClick={nextQuestion}
+                disabled={selected === undefined}
+                className="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-[#fd0000] hover:bg-[#cc0000] text-white font-bold text-sm uppercase tracking-[0.18em] disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+              >
+                {current < total - 1 ? "Question suivante" : "Voir mon score"}
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={restart}
+                className="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm uppercase tracking-[0.18em] transition-all"
+                style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+              >
+                Rejouer le quiz
+              </button>
+            )}
+
+            {showResults && (
+              <div className="text-right text-sm">
+                <p className="text-white/70">
+                  Ton score :{" "}
+                  <span className="font-bold text-white">
+                    {score} / {total}
+                  </span>
                 </p>
-                <ul className="space-y-0.5 pl-5 text-white/80">
-                  <li>A) 1901</li>
-                  <li>B) 1967</li>
-                  <li>C) 1920</li>
-                  <li>D) 1985</li>
-                </ul>
-              </li>
-
-              <li>
-                <p className="font-semibold mb-1">
-                  2. Quel joueur emblématique français a débuté à Nancy ?
+                <p className="text-white/40 text-xs">
+                  {score === total
+                    ? "Parfait, tu es imbattable sur l’ASNL."
+                    : score >= 3
+                    ? "Très bien, tu connais déjà bien le club."
+                    : "Pas grave, tu feras mieux au prochain match !" }
                 </p>
-                <ul className="space-y-0.5 pl-5 text-white/80">
-                  <li>A) Zinedine Zidane</li>
-                  <li>B) Michel Platini</li>
-                  <li>C) Thierry Henry</li>
-                  <li>D) Karim Benzema</li>
-                </ul>
-              </li>
-
-              <li>
-                <p className="font-semibold mb-1">
-                  3. Quel trophée majeur Nancy a-t-il remporté en 1978 ?
-                </p>
-                <ul className="space-y-0.5 pl-5 text-white/80">
-                  <li>A) Ligue 1</li>
-                  <li>B) Coupe de France</li>
-                  <li>C) Coupe de la Ligue</li>
-                  <li>D) Trophée des Champions</li>
-                </ul>
-              </li>
-
-              <li>
-                <p className="font-semibold mb-1">4. Comment s’appelle le stade de Nancy ?</p>
-                <ul className="space-y-0.5 pl-5 text-white/80">
-                  <li>A) Parc des Princes</li>
-                  <li>B) Stade Geoffroy-Guichard</li>
-                  <li>C) Stade Marcel-Picot</li>
-                  <li>D) Stade Vélodrome</li>
-                </ul>
-              </li>
-
-              <li>
-                <p className="font-semibold mb-1">
-                  5. Quelles sont les couleurs principales du club ?
-                </p>
-                <ul className="space-y-0.5 pl-5 text-white/80">
-                  <li>A) Bleu et blanc</li>
-                  <li>B) Rouge et blanc</li>
-                  <li>C) Jaune et noir</li>
-                  <li>D) Vert et blanc</li>
-                </ul>
-              </li>
-            </ol>
+              </div>
+            )}
           </div>
         </section>
 
+        {/* Rappel des bonnes réponses */}
         <section className="space-y-4 border-t border-white/10 pt-6">
           <h2
             className="text-white text-2xl md:text-3xl font-black uppercase"
             style={{ fontFamily: "'Bebas Neue', sans-serif" }}
           >
-            ✅ Réponses
+            ✅ Solutions du quiz
           </h2>
           <ul className="space-y-1 text-white/80">
             <li>
-              <span className="font-semibold">1.</span> B) 1967
+              <span className="font-semibold">1.</span> 1967
             </li>
             <li>
-              <span className="font-semibold">2.</span> B) Michel Platini
+              <span className="font-semibold">2.</span> Michel Platini
             </li>
             <li>
-              <span className="font-semibold">3.</span> B) Coupe de France
+              <span className="font-semibold">3.</span> Coupe de France
             </li>
             <li>
-              <span className="font-semibold">4.</span> C) Stade Marcel-Picot
+              <span className="font-semibold">4.</span> Stade Marcel-Picot
             </li>
             <li>
-              <span className="font-semibold">5.</span> B) Rouge et blanc
+              <span className="font-semibold">5.</span> Rouge et blanc
             </li>
           </ul>
-        </section>
-
-        {/* Mini quiz rapide */}
-        <section className="space-y-4 border-t border-white/10 pt-6">
-          <h2
-            className="text-white text-2xl md:text-3xl font-black uppercase"
-            style={{ fontFamily: "'Bebas Neue', sans-serif" }}
-          >
-            ⚡ Mini quiz express
-          </h2>
-          <div className="bg-[#141414] border border-white/10 rounded-2xl p-5 md:p-6 space-y-4">
-            <ol className="space-y-4 list-decimal list-inside">
-              <li>
-                <p className="font-semibold mb-1">
-                  1. Combien de couleurs principales compose le maillot de l’ASNL ?
-                </p>
-                <p className="text-white/80">Réponse : 2 (rouge et blanc)</p>
-              </li>
-              <li>
-                <p className="font-semibold mb-1">
-                  2. Quel est le surnom animal du club sur son logo ?
-                </p>
-                <p className="text-white/80">Réponse : Le chardon</p>
-              </li>
-              <li>
-                <p className="font-semibold mb-1">
-                  3. Dans quelle ville se situe le stade Marcel-Picot ?
-                </p>
-                <p className="text-white/80">Réponse : Tomblaine (près de Nancy)</p>
-              </li>
-            </ol>
-          </div>
         </section>
       </div>
     </div>
