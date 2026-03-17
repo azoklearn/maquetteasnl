@@ -30,6 +30,11 @@ const SUB_MENUS: Record<
       label: "Partenaires & sponsors",
       description: "Découvrir les marques qui soutiennent l'ASNL.",
     },
+    {
+      href: "/jeu",
+      label: "Jeu / Quiz",
+      description: "Tester vos connaissances sur l'ASNL.",
+    },
   ],
   "/effectif": [
     {
