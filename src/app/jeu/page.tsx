@@ -125,6 +125,38 @@ export default function JeuPage() {
             </li>
           </ul>
         </section>
+
+        {/* Mini quiz rapide */}
+        <section className="space-y-4 border-t border-white/10 pt-6">
+          <h2
+            className="text-white text-2xl md:text-3xl font-black uppercase"
+            style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+          >
+            ⚡ Mini quiz express
+          </h2>
+          <div className="bg-[#141414] border border-white/10 rounded-2xl p-5 md:p-6 space-y-4">
+            <ol className="space-y-4 list-decimal list-inside">
+              <li>
+                <p className="font-semibold mb-1">
+                  1. Combien de couleurs principales compose le maillot de l’ASNL ?
+                </p>
+                <p className="text-white/80">Réponse : 2 (rouge et blanc)</p>
+              </li>
+              <li>
+                <p className="font-semibold mb-1">
+                  2. Quel est le surnom animal du club sur son logo ?
+                </p>
+                <p className="text-white/80">Réponse : Le chardon</p>
+              </li>
+              <li>
+                <p className="font-semibold mb-1">
+                  3. Dans quelle ville se situe le stade Marcel-Picot ?
+                </p>
+                <p className="text-white/80">Réponse : Tomblaine (près de Nancy)</p>
+              </li>
+            </ol>
+          </div>
+        </section>
       </div>
     </div>
   );
