@@ -16,9 +16,13 @@ html {
   scroll-behavior: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
 }
 
 body {
+  margin: 0;
+  padding: 0;
   background-color: var(--asnl-black);
   color: #ffffff;
   font-family: var(--font-montserrat);

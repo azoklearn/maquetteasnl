@@ -23,7 +23,7 @@ export function PlayersSection({ players = [], sectionStyle }: { players?: Playe
   const titleCls   = titleSizeClass(sectionStyle, "text-4xl md:text-6xl");
 
   return (
-    <section className="h-[92dvh] overflow-hidden" style={{ backgroundColor: sectionStyle?.bgColor ?? "#0A0A0A" }}>
+    <section className="h-full min-h-[100dvh] overflow-hidden" style={{ backgroundColor: sectionStyle?.bgColor ?? "#0A0A0A" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full py-5 md:py-6 flex flex-col">
 
         {/* ── Header ── */}
@@ -119,9 +119,9 @@ export function PlayersSection({ players = [], sectionStyle }: { players?: Playe
                     )}
                   </div>
 
-                  <div className="p-3">
+                  <div className="p-2.5">
                     {/* Badge poste */}
-                    <span className="inline-flex text-[10px] font-black px-2 py-0.5 rounded mb-2 bg-[#fd0000]/10 text-[#fd0000] group-hover:bg-white/20 group-hover:text-white uppercase tracking-wider transition-colors">
+                    <span className="inline-flex text-[9px] font-black px-1.5 py-0.5 rounded mb-1.5 bg-[#fd0000]/10 text-[#fd0000] group-hover:bg-white/20 group-hover:text-white uppercase tracking-wider transition-colors">
                       {POSITION_LABELS[player.position]}
                     </span>
 
@@ -129,19 +129,19 @@ export function PlayersSection({ players = [], sectionStyle }: { players?: Playe
                       className="font-black uppercase leading-tight"
                       style={{ fontFamily: "'Bebas Neue', sans-serif" }}
                     >
-                      <span className="text-[#0A0A0A]/50 group-hover:text-white/60 text-xs block transition-colors">{player.firstName}</span>
-                      <span className="text-[#0A0A0A] group-hover:text-white text-xl md:text-2xl transition-colors">{player.name}</span>
+                      <span className="text-[#0A0A0A]/50 group-hover:text-white/60 text-[10px] block transition-colors">{player.firstName}</span>
+                      <span className="text-[#0A0A0A] group-hover:text-white text-base md:text-lg transition-colors">{player.name}</span>
                     </h3>
 
                     {/* Stats */}
-                    <div className="flex gap-3 mt-2 pt-2 border-t border-black/8 group-hover:border-white/15 transition-colors">
-                      <div className="flex items-center gap-1.5 text-xs text-[#0A0A0A]/50 group-hover:text-white/60 transition-colors">
-                        <Target className="w-3 h-3 text-[#fd0000] group-hover:text-white/80 transition-colors" />
+                    <div className="flex gap-2.5 mt-1.5 pt-1.5 border-t border-black/8 group-hover:border-white/15 transition-colors">
+                      <div className="flex items-center gap-1 text-[10px] text-[#0A0A0A]/50 group-hover:text-white/60 transition-colors">
+                        <Target className="w-2.5 h-2.5 text-[#fd0000] group-hover:text-white/80 transition-colors" />
                         <span className="text-[#0A0A0A] group-hover:text-white font-bold transition-colors">{player.stats.goals}</span>
                         <span>buts</span>
                       </div>
-                      <div className="flex items-center gap-1.5 text-xs text-[#0A0A0A]/50 group-hover:text-white/60 transition-colors">
-                        <Zap className="w-3 h-3 text-amber-500 group-hover:text-amber-300 transition-colors" />
+                      <div className="flex items-center gap-1 text-[10px] text-[#0A0A0A]/50 group-hover:text-white/60 transition-colors">
+                        <Zap className="w-2.5 h-2.5 text-amber-500 group-hover:text-amber-300 transition-colors" />
                         <span className="text-[#0A0A0A] group-hover:text-white font-bold transition-colors">{player.stats.assists}</span>
                         <span>passes</span>
                       </div>

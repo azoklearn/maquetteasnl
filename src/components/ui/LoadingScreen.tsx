@@ -4,13 +4,22 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
+function notifySplashComplete() {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent("asnl:splash-complete"));
+  }
+}
+
 export function LoadingScreen() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     // Une seule fois par session
     const seen = sessionStorage.getItem("asnl_splash");
-    if (seen) return;
+    if (seen) {
+      notifySplashComplete();
+      return;
+    }
     sessionStorage.setItem("asnl_splash", "1");
     setVisible(true);
 
@@ -19,7 +28,7 @@ export function LoadingScreen() {
   }, []);
 
   return (
-    <AnimatePresence>
+    <AnimatePresence onExitComplete={notifySplashComplete}>
       {visible && (
         <motion.div
           key="splash"

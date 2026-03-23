@@ -179,7 +179,7 @@ export function Header({ tickerEnabled = true, tickerMessages, ticketingUrl }: H
     <>
       {/* ── Live Ticker ── */}
       {tickerEnabled && (
-      <div className="bg-[#fd0000] text-white text-xs font-semibold overflow-hidden h-8 flex items-center">
+      <div className="fixed top-0 left-0 right-0 z-[60] bg-[#fd0000] text-white text-xs font-semibold overflow-hidden h-8 flex items-center">
         <div className="flex animate-ticker whitespace-nowrap">
           {[...Array(2)].map((_, i) => (
             <span key={i} className="flex items-center gap-8 px-4">
@@ -198,10 +198,11 @@ export function Header({ tickerEnabled = true, tickerMessages, ticketingUrl }: H
       {/* ── Main Header ── */}
       <header
         className={cn(
-          "sticky top-0 z-50 transition-all duration-400 bg-transparent",
+          "fixed left-0 right-0 z-50 transition-all duration-400 bg-transparent",
+          tickerEnabled ? "top-8" : "top-0",
         )}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3 md:pt-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-0">
           <div
             className={cn(
               "flex items-center justify-between rounded-full border backdrop-blur-md shadow-lg h-16 md:h-20 px-4 md:px-6 bg-white/10 border-white/25 shadow-black/20",

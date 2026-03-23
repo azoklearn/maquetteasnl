@@ -38,7 +38,7 @@ export function NextMatchSection({ match: matchProp, sectionStyle }: { match?: M
 
   return (
     <section
-      className="relative overflow-hidden bg-cover bg-center"
+      className="relative min-h-[100dvh] overflow-hidden bg-cover bg-center"
       style={
         bgImage
           ? { backgroundImage: `url('${bgImage}')` }

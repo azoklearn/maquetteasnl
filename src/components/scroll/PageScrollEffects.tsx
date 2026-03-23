@@ -118,7 +118,7 @@ export function PageScrollEffects({
           case "scaleDown":
             // Garde les sections à pleine largeur/hauteur pour éviter les bandes entre sections.
             scale = 1;
-            opacity = 1 - progress * 0.78;
+            opacity = 1;
             blur = 0;
             break;
           case "fixed":

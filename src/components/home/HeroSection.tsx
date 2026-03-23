@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -38,6 +39,30 @@ export function HeroSection({
   news = [],
   latestVideo,
 }: HeroProps) {
+  const [heroAnimReady, setHeroAnimReady] = useState(false);
+
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const startWithCooldown = () => {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => setHeroAnimReady(true), 4000);
+    };
+
+    const onSplashComplete = () => startWithCooldown();
+    window.addEventListener("asnl:splash-complete", onSplashComplete as EventListener);
+
+    // Si le splash est déjà passé pendant la session, on anime immédiatement.
+    if (sessionStorage.getItem("asnl_splash")) {
+      startWithCooldown();
+    }
+
+    return () => {
+      window.removeEventListener("asnl:splash-complete", onSplashComplete as EventListener);
+      if (timer) clearTimeout(timer);
+    };
+  }, []);
+
+  const motionState = heroAnimReady ? "ready" : "idle";
   const textCol   = sectionStyle?.textColor?.trim() || "#ffffff";
   const ticketUrl = ticketingUrl ?? TICKETING.nextMatchUrl;
   const match       = nextMatch;
@@ -62,7 +87,7 @@ export function HeroSection({
 
   return (
     <section
-      className="relative h-[100svh] min-h-[600px] max-h-[1000px] overflow-visible flex items-center -mt-16 md:-mt-20"
+      className="relative h-[100dvh] min-h-[100dvh] overflow-visible flex items-center mt-0"
       style={sectionStyle?.bgColor ? { backgroundColor: sectionStyle.bgColor } : undefined}
     >
 
@@ -96,15 +121,20 @@ export function HeroSection({
 
       {/* ── Contenu ── */}
       <div className="relative z-20 w-full h-full flex items-center justify-center pt-0">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 w-full flex flex-col md:flex-row items-center justify-between gap-8 mt-2 md:mt-4">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 w-full flex flex-col md:flex-row items-center justify-between gap-8 mt-0">
           {/* Colonne gauche : titre + texte + bloc article */}
           <div className="flex flex-col max-w-3xl items-center sm:items-start">
 
           {/* Eyebrow */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            key={`hero-eyebrow-${motionState}`}
+            {...(heroAnimReady
+              ? {
+                  initial: { opacity: 0, x: -20 },
+                  animate: { opacity: 1, x: 0 },
+                  transition: { duration: 0.5, delay: 0.2 },
+                }
+              : {})}
             className="mb-5 text-center sm:text-left w-full"
           >
             <span className="text-xs font-bold uppercase tracking-[0.4em]" style={{ color: textCol }}>
@@ -114,9 +144,14 @@ export function HeroSection({
 
           {/* Sous-titre */}
           <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            key={`hero-subtitle-${motionState}`}
+            {...(heroAnimReady
+              ? {
+                  initial: { opacity: 0 },
+                  animate: { opacity: 1 },
+                  transition: { duration: 0.8, delay: 0.4 },
+                }
+              : {})}
             className="text-base md:text-xl mt-1 mb-2 max-w-lg leading-relaxed font-medium text-center sm:text-left"
             style={{ color: textCol, opacity: 0.85 }}
           >
@@ -126,9 +161,14 @@ export function HeroSection({
           {/* Dernière actualité mise en avant */}
           {latestArticle && (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
+              key={`hero-article-${motionState}`}
+              {...(heroAnimReady
+                ? {
+                    initial: { opacity: 0, y: 20 },
+                    animate: { opacity: 1, y: 0 },
+                    transition: { duration: 0.6, delay: 0.5 },
+                  }
+                : {})}
               className="mt-6 mb-6 w-full max-w-xl self-start ml-0 sm:-ml-10 lg:-ml-24"
             >
               <div className="flex flex-col gap-2 max-w-xl">
@@ -147,9 +187,14 @@ export function HeroSection({
           {/* Bouton Lire l'article à droite */}
           {latestArticle && (
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.7 }}
+              key={`hero-cta-${motionState}`}
+              {...(heroAnimReady
+                ? {
+                    initial: { opacity: 0, x: 20 },
+                    animate: { opacity: 1, x: 0 },
+                    transition: { duration: 0.6, delay: 0.7 },
+                  }
+                : {})}
               className="hidden md:flex items-center justify-end flex-1"
             >
               <Link
@@ -168,10 +213,15 @@ export function HeroSection({
       {/* ── Liquid glass prochain match en bas du hero ── */}
       {match && (
         <motion.div
+          key={`hero-next-match-${motionState}`}
+          {...(heroAnimReady
+            ? {
+                initial: { opacity: 0, y: 20 },
+                animate: { opacity: 1, y: 0 },
+                transition: { duration: 0.6, delay: 0.9 },
+              }
+            : {})}
           className="absolute bottom-0 left-0 right-0 z-20 h-[200px] sm:h-[230px] flex items-end"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.9 }}
         >
           <a
             href={ticketUrl}

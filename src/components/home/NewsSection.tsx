@@ -23,7 +23,7 @@ export function NewsSection({ articles, sectionStyle }: { articles?: NewsArticle
 
   return (
     /* ── Fond blanc — contraste maximal ── */
-    <section className="h-[88dvh] overflow-hidden bg-white" style={sectionStyle?.bgColor ? { backgroundColor: sectionStyle.bgColor } : undefined}>
+    <section className="h-full min-h-[100dvh] overflow-hidden bg-white" style={sectionStyle?.bgColor ? { backgroundColor: sectionStyle.bgColor } : undefined}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full py-3 md:py-4 flex flex-col">
 
         {/* ── Header section ── */}
@@ -64,7 +64,7 @@ export function NewsSection({ articles, sectionStyle }: { articles?: NewsArticle
               className="lg:row-span-2"
             >
               <Link href={`/actualites/${featured.slug}`} className="group block h-full">
-                <div className="relative h-48 lg:h-full min-h-[240px] rounded-2xl overflow-hidden bg-[#f0f0f0] shadow-xl shadow-black/10">
+                <div className="relative h-40 lg:h-full min-h-[200px] rounded-2xl overflow-hidden bg-[#f0f0f0] shadow-xl shadow-black/10">
                   {featured.image?.trim() && (
                     <Image
                       src={featured.image}
