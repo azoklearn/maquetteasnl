@@ -204,14 +204,18 @@ export function Header({ tickerEnabled = true, tickerMessages, ticketingUrl }: H
       {/* ── Main Header ── */}
       <header
         className={cn(
-          "sticky top-0 z-50 transition-all duration-400",
-          isScrolled
-            ? "bg-white/95 backdrop-blur-md shadow-lg shadow-black/10"
-            : "bg-transparent",
+          "sticky top-0 z-50 transition-all duration-400 bg-transparent",
         )}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3 md:pt-4">
+          <div
+            className={cn(
+              "flex items-center justify-between h-16 md:h-20 rounded-full px-4 md:px-6 border backdrop-blur-xl shadow-xl transition-all",
+              isScrolled
+                ? "bg-white/14 border-white/30 shadow-black/30"
+                : "bg-white/10 border-white/25 shadow-black/20",
+            )}
+          >
 
             {/* Logo */}
             <Link href="/" className="flex items-center group shrink-0">
@@ -239,7 +243,7 @@ export function Header({ tickerEnabled = true, tickerMessages, ticketingUrl }: H
                       className={cn(
                         "group relative px-4 py-2 text-sm font-semibold transition-colors rounded-lg uppercase tracking-wide",
                         isScrolled
-                          ? "text-[#0A0A0A]/70 hover:text-[#fd0000] hover:bg-[#fd0000]/5"
+                          ? "text-white/85 hover:text-white hover:bg-white/10"
                           : "text-white/80 hover:text-white hover:bg-white/5",
                       )}
                     >
@@ -286,7 +290,7 @@ export function Header({ tickerEnabled = true, tickerMessages, ticketingUrl }: H
             <div className="hidden md:flex items-center gap-3">
               <Link
                 href="/boutique"
-                className={cn("p-2 transition-colors", isScrolled ? "text-[#0A0A0A]/50 hover:text-[#fd0000]" : "text-white/60 hover:text-white")}
+                className={cn("p-2 transition-colors", isScrolled ? "text-white/75 hover:text-white" : "text-white/60 hover:text-white")}
                 aria-label="Boutique"
               >
                 <ShoppingBag className="w-5 h-5" />
@@ -299,7 +303,7 @@ export function Header({ tickerEnabled = true, tickerMessages, ticketingUrl }: H
                 className={cn(
                   "cta-pulse flex items-center gap-2 font-bold text-sm px-5 py-2.5 rounded-full transition-all hover:scale-105 uppercase tracking-wider",
                   isScrolled
-                    ? "bg-[#fd0000] text-white hover:bg-[#cc0000] shadow-lg shadow-[#fd0000]/25"
+                    ? "bg-[#fd0000] text-white hover:bg-[#cc0000] shadow-lg shadow-[#fd0000]/35"
                     : "bg-white text-[#fd0000] hover:bg-white/90 shadow-lg shadow-black/20",
                 )}
               >
