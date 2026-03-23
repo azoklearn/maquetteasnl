@@ -187,6 +187,33 @@ export default function NewsEditor({ initialData, username }: Props) {
                       </p>
                     </div>
 
+                    <div className="rounded-xl border border-[#fd0000]/25 bg-[#fd0000]/5 p-4 space-y-3">
+                      <p className="text-[#fd0000] text-xs font-bold uppercase tracking-[0.2em]">
+                        Sous-partie stylisée (bloc en avant)
+                      </p>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className={LABEL}>Sous-partie stylisée — Titre</label>
+                          <input
+                            className={FIELD}
+                            value={article.subSectionTitle ?? ""}
+                            onChange={(e) => update(article.id, "subSectionTitle", e.target.value)}
+                            placeholder="Ex: Ce qu'il faut retenir"
+                          />
+                        </div>
+                        <div>
+                          <label className={LABEL}>Sous-partie stylisée — Contenu</label>
+                          <textarea
+                            className={FIELD + " resize-none"}
+                            rows={3}
+                            value={article.subSectionContent ?? ""}
+                            onChange={(e) => update(article.id, "subSectionContent", e.target.value)}
+                            placeholder="Texte de la sous-partie mise en avant."
+                          />
+                        </div>
+                      </div>
+                    </div>
+
                     <div>
                       <label className={LABEL}>Contenu complet</label>
                       <textarea
@@ -209,28 +236,6 @@ export default function NewsEditor({ initialData, username }: Props) {
                           <code className="bg-white/10 px-1 rounded">![légende|large](...)</code>.
                         </span>
                       </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className={LABEL}>Sous-partie stylisée — Titre</label>
-                        <input
-                          className={FIELD}
-                          value={article.subSectionTitle ?? ""}
-                          onChange={(e) => update(article.id, "subSectionTitle", e.target.value)}
-                          placeholder="Ex: Ce qu'il faut retenir"
-                        />
-                      </div>
-                      <div>
-                        <label className={LABEL}>Sous-partie stylisée — Contenu</label>
-                        <textarea
-                          className={FIELD + " resize-none"}
-                          rows={3}
-                          value={article.subSectionContent ?? ""}
-                          onChange={(e) => update(article.id, "subSectionContent", e.target.value)}
-                          placeholder="Texte de la sous-partie mise en avant."
-                        />
-                      </div>
                     </div>
 
                     <div className="flex items-center gap-3">
