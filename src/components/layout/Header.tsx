@@ -120,7 +120,7 @@ function HamburgerButton({
   onClick: () => void;
   scrolled: boolean;
 }) {
-  const color = scrolled ? "#0A0A0A" : "#ffffff";
+  const color = "#ffffff";
   return (
     <button
       onClick={onClick}
@@ -154,8 +154,9 @@ function HamburgerButton({
 
 // ── Header principal ───────────────────────────────────────────────────────────
 export function Header({ tickerEnabled = true, tickerMessages, ticketingUrl }: HeaderProps) {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isNavExpanded, setIsNavExpanded] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const isScrolled = false;
   const ticketUrl = ticketingUrl ?? TICKETING.nextMatchUrl;
   const messages  = tickerMessages?.length ? tickerMessages : [
     "⚽ Nancy 3-0 Valenciennes",
@@ -171,8 +172,23 @@ export function Header({ tickerEnabled = true, tickerMessages, ticketingUrl }: H
     return () => { document.body.style.overflow = ""; };
   }, [isMobileOpen]);
 
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   function handleTicketClick() {
     trackTicketingClick("header_nav", "CTA Header");
+  }
+
+  function handleLogoClick() {
+    if (typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches) {
+      setIsNavExpanded((v) => !v);
+      return;
+    }
+    setIsMobileOpen((v) => !v);
   }
 
   return (
@@ -199,103 +215,153 @@ export function Header({ tickerEnabled = true, tickerMessages, ticketingUrl }: H
       <header
         className={cn(
           "fixed left-0 right-0 z-50 transition-all duration-400 bg-transparent",
-          tickerEnabled ? "top-8" : "top-0",
+          tickerEnabled ? "top-10 md:top-11" : "top-3 md:top-4",
         )}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-0">
-          <div
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-center">
+          <motion.div
             className={cn(
-              "flex items-center justify-between rounded-full border backdrop-blur-md shadow-lg h-16 md:h-20 px-4 md:px-6 bg-white/10 border-white/25 shadow-black/20",
+              "relative flex flex-nowrap items-center rounded-full border backdrop-blur-xl shadow-lg",
+              isNavExpanded ? "overflow-visible" : "overflow-hidden",
+              isScrolled ? "h-14 md:h-16" : "h-16 md:h-20",
+              isNavExpanded && isScrolled
+                ? "bg-black/80 border-white/15 shadow-black/40"
+                : isNavExpanded
+                  ? "bg-white/18 border-white/35 shadow-black/30"
+                  : "",
             )}
+            initial={false}
+            animate={
+              isScrolled
+                ? {
+                    y: -2,
+                    scale: 0.985,
+                    width: isNavExpanded ? "min(1200px, calc(100vw - 2rem))" : 56,
+                    backdropFilter: isNavExpanded ? "blur(16px)" : "blur(0px)",
+                  }
+                : {
+                    y: 0,
+                    scale: 1,
+                    width: isNavExpanded ? "min(1200px, calc(100vw - 2rem))" : 56,
+                    backdropFilter: isNavExpanded ? "blur(22px)" : "blur(0px)",
+                  }
+            }
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           >
             {/* Logo */}
-            <Link href="/" className="flex items-center group shrink-0">
+            <button
+              type="button"
+              onClick={handleLogoClick}
+              aria-label={isNavExpanded ? "Replier la navigation" : "Déplier la navigation"}
+              className={cn(
+                "z-20 flex items-center group shrink-0",
+                isNavExpanded ? "relative left-0 translate-x-0 ml-4 md:ml-6" : "absolute left-1/2 -translate-x-1/2",
+              )}
+            >
               <div className="w-10 h-10 md:w-12 md:h-12 relative transition-transform duration-300 group-hover:scale-110 shrink-0">
                 <Image src="/logo.jpeg" alt="AS Nancy Lorraine" fill className="object-contain drop-shadow-md" sizes="48px" priority />
               </div>
-            </Link>
+            </button>
 
-            {/* Nav desktop */}
-            <nav className="hidden lg:flex items-center gap-0.5">
-              {NAVIGATION.map((item, i) => {
-                const entries = SUB_MENUS[item.href];
-                const hasSubmenu = !!entries;
-
-                return (
-                  <motion.div
-                    key={item.href}
-                    initial={{ opacity: 0, y: -8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.15 + i * 0.04, duration: 0.3 }}
-                    className={hasSubmenu ? "relative group/nav" : undefined}
+            <AnimatePresence>
+              {isNavExpanded && (
+                <>
+                  {/* Nav desktop */}
+                  <motion.nav
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                    className="hidden lg:flex items-center gap-0.5 ml-5 overflow-visible whitespace-nowrap shrink-0"
                   >
-                    <Link
-                      href={item.href}
-                      className={cn(
-                        "group relative px-4 py-2 text-sm font-semibold transition-colors rounded-lg uppercase tracking-wide text-white/80 hover:text-white hover:bg-white/5",
-                      )}
-                    >
-                      <span className="relative z-10">{item.label}</span>
-                      <span
-                        className="pointer-events-none absolute left-4 right-4 bottom-1 h-[2px] bg-[#fd0000] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
-                      />
-                    </Link>
+                    {NAVIGATION.map((item, i) => {
+                      const entries = SUB_MENUS[item.href];
+                      const hasSubmenu = !!entries;
 
-                    {hasSubmenu && (
-                      <div className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 opacity-0 group-hover/nav:opacity-100 group-hover/nav:pointer-events-auto transition-opacity duration-200">
-                        <div className="rounded-2xl bg-[#111] border border-white/10 shadow-xl overflow-hidden min-w-[260px]">
-                          <div className="px-4 py-3 border-b border-white/10">
-                            <p className="text-white/60 text-[10px] font-semibold uppercase tracking-[0.2em]">
-                              {item.label}
-                            </p>
-                          </div>
-                          <div className="py-2">
-                            {entries.map((entry, idx) => (
-                              <Link
-                                key={entry.href}
-                                href={entry.href}
-                                className="flex items-start gap-3 px-4 py-2.5 hover:bg-white/5 transition-colors"
-                              >
-                                <div className="w-2 h-2 mt-1 rounded-full bg-white/30" />
-                                <div>
-                                  <p className="text-sm font-semibold text-white">{entry.label}</p>
-                                  <p className="text-[11px] text-white/50">
-                                    {entry.description}
+                      return (
+                        <motion.div
+                          key={item.href}
+                          initial={{ opacity: 0, y: -8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.1 + i * 0.04, duration: 0.25 }}
+                          className={hasSubmenu ? "relative group/nav" : undefined}
+                        >
+                          <Link
+                            href={item.href}
+                            className={cn(
+                              "group relative whitespace-nowrap px-4 py-2 text-sm font-semibold transition-colors rounded-lg uppercase tracking-wide text-white/85 hover:text-white hover:bg-white/10 hover:underline underline-offset-4 decoration-2 decoration-[#fd0000]",
+                            )}
+                          >
+                            <span className="relative z-10">{item.label}</span>
+                            <span
+                              className="pointer-events-none absolute left-4 right-4 bottom-1 h-[2px] bg-[#fd0000] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
+                            />
+                          </Link>
+
+                          {hasSubmenu && (
+                            <div className="pointer-events-none absolute z-[80] top-full left-1/2 -translate-x-1/2 mt-0 pt-2 opacity-0 group-hover/nav:opacity-100 group-hover/nav:pointer-events-auto transition-opacity duration-200">
+                              <div className="rounded-2xl bg-[#111] border border-white/10 shadow-xl overflow-hidden min-w-[260px]">
+                                <div className="px-4 py-3 border-b border-white/10">
+                                  <p className="text-white/60 text-[10px] font-semibold uppercase tracking-[0.2em]">
+                                    {item.label}
                                   </p>
                                 </div>
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </motion.div>
-                );
-              })}
-            </nav>
+                                <div className="py-2">
+                                  {entries.map((entry) => (
+                                    <Link
+                                      key={entry.href}
+                                      href={entry.href}
+                                      className="flex items-start gap-3 px-4 py-2.5 hover:bg-white/5 transition-colors hover:underline underline-offset-4 decoration-[#fd0000]"
+                                    >
+                                      <div className="w-2 h-2 mt-1 rounded-full bg-white/30" />
+                                      <div>
+                                        <p className="text-sm font-semibold text-white">{entry.label}</p>
+                                        <p className="text-[11px] text-white/50">
+                                          {entry.description}
+                                        </p>
+                                      </div>
+                                    </Link>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </motion.div>
+                      );
+                    })}
+                  </motion.nav>
 
-            {/* CTAs desktop */}
-            <div className="hidden md:flex items-center gap-3">
-              <Link
-                href="/boutique"
-                className={cn("p-2 transition-colors text-white/60 hover:text-white")}
-                aria-label="Boutique"
-              >
-                <ShoppingBag className="w-5 h-5" />
-              </Link>
-              <a
-                href={ticketUrl}
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-                onClick={handleTicketClick}
-                className={cn(
-                  "cta-pulse flex items-center gap-2 font-bold text-sm px-5 py-2.5 rounded-full transition-all hover:scale-105 uppercase tracking-wider bg-white text-[#fd0000] hover:bg-white/90 shadow-lg shadow-black/20",
-                )}
-              >
-                <Ticket className="w-4 h-4" />
-                <span>Billetterie</span>
-              </a>
-            </div>
+                  {/* CTAs desktop */}
+                  <motion.div
+                    initial={{ opacity: 0, x: 12 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 12 }}
+                    transition={{ duration: 0.25 }}
+                    className="hidden md:flex items-center gap-3 ml-auto pr-4 md:pr-6 whitespace-nowrap shrink-0"
+                  >
+                    <Link
+                      href="/boutique"
+                      className={cn("p-2 transition-colors text-white/75 hover:text-white")}
+                      aria-label="Boutique"
+                    >
+                      <ShoppingBag className="w-5 h-5" />
+                    </Link>
+                    <a
+                      href={ticketUrl}
+                      target="_blank"
+                      rel="noopener noreferrer nofollow"
+                      onClick={handleTicketClick}
+                      className={cn(
+                        "cta-pulse flex items-center gap-2 font-bold text-sm px-5 py-2.5 rounded-full transition-all hover:scale-105 uppercase tracking-wider bg-white text-[#fd0000] hover:bg-white/90 shadow-lg shadow-black/20",
+                      )}
+                    >
+                      <Ticket className="w-4 h-4" />
+                      <span>Billetterie</span>
+                    </a>
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
 
             {/* Hamburger mobile */}
             <HamburgerButton
@@ -303,7 +369,7 @@ export function Header({ tickerEnabled = true, tickerMessages, ticketingUrl }: H
               onClick={() => setIsMobileOpen(!isMobileOpen)}
               scrolled={isScrolled}
             />
-          </div>
+          </motion.div>
         </div>
       </header>
 
