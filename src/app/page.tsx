@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getAllCmsData, getMediaVideos, getNewsletterConfig } from "@/lib/db";
-import { HeroSection } from "@/components/home/HeroSection";
+import { HeroWithNextMatch } from "@/components/home/HeroWithNextMatch";
 import { NextMatchSection } from "@/components/home/NextMatchSection";
 import { NewsSection } from "@/components/home/NewsSection";
 import { PlayersSection } from "@/components/home/PlayersSection";
@@ -27,21 +27,37 @@ export default async function HomePage() {
 
   return (
     <>
-      {s.hero?.visible !== false && (
-        <HeroSection
-          subtitle={config?.heroSubtitle ?? "Fondé en 1967. Fier. Lorrain. Irréductible."}
-          season={config?.heroSeason ?? "Saison 2025 – 2026"}
+      {s.hero?.visible !== false && s.nextMatch?.visible !== false ? (
+        <HeroWithNextMatch
+          heroSubtitle={config?.heroSubtitle ?? "Fondé en 1967. Fier. Lorrain. Irréductible."}
+          heroSeason={config?.heroSeason ?? "Saison 2025 – 2026"}
           ticketingUrl={config?.ticketingUrl}
-          sectionStyle={s.hero}
+          heroStyle={s.hero}
           heroBg={heroBg}
           nextMatch={nextMatch}
-          nextMatchBgImage={s.nextMatch?.bgImage}
+          nextMatchStyle={s.nextMatch}
           news={news}
           latestVideo={videos[0]}
         />
-      )}
-      {s.nextMatch?.visible !== false && (
-        <NextMatchSection match={nextMatch} sectionStyle={s.nextMatch} />
+      ) : (
+        <>
+          {s.hero?.visible !== false && (
+            <HeroSection
+              subtitle={config?.heroSubtitle ?? "Fondé en 1967. Fier. Lorrain. Irréductible."}
+              season={config?.heroSeason ?? "Saison 2025 – 2026"}
+              ticketingUrl={config?.ticketingUrl}
+              sectionStyle={s.hero}
+              heroBg={heroBg}
+              nextMatch={nextMatch}
+              nextMatchBgImage={s.nextMatch?.bgImage}
+              news={news}
+              latestVideo={videos[0]}
+            />
+          )}
+          {s.nextMatch?.visible !== false && (
+            <NextMatchSection match={nextMatch} sectionStyle={s.nextMatch} />
+          )}
+        </>
       )}
       {s.news?.visible !== false && (
         <NewsSection articles={news} sectionStyle={s.news} />

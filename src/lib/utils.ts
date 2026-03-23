@@ -33,6 +33,25 @@ export function markdownLinksToHtml(html: string): string {
 
   let out = html;
 
+  // Sous-partie stylisée: [focus:Mon sous-titre]...contenu...[/focus]
+  // Permet d'insérer un bloc visuel dans l'article.
+  out = out.replace(/\[focus:([^\]]+)\]([\s\S]*?)\[\/focus\]/g, (_m, title, body) => {
+    const safeTitle = String(title)
+      .trim()
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+    const safeBody = String(body)
+      .trim()
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+
+    return `<div class="my-6 rounded-2xl border border-[#fd0000]/30 bg-[#fd0000]/10 p-5">
+      <p class="text-[#fd0000] text-xs font-black uppercase tracking-[0.2em] mb-2">${safeTitle}</p>
+      <p class="text-white/80 leading-relaxed whitespace-pre-wrap">${safeBody}</p>
+    </div>`;
+  });
+
   // Images: ![alt|taille](url) — taille: small | medium | large
   out = out.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_m, alt, url) => {
     const rawAlt = String(alt || "");

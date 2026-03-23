@@ -76,10 +76,7 @@ export function NextMatchSection({ match: matchProp, sectionStyle }: { match?: M
         </span>
       </div>
 
-      {/* ── Barre blanche top ── */}
-      <div className="h-1 bg-white/30 relative z-[1]" />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-0 pb-16 md:pt-0 md:pb-24">
 
         {/* ── Badges ── */}
         <motion.div

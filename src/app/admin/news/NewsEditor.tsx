@@ -192,7 +192,7 @@ export default function NewsEditor({ initialData, username }: Props) {
                         rows={8}
                         value={article.content ?? ""}
                         onChange={(e) => update(article.id, "content", e.target.value)}
-                        placeholder="Texte libre. Liens [texte](https://url), images ![légende](https://image.jpg) ou HTML (&lt;h2&gt;, &lt;p&gt;, ...)."
+                        placeholder="Texte libre. Liens [texte](https://url), images ![légende](https://image.jpg), bloc stylisé [focus:Mon sous-titre]...[/focus] ou HTML (&lt;h2&gt;, &lt;p&gt;, ...)."
                       />
                       <p className="text-white/30 text-xs mt-1.5 space-y-1">
                         <span className="block">
@@ -205,6 +205,10 @@ export default function NewsEditor({ initialData, username }: Props) {
                           <code className="bg-white/10 px-1 rounded">![légende|small](...)</code>,{" "}
                           <code className="bg-white/10 px-1 rounded">![légende|medium](...)</code>,{" "}
                           <code className="bg-white/10 px-1 rounded">![légende|large](...)</code>.
+                        </span>
+                        <span className="block">
+                          Sous-partie stylisée :{" "}
+                          <code className="bg-white/10 px-1 rounded">[focus:Mon sous-titre]Ton texte ici[/focus]</code>
                         </span>
                       </p>
                     </div>

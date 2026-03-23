@@ -181,32 +181,6 @@ export function JeuClient({ questions }: { questions: Question[] }) {
           </div>
         </section>
 
-        {/* Rappel des bonnes réponses */}
-        <section className="space-y-4 border-t border-white/10 pt-6">
-          <h2
-            className="text-white text-2xl md:text-3xl font-black uppercase"
-            style={{ fontFamily: "'Bebas Neue', sans-serif" }}
-          >
-            ✅ Solutions du quiz
-          </h2>
-          <ul className="space-y-1 text-white/80">
-            <li>
-              <span className="font-semibold">1.</span> 1967
-            </li>
-            <li>
-              <span className="font-semibold">2.</span> Michel Platini
-            </li>
-            <li>
-              <span className="font-semibold">3.</span> Coupe de France
-            </li>
-            <li>
-              <span className="font-semibold">4.</span> Stade Marcel-Picot
-            </li>
-            <li>
-              <span className="font-semibold">5.</span> Rouge et blanc
-            </li>
-          </ul>
-        </section>
       </div>
     </div>
   );
