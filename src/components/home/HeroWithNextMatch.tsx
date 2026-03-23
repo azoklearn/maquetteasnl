@@ -36,16 +36,17 @@ export function HeroWithNextMatch({
     offset: ["start start", "end start"],
   });
 
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.4, 0.8], [1, 1, 0]);
-  const heroScale = useTransform(scrollYProgress, [0, 0.8], [1, 0.98]);
-  const nextMatchY = useTransform(scrollYProgress, [0, 1], ["100%", "0%"]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.35, 0.55], [1, 1, 0]);
+  const heroScale = useTransform(scrollYProgress, [0, 0.55], [1, 0.985]);
+  // Le prochain match monte puis reste en place avant d'enchaîner sur les actus.
+  const nextMatchY = useTransform(scrollYProgress, [0, 0.55, 1], ["100%", "0%", "0%"]);
 
   return (
-    <section ref={containerRef} className="relative h-[220vh] -mt-16 md:-mt-20">
+    <section ref={containerRef} className="relative h-[260vh] -mt-16 md:-mt-20">
       {/* Hero fixé, qui s'estompe en fin de scroll */}
       <motion.div
         style={{ opacity: heroOpacity, scale: heroScale }}
-        className="sticky top-0 h-[100svh]"
+        className="sticky top-0 z-10 h-[100svh]"
       >
         <HeroSection
           subtitle={heroSubtitle}
@@ -53,7 +54,9 @@ export function HeroWithNextMatch({
           ticketingUrl={ticketingUrl}
           sectionStyle={heroStyle}
           heroBg={heroBg}
-          nextMatch={nextMatch}
+          // On masque le bloc prochain match du Hero pour garder
+          // une seule transition claire vers la section dédiée.
+          nextMatch={undefined}
           nextMatchBgImage={nextMatchStyle?.bgImage}
           news={news}
           latestVideo={latestVideo}
@@ -61,12 +64,9 @@ export function HeroWithNextMatch({
       </motion.div>
 
       {/* Section prochain match qui glisse par-dessus le hero */}
-      <motion.div style={{ y: nextMatchY }} className="relative pt-[100svh]">
+      <motion.div style={{ y: nextMatchY }} className="relative z-20 pt-[100svh]">
         <NextMatchSection match={nextMatch} sectionStyle={nextMatchStyle} />
       </motion.div>
-
-      {/* Espace tampon pour éviter que la section actualités ne remonte sur le prochain match */}
-      <div className="h-[40vh]" />
     </section>
   );
 }
