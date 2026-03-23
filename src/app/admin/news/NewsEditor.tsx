@@ -39,9 +39,14 @@ function newArticle(): NewsArticle {
 export default function NewsEditor({ initialData, username }: Props) {
   const router = useRouter();
   const [articles, setArticles] = useState<NewsArticle[]>(initialData);
-  const [expanded, setExpanded] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState<string | null>(initialData[0]?.id ?? null);
 
-  useEffect(() => { setArticles(initialData); }, [initialData]);
+  useEffect(() => {
+    setArticles(initialData);
+    if (!expanded && initialData[0]?.id) {
+      setExpanded(initialData[0].id);
+    }
+  }, [initialData, expanded]);
 
   function update(id: string, field: keyof NewsArticle, value: string | boolean) {
     setArticles((prev) =>
