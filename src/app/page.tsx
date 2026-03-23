@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getAllCmsData, getMediaVideos, getNewsletterConfig } from "@/lib/db";
 import { HeroWithNextMatch } from "@/components/home/HeroWithNextMatch";
+import { HeroSection } from "@/components/home/HeroSection";
 import { NextMatchSection } from "@/components/home/NextMatchSection";
 import { NewsSection } from "@/components/home/NewsSection";
 import { PlayersSection } from "@/components/home/PlayersSection";
