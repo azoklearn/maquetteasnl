@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { HeroSection } from "./HeroSection";
 import { NextMatchSection } from "./NextMatchSection";
 import type { SectionStyle, HeroBg } from "@/lib/db";
@@ -36,10 +36,16 @@ export function HeroWithNextMatch({
     offset: ["start start", "end start"],
   });
 
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.35, 0.55], [1, 1, 0]);
-  const heroScale = useTransform(scrollYProgress, [0, 0.55], [1, 0.985]);
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 70,
+    damping: 24,
+    mass: 0.7,
+  });
+
+  const heroOpacity = useTransform(smoothProgress, [0, 0.35, 0.55], [1, 1, 0]);
+  const heroScale = useTransform(smoothProgress, [0, 0.55], [1, 0.985]);
   // Le prochain match monte puis reste en place avant d'enchaîner sur les actus.
-  const nextMatchY = useTransform(scrollYProgress, [0, 0.55, 1], ["100%", "0%", "0%"]);
+  const nextMatchY = useTransform(smoothProgress, [0, 0.55, 1], ["100%", "0%", "0%"]);
 
   return (
     <section ref={containerRef} className="relative h-[260vh] -mt-16 md:-mt-20">
@@ -54,9 +60,7 @@ export function HeroWithNextMatch({
           ticketingUrl={ticketingUrl}
           sectionStyle={heroStyle}
           heroBg={heroBg}
-          // On masque le bloc prochain match du Hero pour garder
-          // une seule transition claire vers la section dédiée.
-          nextMatch={undefined}
+          nextMatch={nextMatch}
           nextMatchBgImage={nextMatchStyle?.bgImage}
           news={news}
           latestVideo={latestVideo}
