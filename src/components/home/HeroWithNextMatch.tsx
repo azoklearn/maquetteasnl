@@ -1,7 +1,5 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { HeroSection } from "./HeroSection";
 import { NextMatchSection } from "./NextMatchSection";
 import type { SectionStyle, HeroBg } from "@/lib/db";
@@ -30,30 +28,10 @@ export function HeroWithNextMatch({
   news = [],
   latestVideo,
 }: Props) {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
-  });
-
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 70,
-    damping: 24,
-    mass: 0.7,
-  });
-
-  const heroOpacity = useTransform(smoothProgress, [0, 0.35, 0.55], [1, 1, 0]);
-  const heroScale = useTransform(smoothProgress, [0, 0.55], [1, 0.985]);
-  // Le prochain match monte puis reste en place avant d'enchaîner sur les actus.
-  const nextMatchY = useTransform(smoothProgress, [0, 0.55, 1], ["100%", "0%", "0%"]);
-
   return (
-    <section ref={containerRef} className="relative h-[260vh] -mt-16 md:-mt-20">
-      {/* Hero fixé, qui s'estompe en fin de scroll */}
-      <motion.div
-        style={{ opacity: heroOpacity, scale: heroScale }}
-        className="sticky top-0 z-10 h-[100svh]"
-      >
+    <section className="relative">
+      {/* Slide 1 : Hero */}
+      <div className="sticky top-0 z-10 h-[100svh]">
         <HeroSection
           subtitle={heroSubtitle}
           season={heroSeason}
@@ -65,12 +43,12 @@ export function HeroWithNextMatch({
           news={news}
           latestVideo={latestVideo}
         />
-      </motion.div>
+      </div>
 
-      {/* Section prochain match qui glisse par-dessus le hero */}
-      <motion.div style={{ y: nextMatchY }} className="relative z-20 pt-[100svh]">
+      {/* Slide 2 : Prochain match qui remplace le Hero */}
+      <div className="sticky top-0 z-20 min-h-[100svh]">
         <NextMatchSection match={nextMatch} sectionStyle={nextMatchStyle} />
-      </motion.div>
+      </div>
     </section>
   );
 }

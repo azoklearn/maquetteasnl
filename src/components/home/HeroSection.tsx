@@ -94,19 +94,9 @@ export function HeroSection({
         }}
       />
 
-      {/* ── Grain ── */}
-      <div
-        className="absolute inset-0 z-10 opacity-[0.12] pointer-events-none"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.4'/%3E%3C/svg%3E\")",
-          backgroundSize: "200px 200px",
-        }}
-      />
-
       {/* ── Contenu ── */}
-      <div className="relative z-20 w-full h-full flex items-center justify-center pt-8">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 w-full flex flex-col md:flex-row items-center justify-between gap-8 mt-12 md:mt-16">
+      <div className="relative z-20 w-full h-full flex items-center justify-center pt-0">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 w-full flex flex-col md:flex-row items-center justify-between gap-8 mt-2 md:mt-4">
           {/* Colonne gauche : titre + texte + bloc article */}
           <div className="flex flex-col max-w-3xl items-center sm:items-start">
 

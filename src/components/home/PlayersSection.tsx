@@ -23,11 +23,11 @@ export function PlayersSection({ players = [], sectionStyle }: { players?: Playe
   const titleCls   = titleSizeClass(sectionStyle, "text-4xl md:text-6xl");
 
   return (
-    <section className="section-padding" style={{ backgroundColor: sectionStyle?.bgColor ?? "#0A0A0A" }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="h-[92dvh] overflow-hidden" style={{ backgroundColor: sectionStyle?.bgColor ?? "#0A0A0A" }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full py-5 md:py-6 flex flex-col">
 
         {/* ── Header ── */}
-        <div className="flex items-end justify-between mb-14">
+        <div className="flex items-end justify-between mb-5 md:mb-7 shrink-0">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -54,7 +54,7 @@ export function PlayersSection({ players = [], sectionStyle }: { players?: Playe
         </div>
 
         {/* ── Grille ── */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 flex-1 min-h-0">
           {featured.map((player, i) => (
             <motion.div
               key={player.id}
@@ -64,7 +64,7 @@ export function PlayersSection({ players = [], sectionStyle }: { players?: Playe
               transition={{ duration: 0.5, delay: i * 0.07 }}
             >
               <Link href={`/effectif/${player.id}`} className="group block">
-                <div className="relative bg-white hover:bg-[#fd0000] rounded-2xl overflow-hidden transition-all duration-300 border border-[#e5e5e5] hover:border-[#fd0000] hover:shadow-xl hover:shadow-[#fd0000]/25">
+                <div className="relative h-full bg-white hover:bg-[#fd0000] rounded-2xl overflow-hidden transition-all duration-300 border border-[#e5e5e5] hover:border-[#fd0000] hover:shadow-xl hover:shadow-[#fd0000]/25">
 
                   {/* Numéro en watermark */}
                   <div
@@ -75,10 +75,10 @@ export function PlayersSection({ players = [], sectionStyle }: { players?: Playe
                   </div>
 
                   {/* Avatar */}
-                  <div className="relative h-36 md:h-48 bg-[#f5f5f5] group-hover:bg-[#d40000] flex items-center justify-center overflow-hidden transition-colors">
+                  <div className="relative h-28 md:h-36 bg-[#f5f5f5] group-hover:bg-[#d40000] flex items-center justify-center overflow-hidden transition-colors">
                     {/* Numéro haut droite (bandeau réduit) */}
                     <div
-                      className="absolute top-2 right-2 text-[#0A0A0A]/25 group-hover:text-white/45 text-base md:text-lg font-black leading-none transition-colors z-10 px-2 py-1 rounded-full bg-white/40 group-hover:bg-black/25"
+                      className="absolute top-1.5 right-1.5 text-[#0A0A0A]/25 group-hover:text-white/45 text-xs md:text-sm font-black leading-none transition-colors z-10 px-1.5 py-0.5 rounded-full bg-white/40 group-hover:bg-black/25"
                       style={{ fontFamily: "'Bebas Neue', sans-serif" }}
                     >
                       {player.number}
@@ -119,7 +119,7 @@ export function PlayersSection({ players = [], sectionStyle }: { players?: Playe
                     )}
                   </div>
 
-                  <div className="p-4">
+                  <div className="p-3">
                     {/* Badge poste */}
                     <span className="inline-flex text-[10px] font-black px-2 py-0.5 rounded mb-2 bg-[#fd0000]/10 text-[#fd0000] group-hover:bg-white/20 group-hover:text-white uppercase tracking-wider transition-colors">
                       {POSITION_LABELS[player.position]}
@@ -134,7 +134,7 @@ export function PlayersSection({ players = [], sectionStyle }: { players?: Playe
                     </h3>
 
                     {/* Stats */}
-                    <div className="flex gap-4 mt-3 pt-3 border-t border-black/8 group-hover:border-white/15 transition-colors">
+                    <div className="flex gap-3 mt-2 pt-2 border-t border-black/8 group-hover:border-white/15 transition-colors">
                       <div className="flex items-center gap-1.5 text-xs text-[#0A0A0A]/50 group-hover:text-white/60 transition-colors">
                         <Target className="w-3 h-3 text-[#fd0000] group-hover:text-white/80 transition-colors" />
                         <span className="text-[#0A0A0A] group-hover:text-white font-bold transition-colors">{player.stats.goals}</span>
@@ -153,7 +153,7 @@ export function PlayersSection({ players = [], sectionStyle }: { players?: Playe
           ))}
         </div>
 
-        <div className="mt-10 text-center md:hidden">
+        <div className="mt-4 text-center md:hidden shrink-0">
           <Link
             href="/effectif"
             className="inline-flex items-center gap-2 text-sm font-semibold text-white/40 hover:text-white transition-colors"

@@ -23,11 +23,11 @@ export function NewsSection({ articles, sectionStyle }: { articles?: NewsArticle
 
   return (
     /* ── Fond blanc — contraste maximal ── */
-    <section className="section-padding bg-white" style={sectionStyle?.bgColor ? { backgroundColor: sectionStyle.bgColor } : undefined}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="h-[88dvh] overflow-hidden bg-white" style={sectionStyle?.bgColor ? { backgroundColor: sectionStyle.bgColor } : undefined}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full py-3 md:py-4 flex flex-col">
 
         {/* ── Header section ── */}
-        <div className="flex items-end justify-between mb-12">
+        <div className="flex items-end justify-between mb-3 md:mb-4 shrink-0">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -53,7 +53,7 @@ export function NewsSection({ articles, sectionStyle }: { articles?: NewsArticle
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1 min-h-0">
           {/* Article featured */}
           {featured && (
             <motion.div
@@ -64,7 +64,7 @@ export function NewsSection({ articles, sectionStyle }: { articles?: NewsArticle
               className="lg:row-span-2"
             >
               <Link href={`/actualites/${featured.slug}`} className="group block h-full">
-                <div className="relative h-64 lg:h-full min-h-[420px] rounded-2xl overflow-hidden bg-[#f0f0f0] shadow-xl shadow-black/10">
+                <div className="relative h-48 lg:h-full min-h-[240px] rounded-2xl overflow-hidden bg-[#f0f0f0] shadow-xl shadow-black/10">
                   {featured.image?.trim() && (
                     <Image
                       src={featured.image}
@@ -75,20 +75,20 @@ export function NewsSection({ articles, sectionStyle }: { articles?: NewsArticle
                     />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-black/30 to-transparent" />
-                  <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                  <div className="absolute inset-0 p-4 md:p-5 flex flex-col justify-end">
                     <span className={`inline-flex self-start text-xs font-black px-3 py-1 rounded-full mb-3 ${CATEGORY_COLORS[featured.category] ?? "bg-[#0A0A0A] text-white"}`}>
                       {featured.category}
                     </span>
                     <h3
-                      className="text-white text-2xl md:text-3xl font-black uppercase leading-tight mb-2 group-hover:text-[#fd0000] transition-colors"
+                      className="text-white text-xl md:text-2xl font-black uppercase leading-tight mb-1.5 group-hover:text-[#fd0000] transition-colors"
                       style={{ fontFamily: "'Bebas Neue', sans-serif" }}
                     >
                       {featured.title}
                     </h3>
-                    <p className="text-white/60 text-sm leading-relaxed line-clamp-2">
+                    <p className="text-white/60 text-xs md:text-sm leading-relaxed line-clamp-2">
                       <ExcerptWithLinks text={featured.excerpt} linkClassName="text-white/80 hover:text-white underline" />
                     </p>
-                    <div className="flex items-center gap-2 mt-4 text-white/40 text-xs font-medium">
+                    <div className="flex items-center gap-2 mt-3 text-white/40 text-[11px] font-medium">
                       <Clock className="w-3 h-3" />
                       {formatShortDate(featured.publishedAt)}
                     </div>
@@ -99,7 +99,7 @@ export function NewsSection({ articles, sectionStyle }: { articles?: NewsArticle
           )}
 
           {/* Articles secondaires sur fond blanc */}
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-3 pr-1">
             {rest.map((article, i) => (
               <motion.div
                 key={article.id}
@@ -110,9 +110,9 @@ export function NewsSection({ articles, sectionStyle }: { articles?: NewsArticle
               >
                 <Link
                   href={`/actualites/${article.slug}`}
-                  className="group flex gap-4 bg-[#f7f7f7] hover:bg-[#fd0000]/5 border border-[#e5e5e5] hover:border-[#fd0000]/20 rounded-2xl p-4 transition-all"
+                  className="group flex gap-3 bg-[#f7f7f7] hover:bg-[#fd0000]/5 border border-[#e5e5e5] hover:border-[#fd0000]/20 rounded-2xl p-3 transition-all"
                 >
-                  <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden shrink-0 bg-[#e0e0e0]">
+                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden shrink-0 bg-[#e0e0e0]">
                     {article.image?.trim() && (
                       <Image
                         src={article.image}
@@ -128,11 +128,11 @@ export function NewsSection({ articles, sectionStyle }: { articles?: NewsArticle
                       <span className={`inline-flex text-xs font-black px-2 py-0.5 rounded-full mb-2 ${CATEGORY_COLORS[article.category] ?? "bg-[#0A0A0A] text-white"}`}>
                         {article.category}
                       </span>
-                      <h3 className="text-[#0A0A0A] font-bold text-sm sm:text-base leading-snug line-clamp-2 group-hover:text-[#fd0000] transition-colors">
+                      <h3 className="text-[#0A0A0A] font-bold text-xs sm:text-sm leading-snug line-clamp-2 group-hover:text-[#fd0000] transition-colors">
                         {article.title}
                       </h3>
                     </div>
-                    <div className="flex items-center gap-2 text-[#0A0A0A]/40 text-xs mt-2 font-medium">
+                    <div className="flex items-center gap-2 text-[#0A0A0A]/40 text-[11px] mt-1.5 font-medium">
                       <Clock className="w-3 h-3" />
                       {formatShortDate(article.publishedAt)}
                     </div>
@@ -143,7 +143,7 @@ export function NewsSection({ articles, sectionStyle }: { articles?: NewsArticle
           </div>
         </div>
 
-        <div className="mt-8 text-center md:hidden">
+        <div className="mt-5 text-center md:hidden shrink-0">
           <Link
             href="/actualites"
             className="inline-flex items-center gap-2 text-sm font-semibold text-[#fd0000] hover:text-[#cc0000] transition-colors"

@@ -154,8 +154,8 @@ function HamburgerButton({
 
 // ── Header principal ───────────────────────────────────────────────────────────
 export function Header({ tickerEnabled = true, tickerMessages, ticketingUrl }: HeaderProps) {
-  const [isScrolled, setIsScrolled]     = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const isScrolled = false;
   const ticketUrl = ticketingUrl ?? TICKETING.nextMatchUrl;
   const messages  = tickerMessages?.length ? tickerMessages : [
     "⚽ Nancy 3-0 Valenciennes",
@@ -164,12 +164,6 @@ export function Header({ tickerEnabled = true, tickerMessages, ticketingUrl }: H
     "📣 Diego Santos prolonge jusqu'en 2028",
     "🔥 Choc de la saison le 14 mars à Marcel Picot",
   ];
-
-  useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 60);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   // Bloque le scroll du body quand le menu est ouvert
   useEffect(() => {
@@ -210,13 +204,9 @@ export function Header({ tickerEnabled = true, tickerMessages, ticketingUrl }: H
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3 md:pt-4">
           <div
             className={cn(
-              "flex items-center justify-between h-16 md:h-20 rounded-full px-4 md:px-6 border backdrop-blur-xl shadow-xl transition-all",
-              isScrolled
-                ? "bg-white/14 border-white/30 shadow-black/30"
-                : "bg-white/10 border-white/25 shadow-black/20",
+              "flex items-center justify-between rounded-full border backdrop-blur-md shadow-lg h-16 md:h-20 px-4 md:px-6 bg-white/10 border-white/25 shadow-black/20",
             )}
           >
-
             {/* Logo */}
             <Link href="/" className="flex items-center group shrink-0">
               <div className="w-10 h-10 md:w-12 md:h-12 relative transition-transform duration-300 group-hover:scale-110 shrink-0">
@@ -241,10 +231,7 @@ export function Header({ tickerEnabled = true, tickerMessages, ticketingUrl }: H
                     <Link
                       href={item.href}
                       className={cn(
-                        "group relative px-4 py-2 text-sm font-semibold transition-colors rounded-lg uppercase tracking-wide",
-                        isScrolled
-                          ? "text-white/85 hover:text-white hover:bg-white/10"
-                          : "text-white/80 hover:text-white hover:bg-white/5",
+                        "group relative px-4 py-2 text-sm font-semibold transition-colors rounded-lg uppercase tracking-wide text-white/80 hover:text-white hover:bg-white/5",
                       )}
                     >
                       <span className="relative z-10">{item.label}</span>
@@ -290,7 +277,7 @@ export function Header({ tickerEnabled = true, tickerMessages, ticketingUrl }: H
             <div className="hidden md:flex items-center gap-3">
               <Link
                 href="/boutique"
-                className={cn("p-2 transition-colors", isScrolled ? "text-white/75 hover:text-white" : "text-white/60 hover:text-white")}
+                className={cn("p-2 transition-colors text-white/60 hover:text-white")}
                 aria-label="Boutique"
               >
                 <ShoppingBag className="w-5 h-5" />
@@ -301,10 +288,7 @@ export function Header({ tickerEnabled = true, tickerMessages, ticketingUrl }: H
                 rel="noopener noreferrer nofollow"
                 onClick={handleTicketClick}
                 className={cn(
-                  "cta-pulse flex items-center gap-2 font-bold text-sm px-5 py-2.5 rounded-full transition-all hover:scale-105 uppercase tracking-wider",
-                  isScrolled
-                    ? "bg-[#fd0000] text-white hover:bg-[#cc0000] shadow-lg shadow-[#fd0000]/35"
-                    : "bg-white text-[#fd0000] hover:bg-white/90 shadow-lg shadow-black/20",
+                  "cta-pulse flex items-center gap-2 font-bold text-sm px-5 py-2.5 rounded-full transition-all hover:scale-105 uppercase tracking-wider bg-white text-[#fd0000] hover:bg-white/90 shadow-lg shadow-black/20",
                 )}
               >
                 <Ticket className="w-4 h-4" />

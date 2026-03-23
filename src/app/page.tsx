@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { getAllCmsData, getMediaVideos, getNewsletterConfig } from "@/lib/db";
-import { HeroWithNextMatch } from "@/components/home/HeroWithNextMatch";
 import { HeroSection } from "@/components/home/HeroSection";
 import { NextMatchSection } from "@/components/home/NextMatchSection";
 import { NewsSection } from "@/components/home/NewsSection";
@@ -8,6 +8,7 @@ import { PlayersSection } from "@/components/home/PlayersSection";
 import { StandingsSection } from "@/components/home/StandingsSection";
 import { NewsletterSection } from "@/components/home/NewsletterSection";
 import { MediasClient } from "@/app/medias/MediasClient";
+import { PageScrollEffects } from "@/components/scroll/PageScrollEffects";
 
 // Dynamique — les changements admin apparaissent immédiatement
 export const dynamic = "force-dynamic";
@@ -26,52 +27,40 @@ export default async function HomePage() {
   ]);
   const s = config.sections ?? {};
 
-  return (
-    <>
-      {s.hero?.visible !== false && s.nextMatch?.visible !== false ? (
-        <HeroWithNextMatch
-          heroSubtitle={config?.heroSubtitle ?? "Fondé en 1967. Fier. Lorrain. Irréductible."}
-          heroSeason={config?.heroSeason ?? "Saison 2025 – 2026"}
-          ticketingUrl={config?.ticketingUrl}
-          heroStyle={s.hero}
-          heroBg={heroBg}
-          nextMatch={nextMatch}
-          nextMatchStyle={s.nextMatch}
-          news={news}
-          latestVideo={videos[0]}
-        />
-      ) : (
-        <>
-          {s.hero?.visible !== false && (
-            <HeroSection
-              subtitle={config?.heroSubtitle ?? "Fondé en 1967. Fier. Lorrain. Irréductible."}
-              season={config?.heroSeason ?? "Saison 2025 – 2026"}
-              ticketingUrl={config?.ticketingUrl}
-              sectionStyle={s.hero}
-              heroBg={heroBg}
-              nextMatch={nextMatch}
-              nextMatchBgImage={s.nextMatch?.bgImage}
-              news={news}
-              latestVideo={videos[0]}
-            />
-          )}
-          {s.nextMatch?.visible !== false && (
-            <NextMatchSection match={nextMatch} sectionStyle={s.nextMatch} />
-          )}
-        </>
-      )}
-      {s.news?.visible !== false && (
-        <NewsSection articles={news} sectionStyle={s.news} />
-      )}
-      {s.players?.visible !== false && (
-        <PlayersSection players={players} sectionStyle={s.players} />
-      )}
-      {s.standings?.visible !== false && (
-        <StandingsSection sectionStyle={s.standings} />
-      )}
-      {/* Bloc Médias de la page principale, après le classement en direct */}
-      <MediasClient />
-      <NewsletterSection config={newsletterConfig} />
-    </>
-  );
+  const sections: ReactNode[] = [];
+
+  if (s.hero?.visible !== false) {
+    sections.push(
+      <HeroSection
+        subtitle={config?.heroSubtitle ?? "Fondé en 1967. Fier. Lorrain. Irréductible."}
+        season={config?.heroSeason ?? "Saison 2025 – 2026"}
+        ticketingUrl={config?.ticketingUrl}
+        sectionStyle={s.hero}
+        heroBg={heroBg}
+        nextMatch={nextMatch}
+        nextMatchBgImage={s.nextMatch?.bgImage}
+        news={news}
+        latestVideo={videos[0]}
+      />,
+    );
+  }
+
+  if (s.nextMatch?.visible !== false) {
+    sections.push(<NextMatchSection match={nextMatch} sectionStyle={s.nextMatch} />);
+  }
+  if (s.news?.visible !== false) {
+    sections.push(<NewsSection articles={news} sectionStyle={s.news} />);
+  }
+  if (s.players?.visible !== false) {
+    sections.push(<PlayersSection players={players} sectionStyle={s.players} />);
+  }
+  if (s.standings?.visible !== false) {
+    sections.push(<StandingsSection sectionStyle={s.standings} />);
+  }
+
+  // Bloc Médias de la page principale, après le classement en direct
+  sections.push(<MediasClient />);
+  sections.push(<NewsletterSection config={newsletterConfig} />);
+
+  return <PageScrollEffects hijacking={true} animation="scaleDown" sections={sections} />;
 }

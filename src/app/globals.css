@@ -13,7 +13,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -24,6 +24,14 @@ body {
   font-family: var(--font-montserrat);
   font-weight: 700;
   overflow-x: hidden;
+}
+
+body[data-hijacking="off"] {
+  overflow-y: auto;
+}
+
+body[data-hijacking="on"] {
+  overflow: hidden;
 }
 
 /* Scrollbar custom */
@@ -100,4 +108,41 @@ body {
     padding-top: 7rem;
     padding-bottom: 7rem;
   }
+}
+
+/* Page scroll effects (style "cd-section") */
+.cd-scroll-root {
+  position: relative;
+}
+
+.cd-scroll-root--hijacking {
+  height: 100vh;
+  overflow-y: auto;
+  scroll-behavior: auto;
+  scroll-snap-type: y mandatory;
+  overscroll-behavior-y: contain;
+}
+
+.cd-section {
+  position: relative;
+  min-height: 100dvh;
+  height: auto;
+  overflow: visible;
+  margin: 0;
+  padding: 0;
+}
+
+.cd-scroll-root--hijacking .cd-section {
+  scroll-snap-align: start;
+}
+
+.cd-section > .cd-section-content {
+  min-height: 100dvh;
+  height: auto;
+  overflow: visible;
+  transform-origin: center center;
+  transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity, filter;
 }
