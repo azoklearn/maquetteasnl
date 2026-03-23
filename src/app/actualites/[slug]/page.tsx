@@ -136,6 +136,21 @@ export default async function ArticlePage({ params }: Props) {
           </div>
         )}
 
+        {(article.subSectionTitle?.trim() || article.subSectionContent?.trim()) && (
+          <div className="mt-8 rounded-2xl border border-[#fd0000]/30 bg-[#fd0000]/10 p-5">
+            {article.subSectionTitle?.trim() && (
+              <p className="text-[#fd0000] text-xs font-black uppercase tracking-[0.2em] mb-2">
+                {article.subSectionTitle}
+              </p>
+            )}
+            {article.subSectionContent?.trim() && (
+              <p className="text-white/80 leading-relaxed whitespace-pre-wrap">
+                {article.subSectionContent}
+              </p>
+            )}
+          </div>
+        )}
+
         {/* CTA billetterie si catégorie Billetterie */}
         {article.category === "Billetterie" && (
           <div className="mt-10 p-6 rounded-2xl bg-[#fd0000]/10 border border-[#fd0000]/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">

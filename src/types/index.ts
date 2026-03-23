@@ -47,6 +47,8 @@ export interface NewsArticle {
   title: string;
   excerpt: string;
   content?: string;
+  subSectionTitle?: string;
+  subSectionContent?: string;
   image: string;
   category: string;
   publishedAt: string;

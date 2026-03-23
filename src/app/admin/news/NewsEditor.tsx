@@ -26,6 +26,8 @@ function newArticle(): NewsArticle {
     title: "Nouvel article",
     excerpt: "",
     content: "",
+    subSectionTitle: "",
+    subSectionContent: "",
     image: "/images/news-placeholder.jpg",
     category: "Club",
     publishedAt: new Date().toISOString().split("T")[0],
@@ -192,7 +194,7 @@ export default function NewsEditor({ initialData, username }: Props) {
                         rows={8}
                         value={article.content ?? ""}
                         onChange={(e) => update(article.id, "content", e.target.value)}
-                        placeholder="Texte libre. Liens [texte](https://url), images ![légende](https://image.jpg), bloc stylisé [focus:Mon sous-titre]...[/focus] ou HTML (&lt;h2&gt;, &lt;p&gt;, ...)."
+                        placeholder="Texte libre. Liens [texte](https://url), images ![légende](https://image.jpg) ou HTML (&lt;h2&gt;, &lt;p&gt;, ...)."
                       />
                       <p className="text-white/30 text-xs mt-1.5 space-y-1">
                         <span className="block">
@@ -206,11 +208,29 @@ export default function NewsEditor({ initialData, username }: Props) {
                           <code className="bg-white/10 px-1 rounded">![légende|medium](...)</code>,{" "}
                           <code className="bg-white/10 px-1 rounded">![légende|large](...)</code>.
                         </span>
-                        <span className="block">
-                          Sous-partie stylisée :{" "}
-                          <code className="bg-white/10 px-1 rounded">[focus:Mon sous-titre]Ton texte ici[/focus]</code>
-                        </span>
                       </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className={LABEL}>Sous-partie stylisée — Titre</label>
+                        <input
+                          className={FIELD}
+                          value={article.subSectionTitle ?? ""}
+                          onChange={(e) => update(article.id, "subSectionTitle", e.target.value)}
+                          placeholder="Ex: Ce qu'il faut retenir"
+                        />
+                      </div>
+                      <div>
+                        <label className={LABEL}>Sous-partie stylisée — Contenu</label>
+                        <textarea
+                          className={FIELD + " resize-none"}
+                          rows={3}
+                          value={article.subSectionContent ?? ""}
+                          onChange={(e) => update(article.id, "subSectionContent", e.target.value)}
+                          placeholder="Texte de la sous-partie mise en avant."
+                        />
+                      </div>
                     </div>
 
                     <div className="flex items-center gap-3">
