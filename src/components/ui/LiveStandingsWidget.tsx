@@ -119,8 +119,8 @@ export function LiveStandingsWidget() {
         <span className="hidden lg:block text-right">Forme</span>
       </div>
 
-      {/* ── Lignes ── */}
-      <div className="divide-y divide-[#f5f5f5]">
+      {/* ── Lignes (scrollables) ── */}
+      <div className="max-h-[520px] overflow-y-auto divide-y divide-[#f5f5f5]">
         <AnimatePresence>
           {displayed.map((entry, i) => {
             const zone = getZone(entry.position);
