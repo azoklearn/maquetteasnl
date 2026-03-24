@@ -62,5 +62,5 @@ export default async function HomePage() {
   sections.push(<MediasClient />);
   sections.push(<NewsletterSection config={newsletterConfig} />);
 
-  return <PageScrollEffects hijacking={true} animation="scaleDown" sections={sections} />;
+  return <PageScrollEffects hijacking={false} animation="scaleDown" sections={sections} />;
 }

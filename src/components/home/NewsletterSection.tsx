@@ -72,7 +72,7 @@ export function NewsletterSection({ config }: { config: NewsletterConfig | null 
 
   return (
     <section
-      className="relative overflow-hidden py-20 md:py-28"
+      className="relative min-h-[100dvh] overflow-hidden py-20 md:py-28"
       style={{ backgroundColor: bgColor }}
     >
       <div

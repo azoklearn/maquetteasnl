@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { SponsorsSection } from "@/components/home/SponsorsSection";
 import { getSiteConfig, getSponsors } from "@/lib/db";
 import { LoadingScreen } from "@/components/ui/LoadingScreen";
+import { GlobalScrollSmoother } from "@/components/ui/GlobalScrollSmoother";
 
 export const dynamic = "force-dynamic";
 
@@ -115,6 +116,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body className="bg-[#0A0A0A] text-white antialiased">
         <ThemeProvider>
+          <GlobalScrollSmoother />
           <LoadingScreen />
           <Analytics />
           <Header

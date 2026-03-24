@@ -30,6 +30,7 @@ export function PageScrollEffects({
   const rootRef = useRef<HTMLDivElement | null>(null);
   const lockRef = useRef(false);
   const lockTimerRef = useRef<number | null>(null);
+  const wheelAccumRef = useRef(0);
   const normalizedAnimation = useMemo<ScrollAnimation>(() => {
     if (animation === "rotate" || animation === "gallery" || animation === "catch") {
       return "scaleDown";
@@ -58,6 +59,7 @@ export function PageScrollEffects({
     }
     const blocks = Array.from(root.querySelectorAll<HTMLElement>(".cd-section"));
     if (!blocks.length) return;
+    const enableWheelHijack = hijacking;
     const getSectionOffsets = () => blocks.map((b) => b.offsetTop);
 
     const getCurrentIndex = () => {
@@ -83,7 +85,8 @@ export function PageScrollEffects({
       if (lockTimerRef.current) window.clearTimeout(lockTimerRef.current);
       lockTimerRef.current = window.setTimeout(() => {
         lockRef.current = false;
-      }, 650);
+        wheelAccumRef.current = 0;
+      }, 820);
     };
 
 
@@ -152,17 +155,24 @@ export function PageScrollEffects({
     };
 
     const onWheel = (event: WheelEvent) => {
-      if (!hijacking) return;
+      if (!enableWheelHijack) return;
       event.preventDefault();
       if (lockRef.current) return;
-      if (Math.abs(event.deltaY) < 10) return;
+
+      // Rend le scroll trackpad/souris plus naturel: on accumule le delta
+      // jusqu'a un seuil, au lieu de declencher sur un mini mouvement.
+      wheelAccumRef.current += event.deltaY;
+      const triggerThreshold = 60;
+      if (Math.abs(wheelAccumRef.current) < triggerThreshold) return;
+
       const current = getCurrentIndex();
-      const direction = event.deltaY > 0 ? 1 : -1;
+      const direction = wheelAccumRef.current > 0 ? 1 : -1;
+      wheelAccumRef.current = 0;
       goToSection(current + direction);
     };
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (!hijacking) return;
+      if (!enableWheelHijack) return;
       const downKeys = ["ArrowDown", "PageDown", " "];
       const upKeys = ["ArrowUp", "PageUp"];
       if (!downKeys.includes(event.key) && !upKeys.includes(event.key)) return;
@@ -193,7 +203,7 @@ export function PageScrollEffects({
 
     const scrollTarget = hijacking ? root : window;
     scrollTarget.addEventListener("scroll", onScroll, { passive: true });
-    if (hijacking) {
+    if (enableWheelHijack) {
       root.addEventListener("wheel", onWheel, { passive: false });
       window.addEventListener("keydown", onKeyDown);
     }
@@ -201,12 +211,12 @@ export function PageScrollEffects({
     window.addEventListener("resize", onScroll);
     return () => {
       scrollTarget.removeEventListener("scroll", onScroll);
-      if (hijacking) {
+      window.removeEventListener("resize", onScroll);
+      if (enableWheelHijack) {
         root.removeEventListener("wheel", onWheel);
         window.removeEventListener("keydown", onKeyDown);
       }
       window.removeEventListener("pageshow", onPageShow);
-      window.removeEventListener("resize", onScroll);
       window.clearTimeout(lateReset);
       if (rafId) window.cancelAnimationFrame(rafId);
       if (lockTimerRef.current) window.clearTimeout(lockTimerRef.current);

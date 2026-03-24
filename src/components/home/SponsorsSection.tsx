@@ -44,11 +44,11 @@ export function SponsorsSection({ sponsors = [], sectionStyle }: { sponsors?: Sp
   const doubled = [...sponsors, ...sponsors];
 
   return (
-    <section className="section-padding border-t border-white/5" style={{ backgroundColor: sectionStyle?.bgColor?.trim() || "#0A0A0A" }}>
+    <section className="pt-0 pb-20 md:pb-28 border-t border-white/5" style={{ backgroundColor: sectionStyle?.bgColor?.trim() || "#0A0A0A" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
-        <div className="flex items-end justify-between mb-12">
+        <div className="flex items-end justify-between mb-6">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -74,26 +74,43 @@ export function SponsorsSection({ sponsors = [], sectionStyle }: { sponsors?: Sp
         </div>
       </div>
 
-      {/* Bandeau défilant — pleine largeur */}
+      {/* Bandeau sponsors — mobile swipe + desktop défilant */}
       {sponsors.length > 0 ? (
-        <div
-          className="overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]"
-          onMouseEnter={() => trackRef.current && (trackRef.current.style.animationPlayState = "paused")}
-          onMouseLeave={() => trackRef.current && (trackRef.current.style.animationPlayState = "running")}
-        >
+        <>
+          {/* Mobile: scroll horizontal avec snap */}
           <div
-            ref={trackRef}
-            className="flex"
-            style={{
-              animation: "sponsors-scroll 30s linear infinite",
-              width: "max-content",
-            }}
+            className="md:hidden -mt-2 px-4"
+            style={{ WebkitOverflowScrolling: "touch", scrollBehavior: "smooth" }}
           >
-            {doubled.map((sponsor, i) => (
-              <SponsorCard key={`${sponsor.id}-${i}`} sponsor={sponsor} />
-            ))}
+            <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory">
+              {sponsors.map((sponsor) => (
+                <div key={sponsor.id} className="snap-start shrink-0">
+                  <SponsorCard sponsor={sponsor} />
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+
+          {/* Desktop: bandeau défilant */}
+          <div
+            className="hidden md:block -mt-2 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]"
+            onMouseEnter={() => trackRef.current && (trackRef.current.style.animationPlayState = "paused")}
+            onMouseLeave={() => trackRef.current && (trackRef.current.style.animationPlayState = "running")}
+          >
+            <div
+              ref={trackRef}
+              className="flex"
+              style={{
+                animation: "sponsors-scroll 30s linear infinite",
+                width: "max-content",
+              }}
+            >
+              {doubled.map((sponsor, i) => (
+                <SponsorCard key={`${sponsor.id}-${i}`} sponsor={sponsor} />
+              ))}
+            </div>
+          </div>
+        </>
       ) : (
         <p className="text-center text-white/20 text-sm py-8">Aucun partenaire configuré.</p>
       )}
