@@ -5,6 +5,10 @@ import Lenis from "lenis";
 
 export function GlobalScrollSmoother() {
   useEffect(() => {
+    if (window.location.pathname.startsWith("/admin")) {
+      return;
+    }
+
     const lenis = new Lenis({
       lerp: 0.05,
       wheelMultiplier: 1,
