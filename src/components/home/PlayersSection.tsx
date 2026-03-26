@@ -78,7 +78,7 @@ export function PlayersSection({ players = [], sectionStyle }: { players?: Playe
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.07 }}
             >
-              <Link href={`/effectif/${player.id}`} className="group block">
+              <Link href="/effectif" className="group block">
                 <div className="relative h-full rounded-xl overflow-hidden bg-[#171717] border border-white/10 hover:border-white/20 transition-colors">
                   <div className="relative h-32 bg-[#202020] flex items-center justify-center overflow-hidden">
                     <div className={`absolute top-2 left-2 inline-flex text-[9px] font-black px-2 py-0.5 rounded-sm uppercase tracking-wider ${POSITION_BADGE[player.position] ?? "bg-[#fd0000] text-white"}`}>
