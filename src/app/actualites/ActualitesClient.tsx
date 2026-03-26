@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { Clock, ArrowRight, Tag } from "lucide-react";
+import { Clock, ArrowRight } from "lucide-react";
 import type { NewsArticle } from "@/types";
 import { formatShortDate } from "@/lib/utils";
 import { ExcerptWithLinks } from "@/components/ui/ExcerptWithLinks";
@@ -37,8 +37,6 @@ export function ActualitesClient({ articles }: Props) {
   const filtered = activeCategory === "Tout"
     ? all
     : all.filter((a) => a.category === activeCategory);
-
-  const [featured, ...rest] = filtered;
 
   return (
     <div className="min-h-screen bg-[#0A0A0A]">
@@ -115,120 +113,55 @@ export function ActualitesClient({ articles }: Props) {
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.3 }}
             >
-              {/* ── Article featured ── */}
-              {featured && (
-                <Link
-                  href={`/actualites/${featured.slug}`}
-                  className="group block mb-10"
-                >
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {filtered.map((article, i) => (
                   <motion.div
-                    className="relative h-72 sm:h-96 md:h-[520px] rounded-3xl overflow-hidden bg-[#1a1a1a]"
-                    whileHover={{ scale: 1.005 }}
-                    transition={{ duration: 0.4 }}
+                    key={article.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.05 }}
                   >
-                    {featured.image?.trim() && (
-                      <Image
-                        src={featured.image}
-                        alt={featured.title}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-105 brightness-75"
-                        sizes="100vw"
-                        priority
-                      />
-                    )}
-                    {/* Gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-black/20 to-transparent" />
-
-                    {/* Badge featured */}
-                    <div className="absolute top-5 left-5">
-                      <span className="flex items-center gap-2 bg-[#fd0000] text-white text-xs font-black px-3 py-1.5 rounded-full uppercase tracking-wider shadow-lg">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                        À la une
-                      </span>
-                    </div>
-
-                    {/* Contenu bas */}
-                    <div className="absolute bottom-0 inset-x-0 p-6 md:p-10">
-                      <CategoryBadge cat={featured.category} />
-                      <h2
-                        className="text-white font-black uppercase leading-tight mt-3 mb-3 group-hover:text-[#fd0000] transition-colors"
-                        style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(28px, 4vw, 52px)" }}
-                      >
-                        {featured.title}
-                      </h2>
-                      <p className="text-white/60 text-sm md:text-base leading-relaxed line-clamp-2 max-w-3xl mb-4">
-                        <ExcerptWithLinks text={featured.excerpt} linkClassName="text-white/90 hover:text-[#fd0000] underline" />
-                      </p>
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-1.5 text-white/40 text-xs font-medium">
-                          <Clock className="w-3.5 h-3.5" />
-                          {formatShortDate(featured.publishedAt)}
-                        </div>
-                        <span className="flex items-center gap-1.5 text-[#fd0000] text-sm font-bold group-hover:gap-2.5 transition-all">
-                          Lire l&apos;article <ArrowRight className="w-4 h-4" />
-                        </span>
-                      </div>
-                    </div>
-                  </motion.div>
-                </Link>
-              )}
-
-              {/* ── Grille articles ── */}
-              {rest.length > 0 && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {rest.map((article, i) => (
-                    <motion.div
-                      key={article.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.06 }}
+                    <Link
+                      href={`/actualites/${article.slug}`}
+                      className="group block h-full bg-[#141414] hover:bg-[#1a1a1a] border border-white/5 hover:border-white/10 rounded-2xl overflow-hidden transition-all"
                     >
-                      <Link
-                        href={`/actualites/${article.slug}`}
-                        className="group block bg-[#141414] hover:bg-[#1a1a1a] border border-white/5 hover:border-white/10 rounded-2xl overflow-hidden transition-all h-full"
-                      >
-                        {/* Image */}
-                        <div className="relative h-44 overflow-hidden bg-[#1e1e1e]">
-                          {article.image?.trim() && (
-                            <Image
-                              src={article.image}
-                              alt={article.title}
-                              fill
-                              className="object-cover transition-transform duration-500 group-hover:scale-105"
-                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            />
-                          )}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                          <div className="absolute bottom-3 left-3">
-                            <CategoryBadge cat={article.category} />
-                          </div>
+                      <div className="relative h-44 overflow-hidden bg-[#1e1e1e]">
+                        {article.image?.trim() && (
+                          <Image
+                            src={article.image}
+                            alt={article.title}
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          />
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                        <div className="absolute bottom-3 left-3">
+                          <CategoryBadge cat={article.category} />
                         </div>
+                      </div>
 
-                        {/* Contenu */}
-                        <div className="p-5">
-                          <h3
-                            className="text-white font-bold text-base leading-snug line-clamp-2 group-hover:text-[#fd0000] transition-colors mb-2"
-                          >
-                            {article.title}
-                          </h3>
-                          <p className="text-white/35 text-sm line-clamp-2 leading-relaxed mb-4">
-                            <ExcerptWithLinks text={article.excerpt} linkClassName="text-white/60 hover:text-[#fd0000] underline" />
-                          </p>
-                          <div className="flex items-center justify-between text-xs">
-                            <div className="flex items-center gap-1.5 text-white/25 font-medium">
-                              <Clock className="w-3 h-3" />
-                              {formatShortDate(article.publishedAt)}
-                            </div>
-                            <span className="flex items-center gap-1 text-white/30 group-hover:text-[#fd0000] transition-colors font-semibold">
-                              Lire <ArrowRight className="w-3 h-3" />
-                            </span>
+                      <div className="p-5 flex h-[180px] flex-col">
+                        <h3 className="text-white font-bold text-base leading-snug line-clamp-2 group-hover:text-[#fd0000] transition-colors mb-2">
+                          {article.title}
+                        </h3>
+                        <p className="text-white/35 text-sm line-clamp-3 leading-relaxed mb-4">
+                          <ExcerptWithLinks text={article.excerpt} linkClassName="text-white/60 hover:text-[#fd0000] underline" />
+                        </p>
+                        <div className="mt-auto flex items-center justify-between text-xs">
+                          <div className="flex items-center gap-1.5 text-white/25 font-medium">
+                            <Clock className="w-3 h-3" />
+                            {formatShortDate(article.publishedAt)}
                           </div>
+                          <span className="flex items-center gap-1 text-white/30 group-hover:text-[#fd0000] transition-colors font-semibold">
+                            Lire <ArrowRight className="w-3 h-3" />
+                          </span>
                         </div>
-                      </Link>
-                    </motion.div>
-                  ))}
-                </div>
-              )}
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

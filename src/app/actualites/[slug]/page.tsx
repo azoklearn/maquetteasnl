@@ -4,7 +4,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Clock, Tag } from "lucide-react";
 import { getNews } from "@/lib/db";
-import { NEWS } from "@/lib/mock-data";
 import { formatShortDate, stripExcerptLinks, markdownLinksToHtml } from "@/lib/utils";
 import { ExcerptWithLinks } from "@/components/ui/ExcerptWithLinks";
 
@@ -45,6 +44,14 @@ export default async function ArticlePage({ params }: Props) {
   const moreArticles = related.length < 3
     ? [...related, ...articles.filter((a) => a.id !== article.id && !related.find((r) => r.id === a.id)).slice(0, 3 - related.length)]
     : related;
+  const highlightedSections =
+    article.subSections?.filter((section) => section.title?.trim() || section.content?.trim()) ??
+    [];
+  const legacyHighlightedSection =
+    highlightedSections.length === 0 && (article.subSectionTitle?.trim() || article.subSectionContent?.trim())
+      ? [{ id: `legacy-${article.id}`, title: article.subSectionTitle, content: article.subSectionContent }]
+      : [];
+  const sectionsToRender = [...highlightedSections, ...legacyHighlightedSection];
 
   return (
     <div className="min-h-screen bg-[#0A0A0A]">
@@ -136,20 +143,20 @@ export default async function ArticlePage({ params }: Props) {
           </div>
         )}
 
-        {(article.subSectionTitle?.trim() || article.subSectionContent?.trim()) && (
-          <div className="mt-8 rounded-2xl border border-[#fd0000]/30 bg-[#fd0000]/10 p-5">
-            {article.subSectionTitle?.trim() && (
+        {sectionsToRender.map((section, index) => (
+          <div key={section.id ?? `${article.id}-section-${index}`} className="mt-8 rounded-2xl border border-[#fd0000]/30 bg-[#fd0000]/10 p-5">
+            {section.title?.trim() && (
               <p className="text-[#fd0000] text-xs font-black uppercase tracking-[0.2em] mb-2">
-                {article.subSectionTitle}
+                {section.title}
               </p>
             )}
-            {article.subSectionContent?.trim() && (
+            {section.content?.trim() && (
               <p className="text-white/80 leading-relaxed whitespace-pre-wrap">
-                {article.subSectionContent}
+                {section.content}
               </p>
             )}
           </div>
-        )}
+        ))}
 
         {/* CTA billetterie si catégorie Billetterie */}
         {article.category === "Billetterie" && (

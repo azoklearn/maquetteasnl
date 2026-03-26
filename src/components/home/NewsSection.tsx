@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Clock } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import type { NewsArticle } from "@/types";
 import { formatShortDate } from "@/lib/utils";
 import { ExcerptWithLinks } from "@/components/ui/ExcerptWithLinks";
@@ -19,128 +19,91 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 export function NewsSection({ articles, sectionStyle }: { articles?: NewsArticle[]; sectionStyle?: SectionStyle }) {
   const titleCls = titleSizeClass(sectionStyle, "text-4xl md:text-6xl");
-  const [featured, ...rest] = articles ?? [];
+  const displayed = (articles ?? []).slice(0, 3);
+  const sectionTitle = sectionStyle?.title?.trim() || "Dernieres actualites";
+  const sectionSubtitle = sectionStyle?.subtitle?.trim() || "Restez informes des dernieres nouvelles du club";
 
   return (
-    /* ── Fond blanc — contraste maximal ── */
-    <section className="h-full min-h-[100dvh] overflow-hidden bg-white" style={sectionStyle?.bgColor ? { backgroundColor: sectionStyle.bgColor } : undefined}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full py-3 md:py-4 flex flex-col">
+    <section className="h-full min-h-[100dvh] overflow-hidden bg-[#0A0A0A]" style={sectionStyle?.bgColor ? { backgroundColor: sectionStyle.bgColor } : undefined}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full py-10 md:py-12 flex flex-col">
 
         {/* ── Header section ── */}
-        <div className="flex items-end justify-between mb-3 md:mb-4 shrink-0">
+        <div className="flex items-end justify-between mb-8 md:mb-10 shrink-0">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-xs font-bold uppercase tracking-[0.3em] block mb-2" style={{ color: sectionStyle?.accentColor?.trim() || "#fd0000" }}>
-              {sectionStyle?.subtitle ?? "Les dernières nouveautés"}
-            </span>
+            <div className="h-[3px] w-14 bg-[#fd0000] mb-4" />
             <h2
               className={`font-black uppercase leading-none ${titleCls}`}
-              style={{ fontFamily: "'Bebas Neue', sans-serif", color: sectionStyle?.textColor?.trim() || "#0A0A0A" }}
+              style={{ fontFamily: "'Bebas Neue', sans-serif", color: sectionStyle?.textColor?.trim() || "#ffffff" }}
             >
-              {sectionStyle?.title ?? "Actualités"}
+              {sectionTitle}
             </h2>
+            <p className="text-white/45 text-sm mt-3">
+              {sectionSubtitle}
+            </p>
           </motion.div>
 
           <Link
             href="/actualites"
-            className="hidden md:flex items-center gap-2 text-sm font-semibold text-[#fd0000] hover:text-[#cc0000] transition-colors group"
+            className="hidden md:flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-[#fd0000] hover:text-[#ff3b3b] transition-colors group"
           >
             Toutes les actus
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1 min-h-0">
-          {/* Article featured */}
-          {featured && (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+          {displayed.map((article, i) => (
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              key={article.id}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="lg:row-span-2"
+              transition={{ duration: 0.45, delay: i * 0.08 }}
             >
-              <Link href={`/actualites/${featured.slug}`} className="group block h-full">
-                <div className="relative h-40 lg:h-full min-h-[200px] rounded-2xl overflow-hidden bg-[#f0f0f0] shadow-xl shadow-black/10">
-                  {featured.image?.trim() && (
+              <Link
+                href={`/actualites/${article.slug}`}
+                className="group block rounded-xl overflow-hidden bg-[#171717] border border-white/10 hover:border-white/20 transition-colors h-full"
+              >
+                <div className="relative h-44 overflow-hidden bg-[#202020]">
+                  {article.image?.trim() && (
                     <Image
-                      src={featured.image}
-                      alt={featured.title}
+                      src={article.image}
+                      alt={article.title}
                       fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
-                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                     />
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-black/30 to-transparent" />
-                  <div className="absolute inset-0 p-4 md:p-5 flex flex-col justify-end">
-                    <span className={`inline-flex self-start text-xs font-black px-3 py-1 rounded-full mb-3 ${CATEGORY_COLORS[featured.category] ?? "bg-[#0A0A0A] text-white"}`}>
-                      {featured.category}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
+                  <div className="absolute top-3 left-3">
+                    <span className={`inline-flex text-[10px] font-black px-2 py-0.5 rounded-sm uppercase tracking-wider ${CATEGORY_COLORS[article.category] ?? "bg-[#0A0A0A] text-white"}`}>
+                      {article.category}
                     </span>
-                    <h3
-                      className="text-white text-xl md:text-2xl font-black uppercase leading-tight mb-1.5 group-hover:text-[#fd0000] transition-colors"
-                      style={{ fontFamily: "'Bebas Neue', sans-serif" }}
-                    >
-                      {featured.title}
-                    </h3>
-                    <p className="text-white/60 text-xs md:text-sm leading-relaxed line-clamp-2">
-                      <ExcerptWithLinks text={featured.excerpt} linkClassName="text-white/80 hover:text-white underline" />
-                    </p>
-                    <div className="flex items-center gap-2 mt-3 text-white/40 text-[11px] font-medium">
-                      <Clock className="w-3 h-3" />
-                      {formatShortDate(featured.publishedAt)}
-                    </div>
                   </div>
+                </div>
+
+                <div className="p-4 flex flex-col h-[170px]">
+                  <p className="text-white/35 text-[11px] mb-2">{formatShortDate(article.publishedAt)}</p>
+                  <h3
+                    className="text-white font-black uppercase text-xl leading-tight line-clamp-2 group-hover:text-[#fd0000] transition-colors"
+                    style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+                  >
+                    {article.title}
+                  </h3>
+                  <p className="text-white/45 text-sm leading-relaxed line-clamp-2 mt-2">
+                    <ExcerptWithLinks text={article.excerpt} linkClassName="text-white/60 hover:text-white underline" />
+                  </p>
+                  <span className="mt-auto inline-flex items-center gap-1.5 text-[#fd0000] text-sm font-semibold">
+                    Lire la suite <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
                 </div>
               </Link>
             </motion.div>
-          )}
-
-          {/* Articles secondaires sur fond blanc */}
-          <div className="flex flex-col gap-3 pr-1">
-            {rest.map((article, i) => (
-              <motion.div
-                key={article.id}
-                initial={{ opacity: 0, x: 24 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-              >
-                <Link
-                  href={`/actualites/${article.slug}`}
-                  className="group flex gap-3 bg-[#f7f7f7] hover:bg-[#fd0000]/5 border border-[#e5e5e5] hover:border-[#fd0000]/20 rounded-2xl p-3 transition-all"
-                >
-                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden shrink-0 bg-[#e0e0e0]">
-                    {article.image?.trim() && (
-                      <Image
-                        src={article.image}
-                        alt={article.title}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        sizes="112px"
-                      />
-                    )}
-                  </div>
-                  <div className="flex flex-col justify-between min-w-0">
-                    <div>
-                      <span className={`inline-flex text-xs font-black px-2 py-0.5 rounded-full mb-2 ${CATEGORY_COLORS[article.category] ?? "bg-[#0A0A0A] text-white"}`}>
-                        {article.category}
-                      </span>
-                      <h3 className="text-[#0A0A0A] font-bold text-xs sm:text-sm leading-snug line-clamp-2 group-hover:text-[#fd0000] transition-colors">
-                        {article.title}
-                      </h3>
-                    </div>
-                    <div className="flex items-center gap-2 text-[#0A0A0A]/40 text-[11px] mt-1.5 font-medium">
-                      <Clock className="w-3 h-3" />
-                      {formatShortDate(article.publishedAt)}
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
+          ))}
         </div>
 
         <div className="mt-5 text-center md:hidden shrink-0">

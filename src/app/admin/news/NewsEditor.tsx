@@ -19,6 +19,31 @@ function slugify(s: string) {
   return s.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "").slice(0, 60);
 }
 
+function createSubSection() {
+  return {
+    id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+    title: "",
+    content: "",
+  };
+}
+
+function normalizeArticle(article: NewsArticle): NewsArticle {
+  if (article.subSections?.length) return article;
+  if (article.subSectionTitle?.trim() || article.subSectionContent?.trim()) {
+    return {
+      ...article,
+      subSections: [
+        {
+          id: `legacy-${article.id}`,
+          title: article.subSectionTitle ?? "",
+          content: article.subSectionContent ?? "",
+        },
+      ],
+    };
+  }
+  return { ...article, subSections: [] };
+}
+
 function newArticle(): NewsArticle {
   const id = Date.now().toString();
   return {
@@ -26,6 +51,7 @@ function newArticle(): NewsArticle {
     title: "Nouvel article",
     excerpt: "",
     content: "",
+    subSections: [],
     subSectionTitle: "",
     subSectionContent: "",
     image: "/images/news-placeholder.jpg",
@@ -38,14 +64,16 @@ function newArticle(): NewsArticle {
 
 export default function NewsEditor({ initialData, username }: Props) {
   const router = useRouter();
-  const [articles, setArticles] = useState<NewsArticle[]>(initialData);
+  const [articles, setArticles] = useState<NewsArticle[]>(() => initialData.map(normalizeArticle));
   const [expanded, setExpanded] = useState<string | null>(initialData[0]?.id ?? null);
+  const selectedArticle = articles.find((a) => a.id === expanded) ?? null;
 
   useEffect(() => {
-    setArticles(initialData);
+    setArticles(initialData.map(normalizeArticle));
     if (!expanded && initialData[0]?.id) {
       setExpanded(initialData[0].id);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialData]);
 
   function update(id: string, field: keyof NewsArticle, value: string | boolean) {
@@ -74,6 +102,50 @@ export default function NewsEditor({ initialData, username }: Props) {
     const article = newArticle();
     setArticles((prev) => [article, ...prev]);
     setExpanded(article.id);
+  }
+
+  function addSubSection(articleId: string) {
+    setArticles((prev) =>
+      prev.map((article) => {
+        if (article.id !== articleId) return article;
+        return {
+          ...article,
+          subSections: [...(article.subSections ?? []), createSubSection()],
+          subSectionTitle: "",
+          subSectionContent: "",
+        };
+      }),
+    );
+  }
+
+  function updateSubSection(articleId: string, subSectionId: string, field: "title" | "content", value: string) {
+    setArticles((prev) =>
+      prev.map((article) => {
+        if (article.id !== articleId) return article;
+        return {
+          ...article,
+          subSections: (article.subSections ?? []).map((section) =>
+            section.id === subSectionId ? { ...section, [field]: value } : section,
+          ),
+          subSectionTitle: "",
+          subSectionContent: "",
+        };
+      }),
+    );
+  }
+
+  function removeSubSection(articleId: string, subSectionId: string) {
+    setArticles((prev) =>
+      prev.map((article) => {
+        if (article.id !== articleId) return article;
+        return {
+          ...article,
+          subSections: (article.subSections ?? []).filter((section) => section.id !== subSectionId),
+          subSectionTitle: "",
+          subSectionContent: "",
+        };
+      }),
+    );
   }
 
   async function save() {
@@ -108,50 +180,73 @@ export default function NewsEditor({ initialData, username }: Props) {
           </div>
         </div>
 
-        <div className="flex flex-col gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
           {articles.map((article) => {
             const open = expanded === article.id;
             return (
-              <div key={article.id} className="bg-[#161616] rounded-2xl border border-white/5 overflow-hidden">
-                {/* Header carte */}
-                <div
-                  role="button"
-                  tabIndex={0}
-                  className="w-full flex items-center gap-4 px-5 py-4 text-left hover:bg-white/5 transition-colors"
-                  onClick={() => setExpanded(open ? null : article.id)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      setExpanded(open ? null : article.id);
-                    }
-                  }}
-                >
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <span className="text-[#fd0000] text-xs font-bold uppercase tracking-wider">{article.category}</span>
-                      {article.isFeatured && <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />}
-                    </div>
-                    <p className="text-white font-semibold text-sm truncate">{article.title}</p>
-                    <p className="text-white/30 text-xs mt-0.5">{article.publishedAt}</p>
+              <div
+                key={article.id}
+                role="button"
+                tabIndex={0}
+                className={`h-28 rounded-2xl border transition-all px-4 py-3 flex flex-col justify-between ${
+                  open
+                    ? "bg-[#1b1b1b] border-[#fd0000]/40 shadow-lg shadow-[#fd0000]/10"
+                    : "bg-[#161616] border-white/5 hover:border-white/20"
+                }`}
+                onClick={() => setExpanded(article.id)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setExpanded(article.id);
+                  }
+                }}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="text-[#fd0000] text-[11px] font-bold uppercase tracking-wider truncate">{article.category}</span>
+                    {article.isFeatured && <Star className="w-3 h-3 text-yellow-400 fill-yellow-400 shrink-0" />}
                   </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); if (window.confirm("Supprimer cet article ?")) remove(article.id); }}
-                          className="p-2 rounded-lg hover:bg-red-500/20 text-white/30 hover:text-red-400 transition-colors"
-                          title="Supprimer"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                    {open ? <ChevronUp className="w-4 h-4 text-white/40" /> : <ChevronDown className="w-4 h-4 text-white/40" />}
-                  </div>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (window.confirm("Supprimer cet article ?")) remove(article.id);
+                    }}
+                    className="p-1.5 rounded-md hover:bg-red-500/20 text-white/30 hover:text-red-400 transition-colors shrink-0"
+                    title="Supprimer"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
                 </div>
+                <p className="text-white font-semibold text-sm truncate">{article.title}</p>
+                <div className="flex items-center justify-between">
+                  <p className="text-white/30 text-xs">{article.publishedAt}</p>
+                  {open ? <ChevronUp className="w-4 h-4 text-white/40" /> : <ChevronDown className="w-4 h-4 text-white/40" />}
+                </div>
+              </div>
+            );
+          })}
 
-                {/* Formulaire d'édition */}
-                {open && (
-                  <div className="px-5 pb-5 border-t border-white/5 pt-4 space-y-4">
+          {articles.length === 0 && (
+            <div className="col-span-full text-center py-16 text-white/30">
+              <p>Aucun article. Clique sur Nouvel article pour commencer.</p>
+            </div>
+          )}
+        </div>
+
+        {selectedArticle && (
+          <div className="mt-4 bg-[#161616] rounded-2xl border border-white/5 overflow-hidden">
+            <div className="px-5 py-4 border-b border-white/5 flex items-center justify-between gap-3">
+              <div>
+                <p className="text-[#fd0000] text-xs font-bold uppercase tracking-wider">{selectedArticle.category}</p>
+                <p className="text-white font-semibold text-sm">{selectedArticle.title}</p>
+              </div>
+              <p className="text-white/30 text-xs">{selectedArticle.publishedAt}</p>
+            </div>
+            <div className="px-5 pb-5 pt-4 space-y-4">
                     <div>
                       <label className={LABEL}>Titre</label>
-                      <input className={FIELD} value={article.title} onChange={(e) => update(article.id, "title", e.target.value)} />
+                      <input className={FIELD} value={selectedArticle.title} onChange={(e) => update(selectedArticle.id, "title", e.target.value)} />
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -159,19 +254,19 @@ export default function NewsEditor({ initialData, username }: Props) {
                         <label className={LABEL}>Catégorie</label>
                         <select
                           className={FIELD}
-                          value={article.category}
-                          onChange={(e) => update(article.id, "category", e.target.value)}
+                          value={selectedArticle.category}
+                          onChange={(e) => update(selectedArticle.id, "category", e.target.value)}
                         >
                           {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
                         </select>
                       </div>
                       <div>
                         <label className={LABEL}>Date publication</label>
-                        <input type="date" className={FIELD} value={article.publishedAt} onChange={(e) => update(article.id, "publishedAt", e.target.value)} />
+                        <input type="date" className={FIELD} value={selectedArticle.publishedAt} onChange={(e) => update(selectedArticle.id, "publishedAt", e.target.value)} />
                       </div>
                       <div>
                         <label className={LABEL}>Slug URL</label>
-                        <input className={FIELD} value={article.slug} onChange={(e) => update(article.id, "slug", e.target.value)} />
+                        <input className={FIELD} value={selectedArticle.slug} onChange={(e) => update(selectedArticle.id, "slug", e.target.value)} />
                       </div>
                     </div>
 
@@ -179,8 +274,8 @@ export default function NewsEditor({ initialData, username }: Props) {
                       <DragImageUpload
                         label="Image de couverture"
                         hint="Photo principale affichée sur la carte article"
-                        value={article.image}
-                        onChange={(v) => update(article.id, "image", v ?? "")}
+                        value={selectedArticle.image}
+                        onChange={(v) => update(selectedArticle.id, "image", v ?? "")}
                         maxW={1200}
                         maxH={800}
                       />
@@ -191,8 +286,8 @@ export default function NewsEditor({ initialData, username }: Props) {
                       <textarea
                         className={FIELD + " resize-none"}
                         rows={3}
-                        value={article.excerpt}
-                        onChange={(e) => update(article.id, "excerpt", e.target.value)}
+                        value={selectedArticle.excerpt}
+                        onChange={(e) => update(selectedArticle.id, "excerpt", e.target.value)}
                         placeholder="Pour ajouter un lien : [texte cliquable](https://exemple.com)"
                       />
                       <p className="text-white/30 text-xs mt-1.5">
@@ -201,30 +296,63 @@ export default function NewsEditor({ initialData, username }: Props) {
                     </div>
 
                     <div className="rounded-xl border border-[#fd0000]/25 bg-[#fd0000]/5 p-4 space-y-3">
-                      <p className="text-[#fd0000] text-xs font-bold uppercase tracking-[0.2em]">
-                        Sous-partie stylisée (bloc en avant)
-                      </p>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                          <label className={LABEL}>Sous-partie stylisée — Titre</label>
-                          <input
-                            className={FIELD}
-                            value={article.subSectionTitle ?? ""}
-                            onChange={(e) => update(article.id, "subSectionTitle", e.target.value)}
-                            placeholder="Ex: Ce qu'il faut retenir"
-                          />
-                        </div>
-                        <div>
-                          <label className={LABEL}>Sous-partie stylisée — Contenu</label>
-                          <textarea
-                            className={FIELD + " resize-none"}
-                            rows={3}
-                            value={article.subSectionContent ?? ""}
-                            onChange={(e) => update(article.id, "subSectionContent", e.target.value)}
-                            placeholder="Texte de la sous-partie mise en avant."
-                          />
-                        </div>
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="text-[#fd0000] text-xs font-bold uppercase tracking-[0.2em]">
+                          Sous-parties stylisees (blocs en avant)
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => addSubSection(selectedArticle.id)}
+                          className="inline-flex items-center gap-1.5 rounded-lg bg-[#fd0000] hover:bg-[#d60000] text-white text-xs font-bold px-3 py-1.5 transition-colors"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                          Ajouter
+                        </button>
                       </div>
+                      {(selectedArticle.subSections ?? []).length === 0 ? (
+                        <p className="text-white/45 text-xs">Aucune sous-partie. Clique sur + pour en ajouter une.</p>
+                      ) : (
+                        <div className="space-y-3">
+                          {(selectedArticle.subSections ?? []).map((section, index) => (
+                            <div key={section.id} className="rounded-xl border border-white/10 bg-black/20 p-3">
+                              <div className="flex items-center justify-between gap-2 mb-3">
+                                <p className="text-white/70 text-xs font-bold uppercase tracking-wider">
+                                  Sous-partie {index + 1}
+                                </p>
+                                <button
+                                  type="button"
+                                  onClick={() => removeSubSection(selectedArticle.id, section.id)}
+                                  className="p-1.5 rounded-md hover:bg-red-500/20 text-white/30 hover:text-red-400 transition-colors"
+                                  title="Supprimer la sous-partie"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                  <label className={LABEL}>Titre</label>
+                                  <input
+                                    className={FIELD}
+                                    value={section.title ?? ""}
+                                    onChange={(e) => updateSubSection(selectedArticle.id, section.id, "title", e.target.value)}
+                                    placeholder="Ex: Ce qu'il faut retenir"
+                                  />
+                                </div>
+                                <div>
+                                  <label className={LABEL}>Contenu</label>
+                                  <textarea
+                                    className={FIELD + " resize-none"}
+                                    rows={3}
+                                    value={section.content ?? ""}
+                                    onChange={(e) => updateSubSection(selectedArticle.id, section.id, "content", e.target.value)}
+                                    placeholder="Texte de la sous-partie mise en avant."
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
 
                     <div>
@@ -232,8 +360,8 @@ export default function NewsEditor({ initialData, username }: Props) {
                       <textarea
                         className={FIELD + " resize-none"}
                         rows={8}
-                        value={article.content ?? ""}
-                        onChange={(e) => update(article.id, "content", e.target.value)}
+                        value={selectedArticle.content ?? ""}
+                        onChange={(e) => update(selectedArticle.id, "content", e.target.value)}
                         placeholder="Texte libre. Liens [texte](https://url), images ![légende](https://image.jpg) ou HTML (&lt;h2&gt;, &lt;p&gt;, ...)."
                       />
                       <p className="text-white/30 text-xs mt-1.5 space-y-1">
@@ -254,27 +382,24 @@ export default function NewsEditor({ initialData, username }: Props) {
                     <div className="flex items-center gap-3">
                       <input
                         type="checkbox"
-                        id={`feat-${article.id}`}
-                        checked={!!article.isFeatured}
-                        onChange={(e) => update(article.id, "isFeatured", e.target.checked)}
+                        id={`feat-${selectedArticle.id}`}
+                        checked={!!selectedArticle.isFeatured}
+                        onChange={(e) => update(selectedArticle.id, "isFeatured", e.target.checked)}
                         className="w-4 h-4 accent-[#fd0000]"
                       />
-                      <label htmlFor={`feat-${article.id}`} className="text-white/60 text-sm cursor-pointer flex items-center gap-1.5">
+                      <label htmlFor={`feat-${selectedArticle.id}`} className="text-white/60 text-sm cursor-pointer flex items-center gap-1.5">
                         <Star className="w-3.5 h-3.5 text-yellow-400" /> Article mis en avant (hero de la section actualités)
                       </label>
                     </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-
-          {articles.length === 0 && (
-            <div className="text-center py-16 text-white/30">
-              <p>Aucun article. Clique sur "Nouvel article" pour commencer.</p>
             </div>
-          )}
-        </div>
+          </div>
+        )}
+
+        {articles.length > 0 && !selectedArticle && (
+          <div className="mt-4 text-center py-10 rounded-2xl border border-white/5 bg-[#161616] text-white/35">
+            <p>Sélectionne une carte pour éditer l&apos;actualité.</p>
+          </div>
+        )}
 
         {articles.length > 0 && (
           <div className="mt-6 flex justify-end">

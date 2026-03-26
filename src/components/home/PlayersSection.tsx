@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Target, Zap } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import type { Player } from "@/types";
 import type { SectionStyle } from "@/lib/db";
 import { titleSizeClass } from "@/lib/sectionStyle";
@@ -15,46 +15,61 @@ const POSITION_LABELS: Record<string, string> = {
   ATT: "Attaquant",
 };
 
+const POSITION_BADGE: Record<string, string> = {
+  GK: "bg-amber-500 text-black",
+  DEF: "bg-blue-500 text-white",
+  MID: "bg-emerald-500 text-white",
+  ATT: "bg-[#fd0000] text-white",
+};
+
 export function PlayersSection({ players = [], sectionStyle }: { players?: Player[]; sectionStyle?: SectionStyle }) {
+  const maxCards = 6;
   const featuredPlayers = players.filter((p) => p.isFeatured);
-  const featured = featuredPlayers.length > 0 ? featuredPlayers : players.slice(0, 6);
-  const accent     = sectionStyle?.accentColor?.trim() || "#fd0000";
-  const textCol    = sectionStyle?.textColor?.trim()   || "#ffffff";
-  const titleCls   = titleSizeClass(sectionStyle, "text-4xl md:text-6xl");
+  const nonFeaturedPlayers = players.filter((p) => !p.isFeatured);
+  const newestNonFeaturedFirst = [...nonFeaturedPlayers].reverse();
+  let featured = [...featuredPlayers, ...newestNonFeaturedFirst].slice(0, maxCards);
+  const latestAdded = players[players.length - 1];
+  if (latestAdded && !featured.some((p) => p.id === latestAdded.id)) {
+    featured = [...featured.slice(0, maxCards - 1), latestAdded];
+  }
+  const textCol = sectionStyle?.textColor?.trim() || "#ffffff";
+  const titleCls = titleSizeClass(sectionStyle, "text-4xl md:text-6xl");
+  const sectionTitle = sectionStyle?.title?.trim() || "Nos joueurs";
+  const sectionSubtitle = sectionStyle?.subtitle?.trim() || "Les chardons qui portent nos couleurs";
 
   return (
     <section className="h-full min-h-[100dvh] overflow-hidden" style={{ backgroundColor: sectionStyle?.bgColor ?? "#0A0A0A" }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full py-5 md:py-6 flex flex-col">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full py-10 md:py-12 flex flex-col">
 
         {/* ── Header ── */}
-        <div className="flex items-end justify-between mb-5 md:mb-7 shrink-0">
+        <div className="flex items-end justify-between mb-8 md:mb-10 shrink-0">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-xs font-bold uppercase tracking-[0.3em] block mb-2" style={{ color: accent }}>
-              {sectionStyle?.subtitle ?? "L'Effectif"}
-            </span>
+            <div className="h-[3px] w-14 bg-[#fd0000] mb-4" />
             <h2
               className={`font-black uppercase leading-none ${titleCls}`}
               style={{ fontFamily: "'Bebas Neue', sans-serif", color: textCol }}
             >
-              {sectionStyle?.title ? sectionStyle.title : (<>L'<span style={{ color: accent }}>équipe</span></>)}
+              {sectionTitle}
             </h2>
+            <p className="text-white/45 text-sm mt-3">
+              {sectionSubtitle}
+            </p>
           </motion.div>
 
           <Link
             href="/effectif"
-            className="hidden md:flex items-center gap-2 text-sm font-semibold text-white/40 hover:text-white transition-colors group"
+            className="hidden md:flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-[#fd0000] hover:text-[#ff3b3b] transition-colors group"
           >
-            Effectif complet
+            Voir effectif complet
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
 
-        {/* ── Grille ── */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 flex-1 min-h-0">
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 md:gap-4 flex-1 min-h-0">
           {featured.map((player, i) => (
             <motion.div
               key={player.id}
@@ -64,53 +79,36 @@ export function PlayersSection({ players = [], sectionStyle }: { players?: Playe
               transition={{ duration: 0.5, delay: i * 0.07 }}
             >
               <Link href={`/effectif/${player.id}`} className="group block">
-                <div className="relative h-full bg-white hover:bg-[#fd0000] rounded-2xl overflow-hidden transition-all duration-300 border border-[#e5e5e5] hover:border-[#fd0000] hover:shadow-xl hover:shadow-[#fd0000]/25">
-
-                  {/* Numéro en watermark */}
-                  <div
-                    className="absolute -top-2 -right-2 text-8xl md:text-9xl font-black text-black/[0.04] group-hover:text-white/[0.08] leading-none select-none transition-colors"
-                    style={{ fontFamily: "'Bebas Neue', sans-serif" }}
-                  >
-                    {player.number}
-                  </div>
-
-                  {/* Avatar */}
-                  <div className="relative h-28 md:h-36 bg-[#f5f5f5] group-hover:bg-[#d40000] flex items-center justify-center overflow-hidden transition-colors">
-                    {/* Numéro haut droite (bandeau réduit) */}
-                    <div
-                      className="absolute top-1.5 right-1.5 text-[#0A0A0A]/25 group-hover:text-white/45 text-xs md:text-sm font-black leading-none transition-colors z-10 px-1.5 py-0.5 rounded-full bg-white/40 group-hover:bg-black/25"
-                      style={{ fontFamily: "'Bebas Neue', sans-serif" }}
-                    >
-                      {player.number}
+                <div className="relative h-full rounded-xl overflow-hidden bg-[#171717] border border-white/10 hover:border-white/20 transition-colors">
+                  <div className="relative h-32 bg-[#202020] flex items-center justify-center overflow-hidden">
+                    <div className={`absolute top-2 left-2 inline-flex text-[9px] font-black px-2 py-0.5 rounded-sm uppercase tracking-wider ${POSITION_BADGE[player.position] ?? "bg-[#fd0000] text-white"}`}>
+                      {player.position}
                     </div>
-
                     {player.photo?.trim() ? (
                       <>
-                        {/* Photo principale */}
                         <Image
                           src={player.photo}
                           alt={`${player.firstName} ${player.name}`}
                           fill
-                          className={`object-cover object-top transition-opacity duration-300 ${player.photoHover?.trim() ? "group-hover:opacity-0" : ""}`}
-                          sizes="(max-width: 768px) 50vw, 33vw"
+                          className={`object-cover object-top transition-opacity duration-300 ${player.photoHover?.trim() ? "group-hover:opacity-0" : ""} opacity-90`}
+                          sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 16vw"
                           unoptimized={player.photo.startsWith("data:")}
                         />
-                        {/* Photo hover */}
                         {player.photoHover?.trim() && (
                           <Image
                             src={player.photoHover}
                             alt={`${player.firstName} ${player.name} — action`}
                             fill
                             className="object-cover object-top opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute inset-0"
-                            sizes="(max-width: 768px) 50vw, 33vw"
+                            sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 16vw"
                             unoptimized={player.photoHover.startsWith("data:")}
                           />
                         )}
                       </>
                     ) : (
-                      <div className="w-18 h-18 md:w-24 md:h-24 rounded-full bg-[#fd0000]/15 group-hover:bg-white/20 border border-[#fd0000]/20 group-hover:border-white/30 flex items-center justify-center transition-all">
+                      <div className="w-18 h-18 md:w-24 md:h-24 rounded-full bg-[#fd0000]/15 border border-[#fd0000]/20 flex items-center justify-center transition-all">
                         <span
-                          className="text-[#fd0000] group-hover:text-white text-2xl md:text-3xl font-black transition-colors"
+                          className="text-[#fd0000] text-2xl md:text-3xl font-black transition-colors"
                           style={{ fontFamily: "'Bebas Neue', sans-serif" }}
                         >
                           {player.firstName[0]}{player.name[0]}
@@ -119,33 +117,16 @@ export function PlayersSection({ players = [], sectionStyle }: { players?: Playe
                     )}
                   </div>
 
-                  <div className="p-2.5">
-                    {/* Badge poste */}
-                    <span className="inline-flex text-[9px] font-black px-1.5 py-0.5 rounded mb-1.5 bg-[#fd0000]/10 text-[#fd0000] group-hover:bg-white/20 group-hover:text-white uppercase tracking-wider transition-colors">
-                      {POSITION_LABELS[player.position]}
-                    </span>
-
+                  <div className="p-3">
+                    <p className="text-white/25 text-[11px] mb-1">#{player.number}</p>
                     <h3
                       className="font-black uppercase leading-tight"
                       style={{ fontFamily: "'Bebas Neue', sans-serif" }}
                     >
-                      <span className="text-[#0A0A0A]/50 group-hover:text-white/60 text-[10px] block transition-colors">{player.firstName}</span>
-                      <span className="text-[#0A0A0A] group-hover:text-white text-base md:text-lg transition-colors">{player.name}</span>
+                      <span className="text-white text-xl block leading-none">{player.firstName}</span>
+                      <span className="text-white text-xl block leading-none">{player.name}</span>
                     </h3>
-
-                    {/* Stats */}
-                    <div className="flex gap-2.5 mt-1.5 pt-1.5 border-t border-black/8 group-hover:border-white/15 transition-colors">
-                      <div className="flex items-center gap-1 text-[10px] text-[#0A0A0A]/50 group-hover:text-white/60 transition-colors">
-                        <Target className="w-2.5 h-2.5 text-[#fd0000] group-hover:text-white/80 transition-colors" />
-                        <span className="text-[#0A0A0A] group-hover:text-white font-bold transition-colors">{player.stats.goals}</span>
-                        <span>buts</span>
-                      </div>
-                      <div className="flex items-center gap-1 text-[10px] text-[#0A0A0A]/50 group-hover:text-white/60 transition-colors">
-                        <Zap className="w-2.5 h-2.5 text-amber-500 group-hover:text-amber-300 transition-colors" />
-                        <span className="text-[#0A0A0A] group-hover:text-white font-bold transition-colors">{player.stats.assists}</span>
-                        <span>passes</span>
-                      </div>
-                    </div>
+                    <p className="text-white/45 text-xs mt-2">{POSITION_LABELS[player.position]}</p>
                   </div>
                 </div>
               </Link>
@@ -158,7 +139,7 @@ export function PlayersSection({ players = [], sectionStyle }: { players?: Playe
             href="/effectif"
             className="inline-flex items-center gap-2 text-sm font-semibold text-white/40 hover:text-white transition-colors"
           >
-            Voir l'effectif complet <ArrowRight className="w-4 h-4" />
+            Voir l&apos;effectif complet <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </div>
