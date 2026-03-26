@@ -68,7 +68,7 @@ export function NewsSection({ articles, sectionStyle }: { articles?: NewsArticle
                 href={`/actualites/${article.slug}`}
                 className="group block rounded-xl overflow-hidden bg-[#171717] border border-white/10 hover:border-white/20 transition-colors h-full"
               >
-                <div className="relative h-44 overflow-hidden bg-[#202020]">
+                <div className="relative h-52 overflow-hidden bg-[#202020]">
                   {article.image?.trim() && (
                     <Image
                       src={article.image}
@@ -86,7 +86,7 @@ export function NewsSection({ articles, sectionStyle }: { articles?: NewsArticle
                   </div>
                 </div>
 
-                <div className="p-4 flex flex-col h-[170px]">
+                <div className="p-4 flex flex-col h-[220px]">
                   <p className="text-white/35 text-[11px] mb-2">{formatShortDate(article.publishedAt)}</p>
                   <h3
                     className="text-white font-black uppercase text-xl leading-tight line-clamp-2 group-hover:text-[#fd0000] transition-colors"

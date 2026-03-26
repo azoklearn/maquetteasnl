@@ -23,7 +23,7 @@ const POSITION_BADGE: Record<string, string> = {
 };
 
 export function PlayersSection({ players = [], sectionStyle }: { players?: Player[]; sectionStyle?: SectionStyle }) {
-  const maxCards = 6;
+  const maxCards = 11;
   const featuredPlayers = players.filter((p) => p.isFeatured);
   const nonFeaturedPlayers = players.filter((p) => !p.isFeatured);
   const newestNonFeaturedFirst = [...nonFeaturedPlayers].reverse();

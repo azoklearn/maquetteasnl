@@ -10,14 +10,14 @@ import type { SectionStyle } from "@/lib/db";
 import { titleSizeClass } from "@/lib/sectionStyle";
 
 export function StandingsSection({ sectionStyle }: { sectionStyle?: SectionStyle }) {
-  const accent   = sectionStyle?.accentColor?.trim() || "#fd0000";
-  const textCol  = sectionStyle?.textColor?.trim()   || "#0A0A0A";
+  const accent   = sectionStyle?.accentColor?.trim() || "#6b7280";
+  const textCol  = sectionStyle?.textColor?.trim()   || "#111827";
   const titleCls = titleSizeClass(sectionStyle, "text-5xl md:text-7xl");
   return (
     <section
       id="classement"
       className="section-padding"
-      style={{ backgroundColor: sectionStyle?.bgColor?.trim() || "#ffffff" }}
+      style={{ backgroundColor: sectionStyle?.bgColor?.trim() || "#e5e7eb" }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-5 gap-12 items-start">
@@ -53,15 +53,15 @@ export function StandingsSection({ sectionStyle }: { sectionStyle?: SectionStyle
                 target="_blank"
                 rel="noopener noreferrer nofollow"
                 onClick={() => trackTicketingClick("standings_section", "Prochain match")}
-                className="flex items-center justify-center gap-2 bg-[#fd0000] hover:bg-[#cc0000] text-white font-black text-base py-4 rounded-2xl transition-all hover:scale-[1.02] uppercase tracking-wider shadow-lg shadow-[#fd0000]/25"
+                className="flex items-center justify-center gap-2 bg-[#6b7280] hover:bg-[#4b5563] text-white font-black text-base py-4 rounded-2xl transition-all hover:scale-[1.02] uppercase tracking-wider shadow-lg shadow-black/20"
                 style={{ fontFamily: "'Bebas Neue', sans-serif" }}
               >
                 <Ticket className="w-5 h-5" />
-                Soutenir l'équipe — Prendre sa place
+                Soutenir l&apos;equipe — Prendre sa place
               </a>
               <Link
                 href="/calendrier"
-                className="flex items-center justify-center gap-2 mt-3 text-sm font-semibold text-[#0A0A0A]/40 hover:text-[#fd0000] transition-colors group"
+                className="flex items-center justify-center gap-2 mt-3 text-sm font-semibold text-[#111827]/45 hover:text-[#374151] transition-colors group"
               >
                 Voir le calendrier complet
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />

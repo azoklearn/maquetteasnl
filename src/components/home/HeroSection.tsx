@@ -183,7 +183,7 @@ export function HeroSection({
               className="mt-6 mb-6 w-full max-w-xl self-start ml-0 sm:-ml-10 lg:-ml-24"
             >
               <div className="flex flex-col gap-2 max-w-xl">
-                <h2 className="text-xl md:text-3xl lg:text-4xl font-black text-white leading-snug line-clamp-2">
+                <h2 className="text-xl md:text-3xl lg:text-4xl font-black text-white leading-snug break-words">
                   {latestArticle.title}
                 </h2>
                 <p className="text-xs md:text-sm text-white/80 line-clamp-3">
