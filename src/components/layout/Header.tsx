@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -149,6 +150,7 @@ function HamburgerButton({
 
 // ── Header principal ───────────────────────────────────────────────────────────
 export function Header({ tickerEnabled = true, tickerMessages, ticketingUrl }: HeaderProps) {
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const ticketUrl = ticketingUrl ?? TICKETING.nextMatchUrl;
@@ -176,6 +178,10 @@ export function Header({ tickerEnabled = true, tickerMessages, ticketingUrl }: H
 
   function handleTicketClick() {
     trackTicketingClick("header_nav", "CTA Header");
+  }
+
+  if (pathname?.startsWith("/admin")) {
+    return null;
   }
 
   return (

@@ -120,8 +120,8 @@ export function Footer({ social, ticketingUrl, seasonTicketUrl, groupUrl }: Foot
                 {section}
               </h4>
               <ul className="space-y-3">
-                {links.map((link) => (
-                  <li key={link.href}>
+                {links.map((link, idx) => (
+                  <li key={`${section}-${link.label}-${link.href}-${idx}`}>
                     {"external" in link && link.external ? (
                       <a
                         href={link.href}

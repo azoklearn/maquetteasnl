@@ -7,7 +7,7 @@ import Link from "next/link";
 import { Play, ChevronDown, Ticket, Newspaper, ArrowRight } from "lucide-react";
 import { TICKETING } from "@/lib/constants";
 import { trackTicketingClick } from "@/lib/analytics";
-import { formatDate, formatShortDate, cn } from "@/lib/utils";
+import { formatDate, getTimeUntil, cn } from "@/lib/utils";
 import { ExcerptWithLinks } from "@/components/ui/ExcerptWithLinks";
 import type { SectionStyle, HeroBg } from "@/lib/db";
 import type { Match, NewsArticle, MediaVideo } from "@/types";
@@ -40,6 +40,9 @@ export function HeroSection({
   latestVideo,
 }: HeroProps) {
   const [heroAnimReady, setHeroAnimReady] = useState(false);
+  const [countdown, setCountdown] = useState(() =>
+    nextMatch ? getTimeUntil(nextMatch.date, nextMatch.time) : null,
+  );
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | null = null;
@@ -61,6 +64,14 @@ export function HeroSection({
       if (timer) clearTimeout(timer);
     };
   }, []);
+
+  useEffect(() => {
+    if (!nextMatch) return;
+    const update = () => setCountdown(getTimeUntil(nextMatch.date, nextMatch.time));
+    update();
+    const t = setInterval(update, 1000);
+    return () => clearInterval(t);
+  }, [nextMatch]);
 
   const motionState = heroAnimReady ? "ready" : "idle";
   const textCol   = sectionStyle?.textColor?.trim() || "#ffffff";
@@ -267,6 +278,13 @@ export function HeroSection({
                 <p className="text-sm sm:text-base truncate text-white/90">
                   {formatDate(match.date)} · {match.time} · {match.stadium}
                 </p>
+                {countdown && (
+                  <p className="text-xs sm:text-sm mt-1 text-white/80 tabular-nums">
+                    {countdown.isPast
+                      ? "Match en cours"
+                      : `${String(countdown.days).padStart(2, "0")}j ${String(countdown.hours).padStart(2, "0")}h ${String(countdown.minutes).padStart(2, "0")}m ${String(countdown.seconds).padStart(2, "0")}s`}
+                  </p>
+                )}
               </div>
             </div>
             <div className="hidden sm:flex items-center gap-2 shrink-0 px-5 py-3 rounded-xl bg-white/15 text-white group-hover:bg-[#fd0000] transition-colors">

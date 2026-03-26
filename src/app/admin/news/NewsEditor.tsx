@@ -46,7 +46,7 @@ export default function NewsEditor({ initialData, username }: Props) {
     if (!expanded && initialData[0]?.id) {
       setExpanded(initialData[0].id);
     }
-  }, [initialData, expanded]);
+  }, [initialData]);
 
   function update(id: string, field: keyof NewsArticle, value: string | boolean) {
     setArticles((prev) =>
@@ -114,9 +114,17 @@ export default function NewsEditor({ initialData, username }: Props) {
             return (
               <div key={article.id} className="bg-[#161616] rounded-2xl border border-white/5 overflow-hidden">
                 {/* Header carte */}
-                <button
+                <div
+                  role="button"
+                  tabIndex={0}
                   className="w-full flex items-center gap-4 px-5 py-4 text-left hover:bg-white/5 transition-colors"
                   onClick={() => setExpanded(open ? null : article.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setExpanded(open ? null : article.id);
+                    }
+                  }}
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
@@ -136,7 +144,7 @@ export default function NewsEditor({ initialData, username }: Props) {
                         </button>
                     {open ? <ChevronUp className="w-4 h-4 text-white/40" /> : <ChevronDown className="w-4 h-4 text-white/40" />}
                   </div>
-                </button>
+                </div>
 
                 {/* Formulaire d'édition */}
                 {open && (
